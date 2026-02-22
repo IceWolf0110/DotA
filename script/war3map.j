@@ -47,7 +47,7 @@ globals
 	boolean boolean006 = false
 	boolean boolean007 = false
 	multiboard multiboard001 = null
-	unit unit001 = null
+	unit Roshan = null
 	boolean array booleans004
 	integer integer003 = 0
 	boolean boolean008 = false
@@ -499,8 +499,8 @@ globals
 	trigger trigger020 = null
 	trigger trigger021 = null
 	trigger trigger022 = null
-	trigger trigger023 = null
-	trigger trigger024 = null
+	// trigger trigger023 = null
+	trigger Trig_SpawnNeutrals = null
 	trigger trigger025 = null
 	trigger trigger026 = null
 	trigger trigger027 = null
@@ -573,14 +573,14 @@ globals
 	real real012
 	real real013
 	real real014
-	unit unit124
+	unit tt_unit1
 	unit unit125
 	unit unit126
-	item item002
+	item tt_item1
 	trigger trigger046
 	group group002
 	group group003
-	player player005
+	player tt_player1
 	boolean boolean045
 	string string027
 	image image001 = null
@@ -839,7 +839,7 @@ globals
 	integer array integers082
 	integer integer058
 	integer integer059
-	unit unit242 = null
+	unit AegisHolder = null
 	boolean boolean065 = true
 	integer integer060 = 1
 	integer integer061 = 600
@@ -848,14 +848,14 @@ globals
 	integer integer063 = 0
 	leaderboard array leaderboards002
 	boolean array booleans021
-	integer array integers083
-	integer array integers084
-	integer array integers085
-	integer array integers086
-	string array strings012
-	integer array integers087
+	integer array Item_Dummy
+	integer array Item_Real
+	integer array Item_SellerUnit
+	integer array Item_Mute
+	string array Item_Icon
+	integer array Item_Cooldown
 	integer array integers088
-	integer integer064 = 0
+	integer ItemCount = 0
 	integer integer065
 	integer integer066
 	integer integer067
@@ -985,8 +985,8 @@ globals
 	integer integer191
 	integer integer192
 	integer integer193
-	integer integer194
-	integer integer195
+	integer MantaStyle
+	integer MantaStyle_Ranged
 	integer integer196
 	integer integer197
 	integer integer198
@@ -1008,8 +1008,8 @@ globals
 	integer integer214
 	integer integer215
 	integer integer216
-	integer integer217
-	integer integer218
+	integer EyeOfSkadi
+	integer EyeOfSkadiRanged
 	integer integer219
 	integer integer220
 	integer integer221
@@ -1177,7 +1177,7 @@ globals
 	integer integer366
 	boolean boolean066 = false
 	unit unit245
-	trigger trigger057
+	trigger Trig_ManipulateItem
 	integer integer367 = 0
 	integer integer368 = 0
 	integer integer369 = 0
@@ -1336,7 +1336,7 @@ globals
 	trigger trigger062
 	region region008
 	boolean boolean093 = false
-	boolean boolean094 = false
+	boolean IsSpawnRoshan = false
 	boolean IsWTFMode = false
 	boolean boolean096 = false
 	unit array units010
@@ -1510,7 +1510,7 @@ globals
 	boolean boolean117 = false
 	boolean boolean118 = false
 	boolean boolean119 = false
-	boolean boolean120 = true
+	boolean Mode_NN = false
 	boolean boolean121 = false
 	boolean boolean122 = false
 	boolean boolean123 = false
@@ -2029,6 +2029,11 @@ globals
 	force force004 = null
 	boolexpr boolexpr001 = null
 endglobals
+
+function FindRect takes rect r returns rect
+	call PanCameraTo(GetRectCenterX(r), GetRectCenterY(r))
+	return r
+endfunction
 
 function LoadingProgressCheckout takes string s returns nothing
 	call PreloadEndEx()
@@ -2551,7 +2556,7 @@ function Func0028 takes unit loc_unit01 returns boolean
 	return GetUnitAbilityLevel(loc_unit01, 'B0BI') > 0 or GetUnitAbilityLevel(loc_unit01, 'BNss') > 0 or GetUnitAbilityLevel(loc_unit01, 'B0EV') > 0
 endfunction
 
-function Func0029 takes group loc_group01 returns nothing
+function KillGroup takes group loc_group01 returns nothing
 	local integer loc_integer01 = GetHandleId(loc_group01) - integer016
 	if loc_integer01 < 0 or loc_integer01 > 120 then
 		set boolean044 = true
@@ -2562,7 +2567,7 @@ function Func0029 takes group loc_group01 returns nothing
 	endif
 endfunction
 
-function Func0030 takes nothing returns group
+function GetAvailableGroup takes nothing returns group
 	local integer loc_integer01 = integer017
 	loop
 		exitwhen loc_integer01 == integer017 - 1
@@ -4233,10 +4238,10 @@ function Func0180 takes nothing returns nothing
 endfunction
 
 function Func0181 takes nothing returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 16000, Condition(function Func0167))
 	call ForGroup(loc_group01, function Func0180)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return false
 endfunction
@@ -4286,7 +4291,7 @@ function Func0185 takes nothing returns boolean
 		call CleanTrigger(loc_trigger01)
 	elseif Func0170(loc_real04, loc_real05, loc_real08, loc_real09) <= loc_real06 then
 		call KillUnit(loc_unit03)
-		set unit124 = loc_unit02
+		set tt_unit1 = loc_unit02
 		set unit125 = loc_unit01
 		call ExecuteFunc((LoadStr(HY, (loc_integer01), (46))))
 		call Func0021(loc_integer02)
@@ -4737,7 +4742,7 @@ function Func0218 takes sound loc_sound01, player loc_player01 returns nothing
 endfunction
 
 function Func0219 takes nothing returns boolean
-	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false
+	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false
 endfunction
 
 function Func0220 takes nothing returns nothing
@@ -4745,13 +4750,13 @@ function Func0220 takes nothing returns nothing
 endfunction
 
 function Func0221 takes unit loc_unit01, sound loc_sound01, real loc_real01, real loc_real02, real loc_real03 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set sound075 = loc_sound01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real03, Condition(function Func0219))
 	call GroupRemoveUnit(loc_group01, loc_unit01)
 	call ForGroup(loc_group01, function Func0220)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -5456,23 +5461,23 @@ function Func0272 takes nothing returns boolean
 endfunction
 
 function Func0273 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0274 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return Func0095(GetFilterUnit()) == false and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0275 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)
+	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)
 endfunction
 
 function Func0276 takes nothing returns boolean
-	return IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)
+	return IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)
 endfunction
 
 function Func0277 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitTypeId(GetFilterUnit()) == 'ebal' or GetUnitTypeId(GetFilterUnit()) == 'umtw')
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitTypeId(GetFilterUnit()) == 'ebal' or GetUnitTypeId(GetFilterUnit()) == 'umtw')
 endfunction
 
 function Func0278 takes nothing returns boolean
@@ -5492,83 +5497,83 @@ function Func0281 takes nothing returns boolean
 endfunction
 
 function Func0282 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))
 endfunction
 
 function Func0283 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0284 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))
 endfunction
 
 function Func0285 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true
 endfunction
 
 function Func0286 takes nothing returns boolean
-	return((IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true)and Func0265(GetFilterUnit()) == false
+	return((IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true)and Func0265(GetFilterUnit()) == false
 endfunction
 
 function Func0287 takes nothing returns boolean
-	return((IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true)and(Func0265(GetFilterUnit()) == false or IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124)) == true)
+	return((IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true)and(Func0265(GetFilterUnit()) == false or IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == true)
 endfunction
 
 function Func0288 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == false
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == false
 endfunction
 
 function Func0289 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitAbilityLevel(GetFilterUnit(), 'A1RB') == 0
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitAbilityLevel(GetFilterUnit(), 'A1RB') == 0
 endfunction
 
 function Func0290 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return Func0095(GetFilterUnit()) == false and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0291 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0292 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
+	return Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
 endfunction
 
 function Func0293 takes nothing returns boolean
-	return IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
+	return IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
 endfunction
 
 function Func0294 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
 endfunction
 
 function Func0295 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and GetOwningPlayer(GetFilterUnit()) != Neutrals
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and GetOwningPlayer(GetFilterUnit()) != Neutrals
 endfunction
 
 function Func0296 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0297 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0298 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and(IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == true and GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and(IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == true and GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0299 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == false
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == false
 endfunction
 
 function Func0300 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))
+	return Func0095(GetFilterUnit()) == false and(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))
 endfunction
 
 function Func0301 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false)
 endfunction
 
 function Func0302 takes nothing returns boolean
@@ -5584,7 +5589,7 @@ function Func0304 takes nothing returns boolean
 endfunction
 
 function Func0305 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and IsPlayerBelongsToTeams(GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and IsPlayerBelongsToTeams(GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)
 endfunction
 
 function Func0306 takes nothing returns boolean
@@ -5592,7 +5597,7 @@ function Func0306 takes nothing returns boolean
 endfunction
 
 function Func0307 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0308 takes nothing returns boolean
@@ -5612,7 +5617,7 @@ function Func0311 takes nothing returns boolean
 endfunction
 
 function Func0312 takes nothing returns boolean
-	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0313 takes nothing returns boolean
@@ -5628,15 +5633,15 @@ function Func0315 takes nothing returns boolean
 endfunction
 
 function Func0316 takes nothing returns boolean
-	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == true and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
+	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == true and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))
 endfunction
 
 function Func0317 takes nothing returns boolean
-	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == true and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)or Func0265(GetEnumUnit())
+	return IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == true and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)or Func0265(GetEnumUnit())
 endfunction
 
 function Func0318 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and(IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == true and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))
+	return Func0095(GetFilterUnit()) == false and(IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == true and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))
 endfunction
 
 function Func0319 takes nothing returns boolean
@@ -5672,19 +5677,19 @@ function Func0326 takes nothing returns boolean
 endfunction
 
 function Func0327 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))
 endfunction
 
 function Func0328 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))or(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124)) == false and Func0265(GetFilterUnit())) == false)
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))or(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == false and Func0265(GetFilterUnit())) == false)
 endfunction
 
 function Func0329 takes nothing returns boolean
-	return((IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124)))and Func0251(GetFilterUnit()) == false
+	return((IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1)))and Func0251(GetFilterUnit()) == false
 endfunction
 
 function Func0330 takes nothing returns boolean
-	return(((IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124)))and Func0251(GetFilterUnit()) == false)and GetUnitTypeId(GetFilterUnit()) != 'n0F5'
+	return(((IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1)))and Func0251(GetFilterUnit()) == false)and GetUnitTypeId(GetFilterUnit()) != 'n0F5'
 endfunction
 
 function Func0331 takes nothing returns boolean
@@ -5692,11 +5697,11 @@ function Func0331 takes nothing returns boolean
 endfunction
 
 function Func0332 takes nothing returns boolean
-	return((GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))
+	return((GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))
 endfunction
 
 function Func0333 takes nothing returns boolean
-	return Func0095(GetFilterUnit()) == false and((GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))
+	return Func0095(GetFilterUnit()) == false and((GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))
 endfunction
 
 function Func0334 takes nothing returns boolean
@@ -5708,7 +5713,7 @@ function Func0335 takes nothing returns boolean
 endfunction
 
 function Func0336 takes nothing returns boolean
-	return IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit124)) == true and GetTowerLevel(GetFilterUnit()) > 0
+	return IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == true and GetTowerLevel(GetFilterUnit()) > 0
 endfunction
 
 function Func0337 takes real loc_real01 returns integer
@@ -5818,7 +5823,7 @@ endfunction
 function Func0341 takes nothing returns nothing
 	if IsUnitInGroup(GetEnumUnit(), group002) == false and Func0095(GetEnumUnit()) == false and((LoadInteger(HY, (GetHandleId((GetEnumUnit()))), ((4253)))) == 1) == false then
 		call GroupAddUnit(group002, GetEnumUnit())
-		call Func0340(GetEnumUnit(), unit124, real010, real009, real011)
+		call Func0340(GetEnumUnit(), tt_unit1, real010, real009, real011)
 	endif
 endfunction
 
@@ -5836,7 +5841,7 @@ function Func0342 takes nothing returns boolean
 	local real loc_real08 = (LoadReal(HY, (loc_integer01), (44)))
 	local real loc_real09 = Atan2(loc_real06 - loc_real04, loc_real05 - loc_real03)
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (22)))
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local real loc_real10 = loc_real08 * 0.0625
 	local real loc_real11 = (LoadReal(HY, (loc_integer01), (71)))
 	local real loc_real12 = (LoadReal(HY, (loc_integer01), (72)))
@@ -5849,14 +5854,14 @@ function Func0342 takes nothing returns boolean
 		set loc_real03 = loc_real03 + loc_real10 * Cos(loc_real09)
 		set loc_real04 = loc_real04 + loc_real10 * Sin(loc_real09)
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set real009 = loc_real01
 	set real010 = loc_real02
 	set real011 = loc_real14
 	set group002 = loc_group01
 	call GroupEnumUnitsInRange(loc_group02, loc_real03, loc_real04, loc_real07, Condition(function Func0283))
 	call ForGroup(loc_group02, function Func0341)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if Func0141(loc_real03, loc_real04, loc_real11, loc_real12) >= loc_real13 then
 		call SaveReal(HY, (loc_integer01), (71), ((loc_real03) * 1.0))
 		call SaveReal(HY, (loc_integer01), (72), ((loc_real04) * 1.0))
@@ -5866,7 +5871,7 @@ function Func0342 takes nothing returns boolean
 	call SaveReal(HY, (loc_integer01), (65), ((loc_real04) * 1.0))
 	if loc_real03 == loc_real05 and loc_real04 == loc_real06 then
 		if(LoadBoolean(HY, (loc_integer01), (69))) == true then
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 		endif
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
@@ -5896,7 +5901,7 @@ function Func0343 takes unit loc_unit01, unit loc_unit02, real loc_real01, real 
 	call SaveReal(HY, (loc_integer01), (68), ((loc_real08) * 1.0))
 	call SaveReal(HY, (loc_integer01), (44), ((loc_real09) * 1.0))
 	if loc_group01 == null then
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		if loc_unit02 != null and IsUnitIllusion(loc_unit02) == false then
 			call GroupAddUnit(loc_group02, loc_unit02)
 		endif
@@ -6026,8 +6031,8 @@ function Func0353 takes item loc_item01 returns integer
 	endif
 	set loc_integer01 = GetItemTypeId(loc_item01)
 	loop
-		exitwhen loc_integer02 > integer064
-		if integers083[loc_integer02] == loc_integer01 or integers084[loc_integer02] == loc_integer01 or integers086[loc_integer02] == loc_integer01 then
+		exitwhen loc_integer02 > ItemCount
+		if Item_Dummy[loc_integer02] == loc_integer01 or Item_Real[loc_integer02] == loc_integer01 or Item_Mute[loc_integer02] == loc_integer01 then
 			return loc_integer02
 		endif
 		set loc_integer02 = loc_integer02 + 1
@@ -6035,246 +6040,246 @@ function Func0353 takes item loc_item01 returns integer
 	return - 1
 endfunction
 
-function Func0354 takes item loc_item01 returns integer
-	local integer loc_integer01
-	local integer loc_integer02 = 1
-	if loc_item01 == null then
+function GetIndexNoMute takes item it returns integer
+	local integer id
+	local integer i = 1
+	if it == null then
 		return - 2
 	endif
-	set loc_integer01 = GetItemTypeId(loc_item01)
+	set id = GetItemTypeId(it)
 	loop
-		exitwhen loc_integer02 > integer064
-		if integers083[loc_integer02] == loc_integer01 or integers084[loc_integer02] == loc_integer01 then
-			return loc_integer02
+		exitwhen i > ItemCount
+		if Item_Dummy[i] == id or Item_Real[i] == id then
+			return i
 		endif
-		set loc_integer02 = loc_integer02 + 1
+		set i = i + 1
 	endloop
 	return - 1
 endfunction
 
-function Func0355 takes unit loc_unit01 returns integer
-	local integer loc_integer01
-	if loc_unit01 == null then
+function GetHeroAghItemIndex takes unit u returns integer
+	local integer id
+	if u == null then
 		return - 2
 	endif
-	set loc_integer01 = GetUnitTypeId(loc_unit01)
-	if loc_integer01 == 'H004' then
+	set id = GetUnitTypeId(u)
+	if id == 'H004' then
 		return integer315
-	elseif loc_integer01 == 'UC18' then
+	elseif id == 'UC18' then
 		return integer316
-	elseif loc_integer01 == 'Hmkg' then
+	elseif id == 'Hmkg' then
 		return integer320
-	elseif loc_integer01 == 'Ucrl' or loc_integer01 == 'U01X' then
+	elseif id == 'Ucrl' or id == 'U01X' then
 		return integer355
-	elseif loc_integer01 == 'H00H' then
+	elseif id == 'H00H' then
 		return integer322
-	elseif loc_integer01 == 'UC01' then
+	elseif id == 'UC01' then
 		return integer323
-	elseif loc_integer01 == 'Orkn' then
+	elseif id == 'Orkn' then
 		return integer324
-	elseif loc_integer01 == 'Hmbr' then
+	elseif id == 'Hmbr' then
 		return integer328
-	elseif loc_integer01 == 'Hjai' then
+	elseif id == 'Hjai' then
 		return integer325
-	elseif loc_integer01 == 'Ulic' then
+	elseif id == 'Ulic' then
 		return integer314
-	elseif loc_integer01 == 'Ekee' then
+	elseif id == 'Ekee' then
 		return integer313
-	elseif loc_integer01 == 'Emns' then
+	elseif id == 'Emns' then
 		return integer311
-	elseif loc_integer01 == 'EC57' then
+	elseif id == 'EC57' then
 		return integer326
-	elseif loc_integer01 == 'U00E' then
+	elseif id == 'U00E' then
 		return integer319
-	elseif loc_integer01 == 'E005' then
+	elseif id == 'E005' then
 		return integer318
-	elseif loc_integer01 == 'E01A' then
+	elseif id == 'E01A' then
 		return integer327
-	elseif loc_integer01 == 'UC42' then
+	elseif id == 'UC42' then
 		return integer317
-	elseif loc_integer01 == 'Npbm' then
+	elseif id == 'Npbm' then
 		return integer340
-	elseif loc_integer01 == 'H00T' then
+	elseif id == 'H00T' then
 		return integer330
-	elseif loc_integer01 == 'Hvwd' then
+	elseif id == 'Hvwd' then
 		return integer331
-	elseif loc_integer01 == 'Nbbc' then
+	elseif id == 'Nbbc' then
 		return integer332
-	elseif loc_integer01 == 'H00A' then
+	elseif id == 'H00A' then
 		return integer334
-	elseif loc_integer01 == 'Udre' then
+	elseif id == 'Udre' then
 		return integer335
-	elseif loc_integer01 == 'E00P' then
+	elseif id == 'E00P' then
 		return integer336
-	elseif loc_integer01 == 'U00K' then
+	elseif id == 'U00K' then
 		return integer337
-	elseif loc_integer01 == 'H00Q' then
+	elseif id == 'H00Q' then
 		return integer338
-	elseif loc_integer01 == 'H00U' then
+	elseif id == 'H00U' then
 		return integer339
-	elseif loc_integer01 == 'U00F' then
+	elseif id == 'U00F' then
 		return integer341
-	elseif loc_integer01 == 'N0EG' then
+	elseif id == 'N0EG' then
 		return integer342
-	elseif loc_integer01 == 'EC45' then
+	elseif id == 'EC45' then
 		return integer343
-	elseif loc_integer01 == 'O00J' then
+	elseif id == 'O00J' then
 		return integer344
-	elseif loc_integer01 == 'Oshd' then
+	elseif id == 'Oshd' then
 		return integer345
-	elseif loc_integer01 == 'Udea' then
+	elseif id == 'Udea' then
 		return integer346
-	elseif loc_integer01 == 'N01W' then
+	elseif id == 'N01W' then
 		return integer347
-	elseif loc_integer01 == 'H00K' then
+	elseif id == 'H00K' then
 		return integer348
-	elseif loc_integer01 == 'Opgh' then
+	elseif id == 'Opgh' then
 		return integer349
-	elseif loc_integer01 == 'Otch' then
+	elseif id == 'Otch' then
 		return integer350
-	elseif loc_integer01 == 'H00R' then
+	elseif id == 'H00R' then
 		return integer321
-	elseif loc_integer01 == 'H07I' then
+	elseif id == 'H07I' then
 		return integer321
-	elseif loc_integer01 == 'N00B' then
+	elseif id == 'N00B' then
 		return integer351
-	elseif loc_integer01 == 'E01C' then
+	elseif id == 'E01C' then
 		return integer352
-	elseif loc_integer01 == 'E002' then
+	elseif id == 'E002' then
 		return integer353
-	elseif loc_integer01 == 'EC77' then
+	elseif id == 'EC77' then
 		return integer354
-	elseif loc_integer01 == 'U00P' then
+	elseif id == 'U00P' then
 		return integer356
-	elseif loc_integer01 == 'Emoo' then
+	elseif id == 'Emoo' then
 		return integer357
-	elseif loc_integer01 == 'H00N' then
+	elseif id == 'H00N' then
 		return integer358
-	elseif loc_integer01 == 'E02N' or loc_integer01 == 'E02O' then
+	elseif id == 'E02N' or id == 'E02O' then
 		return integer359
-	elseif loc_integer01 == 'H00I' then
+	elseif id == 'H00I' then
 		return integer360
-	elseif loc_integer01 == 'H00D' then
+	elseif id == 'H00D' then
 		return integer361
-	elseif loc_integer01 == 'UC60' then
+	elseif id == 'UC60' then
 		return integer362
-	elseif loc_integer01 == 'N01A' then
+	elseif id == 'N01A' then
 		return integer363
-	elseif loc_integer01 == 'N0HP' then
+	elseif id == 'N0HP' then
 		return integer364
-	elseif loc_integer01 == 'Harf' then
+	elseif id == 'Harf' then
 		return integer365
 	endif
 	return integer310
 endfunction
 
-function Func0356 takes unit loc_unit01 returns integer
-	local integer loc_integer01
-	if loc_unit01 == null then
+function GetAghAbilityId takes unit u returns integer
+	local integer id
+	if u == null then
 		return - 2
 	endif
-	set loc_integer01 = GetUnitTypeId(loc_unit01)
-	if loc_integer01 == 'H004' then
+	set id = GetUnitTypeId(u)
+	if id == 'H004' then
 		return 'A0TP'
-	elseif loc_integer01 == 'UC18' then
+	elseif id == 'UC18' then
 		return 'A0TR'
-	elseif loc_integer01 == 'Hmkg' then
+	elseif id == 'Hmkg' then
 		return 'A2KT'
-	elseif loc_integer01 == 'Ucrl' or loc_integer01 == 'U01X' then
+	elseif id == 'Ucrl' or id == 'U01X' then
 		return 0
-	elseif loc_integer01 == 'H00H' then
+	elseif id == 'H00H' then
 		return 'A0TV'
-	elseif loc_integer01 == 'UC01' then
+	elseif id == 'UC01' then
 		return 'A0TX'
-	elseif loc_integer01 == 'Orkn' then
+	elseif id == 'Orkn' then
 		return 'A0TZ'
-	elseif loc_integer01 == 'Hmbr' then
+	elseif id == 'Hmbr' then
 		return 'A0U1'
-	elseif loc_integer01 == 'Hjai' then
+	elseif id == 'Hjai' then
 		return 'A0U3'
-	elseif loc_integer01 == 'Ulic' then
+	elseif id == 'Ulic' then
 		return 'A0U5'
-	elseif loc_integer01 == 'Ekee' then
+	elseif id == 'Ekee' then
 		return 'A0U7'
-	elseif loc_integer01 == 'Emns' then
+	elseif id == 'Emns' then
 		return 'A0U9'
-	elseif loc_integer01 == 'EC57' then
+	elseif id == 'EC57' then
 		return 'A0UB'
-	elseif loc_integer01 == 'U00E' then
+	elseif id == 'U00E' then
 		return 'A0UD'
-	elseif loc_integer01 == 'E005' then
+	elseif id == 'E005' then
 		return 'A0UF'
-	elseif loc_integer01 == 'E01A' then
+	elseif id == 'E01A' then
 		return 'A0UH'
-	elseif loc_integer01 == 'UC42' then
+	elseif id == 'UC42' then
 		return 'A0UJ'
-	elseif loc_integer01 == 'Npbm' then
+	elseif id == 'Npbm' then
 		return 'A1BE'
-	elseif loc_integer01 == 'H00T' then
+	elseif id == 'H00T' then
 		return 'A1B9'
-	elseif loc_integer01 == 'Hvwd' then
+	elseif id == 'Hvwd' then
 		return 'A1BA'
-	elseif loc_integer01 == 'Nbbc' then
+	elseif id == 'Nbbc' then
 		return 'A1BB'
-	elseif loc_integer01 == 'H00A' then
+	elseif id == 'H00A' then
 		return 'A1CU'
-	elseif loc_integer01 == 'Udre' then
+	elseif id == 'Udre' then
 		return 'A1BG'
-	elseif loc_integer01 == 'E00P' then
+	elseif id == 'E00P' then
 		return 'A1BJ'
-	elseif loc_integer01 == 'U00K' then
+	elseif id == 'U00K' then
 		return 'A1BC'
-	elseif loc_integer01 == 'H00Q' then
+	elseif id == 'H00Q' then
 		return 'A1BI'
-	elseif loc_integer01 == 'H00U' then
+	elseif id == 'H00U' then
 		return 'A1BD'
-	elseif loc_integer01 == 'U00F' then
+	elseif id == 'U00F' then
 		return 'A1CY'
-	elseif loc_integer01 == 'N0EG' then
+	elseif id == 'N0EG' then
 		return 'A1D2'
-	elseif loc_integer01 == 'EC45' then
+	elseif id == 'EC45' then
 		return 'A1D1'
-	elseif loc_integer01 == 'O00J' then
+	elseif id == 'O00J' then
 		return 'A1CZ'
-	elseif loc_integer01 == 'Oshd' then
+	elseif id == 'Oshd' then
 		return 'A1D0'
-	elseif loc_integer01 == 'Udea' then
+	elseif id == 'Udea' then
 		return 'A1D3'
-	elseif loc_integer01 == 'N01W' then
+	elseif id == 'N01W' then
 		return 'A1D4'
-	elseif loc_integer01 == 'H00K' then
+	elseif id == 'H00K' then
 		return 'A1G1'
-	elseif loc_integer01 == 'Opgh' then
+	elseif id == 'Opgh' then
 		return 'A1MT'
-	elseif loc_integer01 == 'Otch' then
+	elseif id == 'Otch' then
 		return 'A1N0'
-	elseif loc_integer01 == 'N00B' then
+	elseif id == 'N00B' then
 		return 'A1QS'
-	elseif loc_integer01 == 'E01C' then
+	elseif id == 'E01C' then
 		return 'A1UT'
-	elseif loc_integer01 == 'E002' then
+	elseif id == 'E002' then
 		return 'A1UU'
-	elseif loc_integer01 == 'EC77' then
+	elseif id == 'EC77' then
 		return 'A1V1'
-	elseif loc_integer01 == 'U00P' then
+	elseif id == 'U00P' then
 		return 'A1VY'
-	elseif loc_integer01 == 'Emoo' then
+	elseif id == 'Emoo' then
 		return 'A1WD'
-	elseif loc_integer01 == 'H00N' then
+	elseif id == 'H00N' then
 		return 'A21S'
-	elseif loc_integer01 == 'E02N' or loc_integer01 == 'E02O' then
+	elseif id == 'E02N' or id == 'E02O' then
 		return 'A237'
-	elseif loc_integer01 == 'H00I' then
+	elseif id == 'H00I' then
 		return 'A27E'
-	elseif loc_integer01 == 'H00D' then
+	elseif id == 'H00D' then
 		return 'A28A'
-	elseif loc_integer01 == 'UC60' then
+	elseif id == 'UC60' then
 		return 'A2IH'
-	elseif loc_integer01 == 'N01A' then
+	elseif id == 'N01A' then
 		return 'A2QB'
-	elseif loc_integer01 == 'N0HP' then
+	elseif id == 'N0HP' then
 		return 'A2QF'
-	elseif loc_integer01 == 'Harf' then
+	elseif id == 'Harf' then
 		return 'A2S7'
 	endif
 	return 0
@@ -6347,17 +6352,17 @@ function Func0362 takes integer loc_integer01, real loc_real01, real loc_real02,
 endfunction
 
 function Func0363 takes nothing returns nothing
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 endfunction
 
 function Func0364 takes nothing returns nothing
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 endfunction
 
-function Func0365 takes item loc_item01 returns nothing
-	call DisableTrigger(trigger057)
-	call RemoveItem(loc_item01)
-	call EnableTrigger(trigger057)
+function DestroyItem takes item it returns nothing
+	call DisableTrigger(Trig_ManipulateItem)
+	call RemoveItem(it)
+	call EnableTrigger(Trig_ManipulateItem)
 endfunction
 
 function Func0366 takes unit loc_unit01, integer loc_integer01, item loc_item01 returns item
@@ -6467,8 +6472,8 @@ function Func0372 takes item loc_item01 returns integer
 	endif
 	set loc_integer01 = GetItemTypeId(loc_item01)
 	loop
-		exitwhen loc_integer02 > integer064
-		if integers083[loc_integer02] == loc_integer01 or integers084[loc_integer02] == loc_integer01 then
+		exitwhen loc_integer02 > ItemCount
+		if Item_Dummy[loc_integer02] == loc_integer01 or Item_Real[loc_integer02] == loc_integer01 then
 			return loc_integer02
 		endif
 		set loc_integer02 = loc_integer02 + 1
@@ -6484,8 +6489,8 @@ function Func0373 takes item loc_item01 returns integer
 	endif
 	set loc_integer01 = GetItemTypeId(loc_item01)
 	loop
-		exitwhen loc_integer02 > integer064
-		if integers086[loc_integer02] == loc_integer01 then
+		exitwhen loc_integer02 > ItemCount
+		if Item_Mute[loc_integer02] == loc_integer01 then
 			return loc_integer02
 		endif
 		set loc_integer02 = loc_integer02 + 1
@@ -6501,9 +6506,9 @@ function Func0374 takes item loc_item01 returns integer
 	endif
 	set loc_integer01 = GetItemTypeId(loc_item01)
 	loop
-		exitwhen loc_integer02 > integer064
-		if integers086[loc_integer02] == loc_integer01 then
-			return integers084[loc_integer02]
+		exitwhen loc_integer02 > ItemCount
+		if Item_Mute[loc_integer02] == loc_integer01 then
+			return Item_Real[loc_integer02]
 		endif
 		set loc_integer02 = loc_integer02 + 1
 	endloop
@@ -6518,8 +6523,8 @@ function Func0375 takes unit loc_unit01 returns integer
 	endif
 	set loc_integer01 = GetUnitTypeId(loc_unit01)
 	loop
-		exitwhen loc_integer02 > integer064
-		if integers085[loc_integer02] == loc_integer01 then
+		exitwhen loc_integer02 > ItemCount
+		if Item_SellerUnit[loc_integer02] == loc_integer01 then
 			return loc_integer02
 		endif
 		set loc_integer02 = loc_integer02 + 1
@@ -6531,7 +6536,7 @@ function Func0376 takes item loc_item01 returns string
 	if loc_item01 == null then
 		return"UI\\Widgets\\Console\\Undead\\undead-inventory-slotfiller.blp"
 	endif
-	return strings012[Func0353(loc_item01)]
+	return Item_Icon[Func0353(loc_item01)]
 endfunction
 
 function Func0377 takes item loc_item01 returns boolean
@@ -6579,7 +6584,7 @@ function Func0382 takes unit loc_unit01, integer loc_integer01, integer loc_inte
 	local integer loc_integer03 = 0
 	local boolean array loc_booleans01
 	local item loc_item02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if loc_integer01 > 0 then
 		loop
 			exitwhen loc_integer03 > (UnitInventorySize(loc_unit01) - 1)
@@ -6591,9 +6596,9 @@ function Func0382 takes unit loc_unit01, integer loc_integer01, integer loc_inte
 				set loc_booleans01[loc_integer03] = false
 			endif
 			if loc_integer03 == loc_integer02 then
-				call EnableTrigger(trigger057)
+				call EnableTrigger(Trig_ManipulateItem)
 				call UnitAddItem(loc_unit01, loc_item01)
-				call DisableTrigger(trigger057)
+				call DisableTrigger(Trig_ManipulateItem)
 			endif
 			set loc_integer03 = loc_integer03 + 1
 		endloop
@@ -6606,11 +6611,11 @@ function Func0382 takes unit loc_unit01, integer loc_integer01, integer loc_inte
 			set loc_integer03 = loc_integer03 + 1
 		endloop
 	endif
-	call EnableTrigger(trigger057)
-	set item002 = loc_item01
+	call EnableTrigger(Trig_ManipulateItem)
+	set tt_item1 = loc_item01
 	set loc_item01 = null
 	set loc_item02 = null
-	return item002
+	return tt_item1
 endfunction
 
 function Func0383 takes integer loc_integer01, integer loc_integer02, integer loc_integer03, integer loc_integer04 returns nothing
@@ -7466,13 +7471,13 @@ function Func0420 takes nothing returns nothing
 endfunction
 
 function Func0421 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, Player(0), Condition(function Func0011))
 	call ForGroup(loc_group01, function Func0420)
 	call GroupClear(loc_group01)
 	call GroupEnumUnitsOfPlayer(loc_group01, Player(6), Condition(function Func0011))
 	call ForGroup(loc_group01, function Func0420)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func0422 takes player p returns nothing
@@ -9808,7 +9813,7 @@ function Func0446 takes unit loc_unit01 returns nothing
 		call UnitRemoveAbility(loc_unit01, 'A237')
 		call UnitAddAbility(loc_unit01, 'A22B')
 		call UnitRemoveAbility(loc_unit01, 'A22B')
-		if Func0367(loc_unit01, integers084[integer359]) != null then
+		if Func0367(loc_unit01, Item_Real[integer359]) != null then
 			call UnitAddAbility(loc_unit01, 'A237')
 		endif
 	endif
@@ -9823,7 +9828,7 @@ function Func0446 takes unit loc_unit01 returns nothing
 	call UnitRemoveAbility(loc_unit01, 'A23F')
 	call UnitRemoveAbility(loc_unit01, 'A2S1')
 	call Func0261(loc_unit01)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call ExecuteFunc("Func1804")
 endfunction
 
@@ -9835,7 +9840,7 @@ function Func0447 takes nothing returns boolean
 endfunction
 
 function Func0448 takes unit loc_unit01, player loc_player01, real loc_real01, real loc_real02, boolean loc_boolean01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set integer051 = 0
 	set player011 = loc_player01
 	call GroupEnumUnitsSelected(loc_group01, loc_player01, Condition(function Func0447))
@@ -9847,7 +9852,7 @@ function Func0448 takes unit loc_unit01, player loc_player01, real loc_real01, r
 		call PanCameraToTimed(loc_real01, loc_real02, 0)
 	endif
 	set integer051 = 0
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -9857,12 +9862,12 @@ endfunction
 
 function Func0450 takes unit loc_unit01 returns nothing
 	local integer loc_integer01
-	if Func0367(loc_unit01, integers084[integer229]) != null and GetUnitTypeId(loc_unit01) != 'H00J' then
-		set loc_integer01 = R2I(GetItemCharges(Func0367(loc_unit01, integers084[integer229])) * 0.67)
-		if GetItemCharges(Func0367(loc_unit01, integers084[integer229])) == 1 then
+	if Func0367(loc_unit01, Item_Real[integer229]) != null and GetUnitTypeId(loc_unit01) != 'H00J' then
+		set loc_integer01 = R2I(GetItemCharges(Func0367(loc_unit01, Item_Real[integer229])) * 0.67)
+		if GetItemCharges(Func0367(loc_unit01, Item_Real[integer229])) == 1 then
 			set loc_integer01 = 0
 		endif
-		call SetItemCharges(Func0367(loc_unit01, integers084[integer229]), loc_integer01)
+		call SetItemCharges(Func0367(loc_unit01, Item_Real[integer229]), loc_integer01)
 		call AddHeroXP(loc_unit01, GetHeroXP(units009[GetPlayerId(GetOwningPlayer(loc_unit01))]), true)
 		call RemoveUnit(units009[GetPlayerId(GetOwningPlayer(loc_unit01))])
 	endif
@@ -10000,12 +10005,12 @@ function Func0454 takes nothing returns nothing
 	call SetUnitY(loc_unit01, loc_real02)
 	call Func0446(loc_unit01)
 	call SetUnitPathing(loc_unit01, true)
-	if Func0367(loc_unit01, integers084[integer229]) != null and GetUnitTypeId(loc_unit01) != 'H00J' then
-		set loc_integer01 = (R2I(((GetItemCharges(Func0367(loc_unit01, integers084[integer229])) * 0.67) * 1.0)))
-		if GetItemCharges(Func0367(loc_unit01, integers084[integer229])) == 1 then
+	if Func0367(loc_unit01, Item_Real[integer229]) != null and GetUnitTypeId(loc_unit01) != 'H00J' then
+		set loc_integer01 = (R2I(((GetItemCharges(Func0367(loc_unit01, Item_Real[integer229])) * 0.67) * 1.0)))
+		if GetItemCharges(Func0367(loc_unit01, Item_Real[integer229])) == 1 then
 			set loc_integer01 = 0
 		endif
-		call SetItemCharges(Func0367(loc_unit01, integers084[integer229]), loc_integer01)
+		call SetItemCharges(Func0367(loc_unit01, Item_Real[integer229]), loc_integer01)
 		call AddHeroXP(loc_unit01, GetHeroXP(units009[GetPlayerId(GetOwningPlayer(loc_unit01))]), true)
 		call RemoveUnit(units009[GetPlayerId(GetOwningPlayer(loc_unit01))])
 	endif
@@ -10092,7 +10097,7 @@ function Func0455 takes unit loc_unit01 returns nothing
 		call ExecuteFunc("Func2099")
 		call ExecuteFunc("Func2085")
 		call SetUnitPathing(loc_unit01, false)
-		call DisableTrigger(trigger057)
+		call DisableTrigger(Trig_ManipulateItem)
 		set boolean091 = true
 		set loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), GetUnitTypeId(loc_unit01), GetUnitX(loc_unit01), GetUnitY(loc_unit01), GetUnitFacing(loc_unit01))
 		call SaveBoolean(HY, (GetHandleId(loc_unit02)), (85), (true))
@@ -10109,7 +10114,7 @@ function Func0455 takes unit loc_unit01 returns nothing
 			call UnitAddItem(loc_unit02, UnitItemInSlot(loc_unit01, 5))
 		endif
 		call Func0128(loc_unit01)
-		call EnableTrigger(trigger057)
+		call EnableTrigger(Trig_ManipulateItem)
 		call SetUnitPathing(loc_unit02, true)
 		call ClearSelectionForPlayer(GetOwningPlayer(loc_unit02))
 		call SelectUnitAddForPlayer(loc_unit02, GetOwningPlayer(loc_unit02))
@@ -10555,7 +10560,7 @@ function Func0455 takes unit loc_unit01 returns nothing
 		call ExecuteFunc("Func4177")
 		call ExecuteFunc("Func4195")
 		call ExecuteFunc("Func4206")
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		call ExecuteFunc("Func4190")
 	elseif loc_integer01 == 59 then
 		call ExecuteFunc("Func4126")
@@ -10602,11 +10607,11 @@ function Func0462 takes nothing returns nothing
 endfunction
 
 function Func0463 takes player loc_player01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func0461)
 	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, loc_boolexpr01)
 	call ForGroup(loc_group01, function Func0462)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func0464 takes nothing returns nothing
@@ -10638,10 +10643,10 @@ function Func0466 takes nothing returns nothing
 endfunction
 
 function Func0467 takes player loc_player01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function Func0465))
 	call ForGroup(loc_group01, function Func0466)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -10747,7 +10752,7 @@ function Func0470 takes nothing returns nothing
 		set integers035[GetPlayerId(loc_player01)] = integers035[GetPlayerId(loc_player01)] + 1
 		if integers035[GetPlayerId(GetOwningPlayer(loc_unit01))] > 1 and loc_unit01 != units002[GetPlayerId(GetOwningPlayer(loc_unit01))]then
 			call Func0450(units002[GetPlayerId(GetOwningPlayer(loc_unit01))])
-			call DisableTrigger(trigger057)
+			call DisableTrigger(Trig_ManipulateItem)
 			call SetHeroXP(loc_unit01, GetHeroXP(units002[GetPlayerId(GetOwningPlayer(loc_unit01))]), false)
 			call UnitAddItem(loc_unit01, UnitItemInSlot(units002[GetPlayerId(GetOwningPlayer(loc_unit01))], 0))
 			call UnitAddItem(loc_unit01, UnitItemInSlot(units002[GetPlayerId(GetOwningPlayer(loc_unit01))], 1))
@@ -10755,7 +10760,7 @@ function Func0470 takes nothing returns nothing
 			call UnitAddItem(loc_unit01, UnitItemInSlot(units002[GetPlayerId(GetOwningPlayer(loc_unit01))], 3))
 			call UnitAddItem(loc_unit01, UnitItemInSlot(units002[GetPlayerId(GetOwningPlayer(loc_unit01))], 4))
 			call UnitAddItem(loc_unit01, UnitItemInSlot(units002[GetPlayerId(GetOwningPlayer(loc_unit01))], 5))
-			call EnableTrigger(trigger057)
+			call EnableTrigger(Trig_ManipulateItem)
 			if Func0449(units002[GetPlayerId(GetOwningPlayer(loc_unit01))])then
 				call Func0451(units002[GetPlayerId(GetOwningPlayer(loc_unit01))])
 			else
@@ -10814,7 +10819,7 @@ function Func0470 takes nothing returns nothing
 		call SaveBoolean(HY, (600 + GetUnitPointValue(loc_unit01)), (87), (true))
 		call Func0455(loc_unit01)
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call ExecuteFunc("Func2883")
 	if not booleans030[GetPlayerId(GetLocalPlayer())] then
 		call SetPlayerName(loc_player01, (PlayerColorArray[GetPlayerId((loc_player01))]) + " (" + GetHeroName(PlayerHeroArray[GetPlayerId(loc_player01)]) + ")")
@@ -11673,7 +11678,7 @@ function Func0491 takes unit loc_unit01 returns boolean
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer02), (699)))
 	loop
 		exitwhen loc_integer01 > 5
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == integers084[integer193]and GetItemCharges(UnitItemInSlot(loc_unit02, loc_integer01)) > 0 then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == Item_Real[integer193]and GetItemCharges(UnitItemInSlot(loc_unit02, loc_integer01)) > 0 then
 			return true
 		endif
 		set loc_integer01 = loc_integer01 + 1
@@ -11780,14 +11785,14 @@ function Func0498 takes unit loc_unit01, unit loc_unit02 returns nothing
 endfunction
 
 function Func0499 takes nothing returns nothing
-	if Func0367(GetEnumUnit(), integers084[integer229]) != null then
-		call SetItemCharges(Func0367(GetEnumUnit(), integers084[integer229]), GetItemCharges(Func0367(GetEnumUnit(), integers084[integer229])) + 1)
+	if Func0367(GetEnumUnit(), Item_Real[integer229]) != null then
+		call SetItemCharges(Func0367(GetEnumUnit(), Item_Real[integer229]), GetItemCharges(Func0367(GetEnumUnit(), Item_Real[integer229])) + 1)
 	endif
 endfunction
 
 function Func0500 takes nothing returns boolean
 	if(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitIllusion(GetFilterUnit()) == false then
-		if IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit240))and Func0367(GetFilterUnit(), integers084[integer229]) != null then
+		if IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit240))and Func0367(GetFilterUnit(), Item_Real[integer229]) != null then
 			return true
 		endif
 	endif
@@ -11798,15 +11803,15 @@ function Func0501 takes nothing returns boolean
 	local item loc_item01
 	local integer loc_integer01
 	if integer054 == 0 and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitIllusion(GetFilterUnit()) == false and IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit241))then
-		if Func0367(GetFilterUnit(), integers084[integer245]) != null then
+		if Func0367(GetFilterUnit(), Item_Real[integer245]) != null then
 			set integer054 = integer054 + 1
-			set loc_integer01 = GetItemCharges(Func0367(GetFilterUnit(), integers084[integer245]))
+			set loc_integer01 = GetItemCharges(Func0367(GetFilterUnit(), Item_Real[integer245]))
 			if loc_integer01 == 0 then
 				set loc_integer01 = 2
 			else
 				set loc_integer01 = loc_integer01 + 1
 			endif
-			call SetItemCharges(Func0367(GetFilterUnit(), integers084[integer245]), loc_integer01)
+			call SetItemCharges(Func0367(GetFilterUnit(), Item_Real[integer245]), loc_integer01)
 		endif
 	endif
 	return false
@@ -11816,25 +11821,25 @@ function Func0502 takes nothing returns boolean
 	local item loc_item01
 	local integer loc_integer01
 	if integer055 == 0 and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitIllusion(GetFilterUnit()) == false and IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit241))then
-		if Func0367(GetFilterUnit(), integers084[integer129]) != null then
+		if Func0367(GetFilterUnit(), Item_Real[integer129]) != null then
 			set integer055 = integer055 + 1
-			set loc_integer01 = GetItemCharges(Func0367(GetFilterUnit(), integers084[integer129]))
+			set loc_integer01 = GetItemCharges(Func0367(GetFilterUnit(), Item_Real[integer129]))
 			set loc_integer01 = IMinBJ(loc_integer01 + 1, 5)
-			call SetItemCharges(Func0367(GetFilterUnit(), integers084[integer129]), loc_integer01)
+			call SetItemCharges(Func0367(GetFilterUnit(), Item_Real[integer129]), loc_integer01)
 		endif
 	endif
 	return false
 endfunction
 
 function Func0503 takes unit loc_unit01, unit loc_unit02 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit240 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1625, Condition(function Func0500))
 	if IsUnitAlly(loc_unit01, GetOwningPlayer(loc_unit02)) == false then
 		call GroupAddUnit(loc_group01, loc_unit02)
 	endif
 	call ForGroup(loc_group01, function Func0499)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -11920,26 +11925,26 @@ endfunction
 
 function Func0507 takes nothing returns boolean
 	if(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitIllusion(GetFilterUnit()) == false then
-		if IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit240)) == false and Func0367(GetFilterUnit(), integers084[integer131]) != null then
+		if IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit240)) == false and Func0367(GetFilterUnit(), Item_Real[integer131]) != null then
 		endif
 	endif
 	return false
 endfunction
 
 function Func0508 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit240 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1625, Condition(function Func0507))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
 function Func0509 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set integer054 = 0
 	set unit241 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1425, Condition(function Func0501))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set integer054 = 0
 	set loc_group01 = null
 endfunction
@@ -12054,9 +12059,9 @@ endfunction
 
 function Func0517 takes nothing returns nothing
 	local boolexpr loc_boolexpr01 = Condition(function Func0516)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRect(loc_group01, bj_mapInitialPlayableArea, loc_boolexpr01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func0518 takes player loc_player01 returns boolean
@@ -12110,7 +12115,7 @@ function Func0523 takes nothing returns boolean
 		set loc_integer01 = GetHeroLevel(GetTriggerUnit())
 		set integer057 = 0
 		set integer056 = 0
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set integer058 = 0
 		set integer059 = 0
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()), 1200 + 25, Condition(function Func0313))
@@ -12142,7 +12147,7 @@ function Func0523 takes nothing returns boolean
 		set integer057 = loc_integer02
 		set integer056 = loc_integer03
 		call ForGroup(loc_group01, function Func0522)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	return false
@@ -12421,10 +12426,10 @@ function Func0524 takes nothing returns nothing
 		endif
 	endif
 	set loc_integer02 = GetHeroLevel(loc_unit01) * 30
-	if Func0367(loc_unit01, integers084[integer229]) != null then
-		if GetItemCharges(Func0367(loc_unit01, integers084[integer229])) > 0 then
-			set loc_real05 = -1 * (4 * GetItemCharges(Func0367(loc_unit01, integers084[integer229])))
-			set loc_integer02 = IMaxBJ(R2I(loc_integer02 - 25 * GetItemCharges(Func0367(loc_unit01, integers084[integer229]))), 0)
+	if Func0367(loc_unit01, Item_Real[integer229]) != null then
+		if GetItemCharges(Func0367(loc_unit01, Item_Real[integer229])) > 0 then
+			set loc_real05 = -1 * (4 * GetItemCharges(Func0367(loc_unit01, Item_Real[integer229])))
+			set loc_integer02 = IMaxBJ(R2I(loc_integer02 - 25 * GetItemCharges(Func0367(loc_unit01, Item_Real[integer229]))), 0)
 		endif
 	endif
 	if loc_integer02 > loc_integer08 then
@@ -12570,45 +12575,45 @@ function Func0527 takes nothing returns boolean
 endfunction
 
 function Func0528 takes nothing returns boolean
-	local trigger loc_trigger01 = GetTriggeringTrigger()
-	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local unit loc_unit01
-	local region loc_region01
+	local trigger t = GetTriggeringTrigger()
+	local integer h = GetHandleId(t)
+	local unit u
+	local region r
 	if GetTriggerEventId() == EVENT_UNIT_DEATH then
-		call FlushChildHashtable(HY, (loc_integer01))
-		call CleanTrigger(loc_trigger01)
+		call FlushChildHashtable(HY, h)
+		call CleanTrigger(t)
 	else
-		set loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (53)))
-		set loc_region01 = CreateRegion()
-		call RegionAddRect(loc_region01, rect188)
-		call RegionAddRect(loc_region01, rect189)
-		call RegionAddRect(loc_region01, rect213)
-		if IsUnitInRegion(loc_region01, loc_unit01) == false then
-			if(LoadBoolean(HY, (loc_integer01), (91))) == true then
-				call SaveBoolean(HY, (loc_integer01), (91), (false))
+		set u = LoadUnitHandle(HY, h, 53)
+		set r = CreateRegion()
+		call RegionAddRect(r, rect188)
+		call RegionAddRect(r, rect189)
+		call RegionAddRect(r, rect213)
+		if not IsUnitInRegion(r, u) then
+			if LoadBoolean(HY, h, 91) then
+				call SaveBoolean(HY, h, 91, false)
 			else
-				call SetUnitX(loc_unit01, GetRectCenterX(rect033))
-				call SetUnitY(loc_unit01, GetRectCenterY(rect033))
-				call SaveBoolean(HY, (loc_integer01), (91), (true))
+				call SetUnitX(u, GetRectCenterX(rect033))
+				call SetUnitY(u, GetRectCenterY(rect033))
+				call SaveBoolean(HY, h, 91, true)
 			endif
 		endif
-		call RemoveRegion(loc_region01)
-		set loc_unit01 = null
-		set loc_region01 = null
+		call RemoveRegion(r)
+		set u = null
+		set r = null
 	endif
-	set loc_trigger01 = null
+	set t = null
 	return false
 endfunction
 
-function Func0529 takes unit loc_unit01 returns nothing
-	local trigger loc_trigger01 = CreateTrigger()
-	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	call TriggerRegisterUnitEvent(loc_trigger01, loc_unit01, EVENT_UNIT_DEATH)
-	call TriggerRegisterTimerEvent(loc_trigger01, 10, true)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func0528))
-	call SaveUnitHandle(HY, (loc_integer01), (53), (loc_unit01))
-	call SaveBoolean(HY, (loc_integer01), (91), (true))
-	set loc_trigger01 = null
+function RoshanCheckLoc takes unit u returns nothing
+	local trigger t = CreateTrigger()
+	local integer h = GetHandleId(t)
+	call TriggerRegisterUnitEvent(t, u, EVENT_UNIT_DEATH)
+	call TriggerRegisterTimerEvent(t, 10, true)
+	call TriggerAddCondition(t, Condition(function Func0528))
+	call SaveUnitHandle(HY, h, 53, u)
+	call SaveBoolean(HY, h, 91, true)
+	set t = null
 endfunction
 
 function Func0530 takes nothing returns boolean
@@ -12618,17 +12623,17 @@ function Func0530 takes nothing returns boolean
 		call CleanTrigger(GetTriggeringTrigger())
 	endif
 	if loc_integer01 == integer062 - 180 or loc_integer01 == integer062 - 60 then
-		if unit242 != null then
-			set loc_item01 = Func0367(unit242, integers084[integer193])
+		if AegisHolder != null then
+			set loc_item01 = Func0367(AegisHolder, Item_Real[integer193])
 			if loc_item01 != null then
 				if loc_integer01 == integer062 - 180 then
-					if IsSentinel(GetOwningPlayer(unit242))then
+					if IsSentinel(GetOwningPlayer(AegisHolder))then
 						call Func0144(force001, 15, GetObjectName('n0E9') + " |c00ff0303" + GetObjectName('n0E7') + "|r")
 					else
 						call Func0144(force002, 15, GetObjectName('n0E9') + " |c00ff0303" + GetObjectName('n0E7') + "|r")
 					endif
 				else
-					if IsSentinel(GetOwningPlayer(unit242))then
+					if IsSentinel(GetOwningPlayer(AegisHolder))then
 						call Func0144(force001, 15, GetObjectName('n0E9') + " |c00ff0303" + GetObjectName('n0DX') + "|r")
 					else
 						call Func0144(force002, 15, GetObjectName('n0E9') + " |c00ff0303" + GetObjectName('n0DX') + "|r")
@@ -12651,39 +12656,39 @@ endfunction
 
 function Func0532 takes nothing returns boolean
 	set integer060 = GetTriggerEvalCount(GetTriggeringTrigger())
-	if unit001 != null and GetUnitState(unit001, UNIT_STATE_LIFE) > 1 then
-		call SetPlayerTechResearched(GetOwningPlayer(unit001), 'R00F', integer060)
-		if GetUnitAbilityLevel(unit001, 'A142') == 0 then
-			call UnitAddAbility(unit001, 'A142')
+	if Roshan != null and GetUnitState(Roshan, UNIT_STATE_LIFE) > 1 then
+		call SetPlayerTechResearched(GetOwningPlayer(Roshan), 'R00F', integer060)
+		if GetUnitAbilityLevel(Roshan, 'A142') == 0 then
+			call UnitAddAbility(Roshan, 'A142')
 		endif
-		call SetUnitAbilityLevel(unit001, 'A142', integer060 + 1)
+		call SetUnitAbilityLevel(Roshan, 'A142', integer060 + 1)
 	endif
 	return false
 endfunction
 
 function Func0533 takes nothing returns nothing
-	local integer loc_integer01 = 1
-	local unit loc_unit01
-	set unit242 = null
+	local integer i = 1
+	local unit u
+	set AegisHolder = null
 	loop
-		exitwhen loc_integer01 > 5
-		set loc_unit01 = PlayerHeroArray[GetPlayerId(Sentinels[loc_integer01])]
-		if loc_unit01 != null and Func0367(loc_unit01, integers084[integer193]) != null then
-			call DisableTrigger(trigger057)
-			call Func0387("AegisOff", GetPlayerId(GetOwningPlayer(loc_unit01)))
-			call RemoveItem(Func0367(loc_unit01, integers084[integer193]))
-			call EnableTrigger(trigger057)
+		exitwhen i > 5
+		set u = PlayerHeroArray[GetPlayerId(Sentinels[i])]
+		if u != null and Func0367(u, Item_Real[integer193]) != null then
+			call DisableTrigger(Trig_ManipulateItem)
+			call Func0387("AegisOff", GetPlayerId(GetOwningPlayer(u)))
+			call RemoveItem(Func0367(u, Item_Real[integer193]))
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
-		set loc_unit01 = PlayerHeroArray[GetPlayerId(Scourges[loc_integer01])]
-		if loc_unit01 != null and Func0367(loc_unit01, integers084[integer193]) != null then
-			call DisableTrigger(trigger057)
-			call Func0387("AegisOff", GetPlayerId(GetOwningPlayer(loc_unit01)))
-			call RemoveItem(Func0367(loc_unit01, integers084[integer193]))
-			call EnableTrigger(trigger057)
+		set u = PlayerHeroArray[GetPlayerId(Scourges[i])]
+		if u != null and Func0367(u, Item_Real[integer193]) != null then
+			call DisableTrigger(Trig_ManipulateItem)
+			call Func0387("AegisOff", GetPlayerId(GetOwningPlayer(u)))
+			call RemoveItem(Func0367(u, Item_Real[integer193]))
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
-		set loc_integer01 = loc_integer01 + 1
+		set i = i + 1
 	endloop
-	set loc_unit01 = null
+	set u = null
 endfunction
 
 function Func0534 takes string loc_string01, string loc_string02 returns string
@@ -12702,40 +12707,39 @@ function Func0536 takes nothing returns boolean
 endfunction
 
 function Func0537 takes nothing returns boolean
-	local trigger loc_trigger01 = GetTriggeringTrigger()
-	local location loc_location01
-	local real loc_real01
-	if GetTriggerEvalCount(loc_trigger01) == integer061 or boolean094 then
-		set boolean094 = false
-		set loc_location01 = GetRectCenter(rect033)
+	local trigger t = GetTriggeringTrigger()
+	local location l
+	if GetTriggerEvalCount(t) == integer061 or IsSpawnRoshan then
+		set IsSpawnRoshan = false
+		set l = GetRectCenter(rect033)
 		call Func0533()
 		set integer063 = integer063 + 1
-		set unit001 = CreateUnitAtLoc(Player(12), 'n00L', loc_location01, bj_UNIT_FACING)
-		call SetUnitAcquireRange(unit001, 150)
-		call Func0529(unit001)
-		call UnitAddAbility(unit001, 'A142')
-		call SetPlayerTechResearched(GetOwningPlayer(unit001), 'R00F', integer060)
-		call SetUnitAbilityLevel(unit001, 'A142', integer060 + 1)
-		call RemoveLocation(loc_location01)
+		set Roshan = CreateUnitAtLoc(Player(12), 'n00L', l, bj_UNIT_FACING)
+		call SetUnitAcquireRange(Roshan, 150)
+		call RoshanCheckLoc(Roshan)
+		call UnitAddAbility(Roshan, 'A142')
+		call SetPlayerTechResearched(GetOwningPlayer(Roshan), 'R00F', integer060)
+		call SetUnitAbilityLevel(Roshan, 'A142', integer060 + 1)
+		call RemoveLocation(l)
 		if integer063 > 1 then
-			call UnitRemoveAbility(unit001, 'A0K2')
-			call UnitAddAbility(unit001, 'A0Q6')
-			call UnitAddItem(unit001, CreateItem(integers084[integer146], 0, 0))
+			call UnitRemoveAbility(Roshan, 'A0K2')
+			call UnitAddAbility(Roshan, 'A0Q6')
+			call UnitAddItem(Roshan, CreateItem(Item_Real[integer146], 0, 0))
 		endif
-		call UnitAddItem(unit001, CreateItem(integers084[integer193], 0, 0))
-		call CleanTrigger(loc_trigger01)
-	elseif GetTriggerEvalCount(loc_trigger01) == integer062 then
+		call UnitAddItem(Roshan, CreateItem(Item_Real[integer193], 0, 0))
+		call CleanTrigger(t)
+	elseif GetTriggerEvalCount(t) == integer062 then
 		call Func0533()
 	endif
-	set loc_trigger01 = null
+	set t = null
 	return false
 endfunction
 
 function Func0538 takes nothing returns nothing
-	local trigger loc_trigger01 = CreateTrigger()
-	call TriggerRegisterTimerEvent(loc_trigger01, 1, true)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func0537))
-	set boolean094 = false
+	local trigger t = CreateTrigger()
+	call TriggerRegisterTimerEvent(t, 1, true)
+	call TriggerAddCondition(t, Condition(function Func0537))
+	set IsSpawnRoshan = false
 	call Func0531()
 	set boolean065 = false
 	if(IsSentinel(GetOwningPlayer(GetKillingUnit())))then
@@ -12756,7 +12760,7 @@ function Func0538 takes nothing returns nothing
 		call AdjustPlayerStateBJ(200, Scourges[4], PLAYER_STATE_RESOURCE_GOLD)
 		call AdjustPlayerStateBJ(200, Scourges[5], PLAYER_STATE_RESOURCE_GOLD)
 	endif
-	set loc_trigger01 = null
+	set t = null
 endfunction
 
 function Func0539 takes nothing returns nothing
@@ -12804,7 +12808,7 @@ function Func0541 takes nothing returns nothing
 endfunction
 
 function Func0542 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01
 	local integer loc_integer02 = 18
 	local integer loc_integer03 = loc_integer02 * 2
@@ -12814,7 +12818,7 @@ function Func0542 takes nothing returns nothing
 	set integer023 = loc_integer02
 	set integer024 = loc_integer03
 	call ForGroup(loc_group01, function Func0541)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func0540(GetDyingUnit(), GetOwningPlayer(GetKillingUnit()))
 	set loc_group01 = null
 endfunction
@@ -13085,7 +13089,7 @@ endfunction
 
 function Func0556 takes nothing returns nothing
 	if GetWidgetLife(GetEnumItem()) > 0 and Func0555(GetItemTypeId(GetEnumItem()))then
-		set item002 = GetEnumItem()
+		set tt_item1 = GetEnumItem()
 	endif
 endfunction
 
@@ -13120,14 +13124,14 @@ function Func0558 takes nothing returns boolean
 	set loc_real04 = GetLocationY(location018)
 	set loc_real05 = GetLocationX(location019)
 	set loc_real06 = GetLocationY(location019)
-	set item002 = null
+	set tt_item1 = null
 	call EnumItemsInRect(rect018, Condition(function Func0011), function Func0556)
-	if item002 == null then
+	if tt_item1 == null then
 		set loc_boolean01 = true
 	endif
-	set item002 = null
+	set tt_item1 = null
 	call EnumItemsInRect(rect015, Condition(function Func0011), function Func0556)
-	if item002 == null then
+	if tt_item1 == null then
 		set loc_boolean02 = true
 	endif
 	if boolean053 == false or GetTriggerEvalCount(GetTriggeringTrigger()) < 20 then
@@ -13331,7 +13335,7 @@ function Func0559 takes nothing returns nothing
 	set integers089[integer309] = integer166
 	set integers090[integer309] = integer108
 	set integers091[integer309] = integer275
-	set integers094[integer309] = integer195
+	set integers094[integer309] = MantaStyle_Ranged
 	set integer309 = integer309 + 1
 	set integers089[integer309] = integer076
 	set integers090[integer309] = integer253
@@ -13413,13 +13417,13 @@ function Func0559 takes nothing returns nothing
 	set integers090[integer309] = integer108
 	set integers091[integer309] = integer096
 	set integers092[integer309] = integer065
-	set integers094[integer309] = integer217
+	set integers094[integer309] = EyeOfSkadi
 	set integer309 = integer309 + 1
 	set integers089[integer309] = integer108
 	set integers090[integer309] = integer108
 	set integers091[integer309] = integer096
 	set integers092[integer309] = integer066
-	set integers094[integer309] = integer217
+	set integers094[integer309] = EyeOfSkadi
 	set integer309 = integer309 + 1
 	set integers089[integer309] = integer078
 	set integers090[integer309] = integer097
@@ -13616,446 +13620,446 @@ function Func0560 takes nothing returns nothing
 endfunction
 
 function Func0561 takes nothing returns nothing
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AZ'
-	set integers084[integer064] = 'I011'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0EY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer311 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00F'
-	set integers084[integer064] = 'I00D'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0EZ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer312 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I018'
-	set integers084[integer064] = 'I009'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F0'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer313 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I019'
-	set integers084[integer064] = 'I005'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F6'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer314 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01A'
-	set integers084[integer064] = 'I00G'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F1'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer315 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01B'
-	set integers084[integer064] = 'I004'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer316 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01H'
-	set integers084[integer064] = 'I003'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer317 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01I'
-	set integers084[integer064] = 'I002'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer318 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02K'
-	set integers084[integer064] = 'I001'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F4'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer319 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02L'
-	set integers084[integer064] = 'I00I'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer320 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B2'
-	set integers084[integer064] = 'I00H'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer322 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B3'
-	set integers084[integer064] = 'I00P'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer323 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B4'
-	set integers084[integer064] = 'I00U'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer324 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B7'
-	set integers084[integer064] = 'I000'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer325 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B6'
-	set integers084[integer064] = 'I016'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer326 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B5'
-	set integers084[integer064] = 'I017'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer327 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B9'
-	set integers084[integer064] = 'I00O'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer328 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J5'
-	set integers084[integer064] = 'I0IT'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer329 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IV'
-	set integers084[integer064] = 'I0IU'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0I9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer330 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IW'
-	set integers084[integer064] = 'I0IS'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0II'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer331 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IX'
-	set integers084[integer064] = 'I0IR'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer332 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IY'
-	set integers084[integer064] = 'I0IQ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer333 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IZ'
-	set integers084[integer064] = 'I0IK'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IG'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer334 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J0'
-	set integers084[integer064] = 'I0IL'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IF'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer335 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J1'
-	set integers084[integer064] = 'I0IM'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer336 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J2'
-	set integers084[integer064] = 'I0IP'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0ID'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer337 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J3'
-	set integers084[integer064] = 'I0IO'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer338 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J4'
-	set integers084[integer064] = 'I0IN'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer339 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0I6'
-	set integers084[integer064] = 'I0I7'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0I8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer340 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0JZ'
-	set integers084[integer064] = 'I0JS'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer341 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K0'
-	set integers084[integer064] = 'I0JT'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer342 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K1'
-	set integers084[integer064] = 'I0JU'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JM'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer343 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K2'
-	set integers084[integer064] = 'I0JW'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JN'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer344 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K3'
-	set integers084[integer064] = 'I0JV'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer345 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K4'
-	set integers084[integer064] = 'I0JY'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer346 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K5'
-	set integers084[integer064] = 'I0JX'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer347 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KI'
-	set integers084[integer064] = 'I0KH'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0KJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer348 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0L4'
-	set integers084[integer064] = 'I0L5'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0L8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer321 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0L3'
-	set integers084[integer064] = 'I0L0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0L9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer349 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0L2'
-	set integers084[integer064] = 'I0L7'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer350 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LU'
-	set integers084[integer064] = 'I0LV'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer351 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0M1'
-	set integers084[integer064] = 'I0M0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0M2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer352 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0M5'
-	set integers084[integer064] = 'I0M4'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0M3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer353 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0M6'
-	set integers084[integer064] = 'I0M7'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0M8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer354 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MF'
-	set integers084[integer064] = 'I0MG'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer355 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MM'
-	set integers084[integer064] = 'I0ML'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MN'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer356 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MO'
-	set integers084[integer064] = 'I0MP'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer357 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NQ'
-	set integers084[integer064] = 'I0NR'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NS'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer358 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NT'
-	set integers084[integer064] = 'I0NU'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NV'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer359 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NW'
-	set integers084[integer064] = 'I0NX'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer360 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NZ'
-	set integers084[integer064] = 'I0O0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0O1'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer361 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OR'
-	set integers084[integer064] = 'I0OS'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OT'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer362 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PG'
-	set integers084[integer064] = 'I0PH'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PI'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer363 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PJ'
-	set integers084[integer064] = 'I0PK'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer364 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PP'
-	set integers084[integer064] = 'I0PQ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer365 = integer064
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AZ'
+	set Item_Real[ItemCount] = 'I011'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0EY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer311 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00F'
+	set Item_Real[ItemCount] = 'I00D'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0EZ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer312 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I018'
+	set Item_Real[ItemCount] = 'I009'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F0'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer313 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I019'
+	set Item_Real[ItemCount] = 'I005'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F6'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer314 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01A'
+	set Item_Real[ItemCount] = 'I00G'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F1'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer315 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01B'
+	set Item_Real[ItemCount] = 'I004'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer316 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01H'
+	set Item_Real[ItemCount] = 'I003'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer317 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01I'
+	set Item_Real[ItemCount] = 'I002'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer318 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02K'
+	set Item_Real[ItemCount] = 'I001'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F4'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer319 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02L'
+	set Item_Real[ItemCount] = 'I00I'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer320 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B2'
+	set Item_Real[ItemCount] = 'I00H'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer322 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B3'
+	set Item_Real[ItemCount] = 'I00P'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer323 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B4'
+	set Item_Real[ItemCount] = 'I00U'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer324 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B7'
+	set Item_Real[ItemCount] = 'I000'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer325 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B6'
+	set Item_Real[ItemCount] = 'I016'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer326 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B5'
+	set Item_Real[ItemCount] = 'I017'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer327 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B9'
+	set Item_Real[ItemCount] = 'I00O'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer328 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J5'
+	set Item_Real[ItemCount] = 'I0IT'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer329 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IV'
+	set Item_Real[ItemCount] = 'I0IU'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0I9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer330 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IW'
+	set Item_Real[ItemCount] = 'I0IS'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0II'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer331 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IX'
+	set Item_Real[ItemCount] = 'I0IR'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer332 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IY'
+	set Item_Real[ItemCount] = 'I0IQ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer333 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IZ'
+	set Item_Real[ItemCount] = 'I0IK'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IG'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer334 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J0'
+	set Item_Real[ItemCount] = 'I0IL'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IF'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer335 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J1'
+	set Item_Real[ItemCount] = 'I0IM'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer336 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J2'
+	set Item_Real[ItemCount] = 'I0IP'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0ID'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer337 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J3'
+	set Item_Real[ItemCount] = 'I0IO'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer338 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J4'
+	set Item_Real[ItemCount] = 'I0IN'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer339 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0I6'
+	set Item_Real[ItemCount] = 'I0I7'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0I8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer340 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0JZ'
+	set Item_Real[ItemCount] = 'I0JS'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer341 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K0'
+	set Item_Real[ItemCount] = 'I0JT'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer342 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K1'
+	set Item_Real[ItemCount] = 'I0JU'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JM'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer343 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K2'
+	set Item_Real[ItemCount] = 'I0JW'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JN'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer344 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K3'
+	set Item_Real[ItemCount] = 'I0JV'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer345 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K4'
+	set Item_Real[ItemCount] = 'I0JY'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer346 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K5'
+	set Item_Real[ItemCount] = 'I0JX'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer347 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KI'
+	set Item_Real[ItemCount] = 'I0KH'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0KJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer348 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0L4'
+	set Item_Real[ItemCount] = 'I0L5'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0L8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer321 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0L3'
+	set Item_Real[ItemCount] = 'I0L0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0L9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer349 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0L2'
+	set Item_Real[ItemCount] = 'I0L7'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer350 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LU'
+	set Item_Real[ItemCount] = 'I0LV'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer351 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0M1'
+	set Item_Real[ItemCount] = 'I0M0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0M2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer352 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0M5'
+	set Item_Real[ItemCount] = 'I0M4'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0M3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer353 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0M6'
+	set Item_Real[ItemCount] = 'I0M7'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0M8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer354 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MF'
+	set Item_Real[ItemCount] = 'I0MG'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer355 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MM'
+	set Item_Real[ItemCount] = 'I0ML'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MN'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer356 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MO'
+	set Item_Real[ItemCount] = 'I0MP'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer357 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NQ'
+	set Item_Real[ItemCount] = 'I0NR'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NS'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer358 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NT'
+	set Item_Real[ItemCount] = 'I0NU'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NV'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer359 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NW'
+	set Item_Real[ItemCount] = 'I0NX'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer360 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NZ'
+	set Item_Real[ItemCount] = 'I0O0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0O1'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer361 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OR'
+	set Item_Real[ItemCount] = 'I0OS'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OT'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer362 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PG'
+	set Item_Real[ItemCount] = 'I0PH'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PI'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer363 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PJ'
+	set Item_Real[ItemCount] = 'I0PK'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer364 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PP'
+	set Item_Real[ItemCount] = 'I0PQ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer365 = ItemCount
 endfunction
 
 function Func0562 takes nothing returns nothing
@@ -14409,29 +14413,29 @@ function Func0578 takes player loc_player01, unit loc_unit01, integer loc_intege
 	call DisableTrigger(trigger058)
 	if loc_integer02 > 0 then
 		set loc_item01 = UnitItemInSlot(loc_unit01, 0)
-		call Func0365(loc_item01)
+		call DestroyItem(loc_item01)
 	endif
 	if loc_integer03 > 0 then
 		set loc_item01 = UnitItemInSlot(loc_unit01, 1)
-		call Func0365(loc_item01)
+		call DestroyItem(loc_item01)
 	endif
 	if loc_integer04 > 0 then
 		set loc_item01 = UnitItemInSlot(loc_unit01, 2)
-		call Func0365(loc_item01)
+		call DestroyItem(loc_item01)
 	endif
 	if loc_integer05 > 0 then
 		set loc_item01 = UnitItemInSlot(loc_unit01, 3)
-		call Func0365(loc_item01)
+		call DestroyItem(loc_item01)
 	endif
 	if loc_integer06 > 0 then
 		set loc_item01 = UnitItemInSlot(loc_unit01, 4)
-		call Func0365(loc_item01)
+		call DestroyItem(loc_item01)
 	endif
 	if loc_integer07 > 0 then
 		set loc_item01 = UnitItemInSlot(loc_unit01, 5)
-		call Func0365(loc_item01)
+		call DestroyItem(loc_item01)
 	endif
-	set loc_item01 = UnitAddItemById(loc_unit01, integers084[loc_integer01])
+	set loc_item01 = UnitAddItemById(loc_unit01, Item_Real[loc_integer01])
 	call SetItemPlayer(loc_item01, loc_player01, true)
 	call SetItemUserData(loc_item01, 0)
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Items\\AIem\\AIemTarget.mdl", loc_unit01,"origin"))
@@ -14680,7 +14684,7 @@ function Func0580 takes player loc_player01, unit loc_unit01, integer loc_intege
 endfunction
 
 function Func0581 takes nothing returns boolean
-	if IsUnitAlly(GetFilterUnit(), GetOwningPlayer(unit124)) == true and GetUnitAbilityLevel(GetFilterUnit(), 'Aloc') == 0 and UnitInventorySize(GetFilterUnit()) > 1 and GetUnitTypeId(GetFilterUnit()) != 'ncop' and GetPlayerAlliance(GetOwningPlayer(GetFilterUnit()), GetOwningPlayer(unit124), ALLIANCE_SHARED_CONTROL)and GetOwningPlayer(unit124) != GetOwningPlayer(GetFilterUnit())and IsUnitIllusion(GetFilterUnit()) == false and IsDead(GetFilterUnit()) == false then
+	if IsUnitAlly(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == true and GetUnitAbilityLevel(GetFilterUnit(), 'Aloc') == 0 and UnitInventorySize(GetFilterUnit()) > 1 and GetUnitTypeId(GetFilterUnit()) != 'ncop' and GetPlayerAlliance(GetOwningPlayer(GetFilterUnit()), GetOwningPlayer(tt_unit1), ALLIANCE_SHARED_CONTROL)and GetOwningPlayer(tt_unit1) != GetOwningPlayer(GetFilterUnit())and IsUnitIllusion(GetFilterUnit()) == false and IsDead(GetFilterUnit()) == false then
 		if Func0093(GetFilterUnit()) == true then
 			set integer022 = integer022 + 1
 			set unit125 = GetFilterUnit()
@@ -14690,8 +14694,8 @@ function Func0581 takes nothing returns boolean
 endfunction
 
 function Func0582 takes nothing returns boolean
-	if IsUnitAlly(GetFilterUnit(), GetOwningPlayer(unit124)) == true and GetUnitAbilityLevel(GetFilterUnit(), 'Aloc') == 0 and UnitInventorySize(GetFilterUnit()) > 1 and GetUnitTypeId(GetFilterUnit()) != 'ncop' and IsUnitIllusion(GetFilterUnit()) == false and IsDead(GetFilterUnit()) == false then
-		if GetOwningPlayer(unit124) == GetOwningPlayer(GetFilterUnit())then
+	if IsUnitAlly(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == true and GetUnitAbilityLevel(GetFilterUnit(), 'Aloc') == 0 and UnitInventorySize(GetFilterUnit()) > 1 and GetUnitTypeId(GetFilterUnit()) != 'ncop' and IsUnitIllusion(GetFilterUnit()) == false and IsDead(GetFilterUnit()) == false then
+		if GetOwningPlayer(tt_unit1) == GetOwningPlayer(GetFilterUnit())then
 			if IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true then
 				if GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 then
 					set unit125 = GetFilterUnit()
@@ -14705,20 +14709,20 @@ function Func0582 takes nothing returns boolean
 endfunction
 
 function Func0583 takes unit loc_unit01, integer loc_integer01 returns unit
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit125 = null
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(unit126), GetUnitY(unit126), 1300 + loc_integer01, Condition(function Func0582))
 	if unit125 == null then
 		set integer022 = 0
-		call Func0029(loc_group01)
-		set loc_group01 = Func0030()
+		call KillGroup(loc_group01)
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(unit126), GetUnitY(unit126), 1100 + loc_integer01, Condition(function Func0581))
 		if integer022 > 1 then
 			set unit125 = null
 		endif
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return unit125
 endfunction
@@ -14738,18 +14742,18 @@ function Func0584 takes player loc_player01, unit loc_unit01, unit loc_unit02, i
 	if loc_unit03 == null or Func0580(loc_player01, loc_unit03, Func0350(loc_integer01)) == false or boolean045 == false then
 		if Func0360(Func0350(loc_integer01))then
 			if Func0371(loc_unit03) == 0 or loc_unit03 == null then
-				call Func0362(integers083[loc_integer01], loc_real01, loc_real02, loc_player01, true, loc_integer02)
+				call Func0362(Item_Dummy[loc_integer01], loc_real01, loc_real02, loc_player01, true, loc_integer02)
 			else
-				set loc_item01 = UnitAddItemById(loc_unit03, integers084[loc_integer01])
+				set loc_item01 = UnitAddItemById(loc_unit03, Item_Real[loc_integer01])
 				call SetItemCharges(loc_item01, loc_integer02)
 				call SetItemPlayer(loc_item01, loc_player01, true)
 				call SetItemUserData(loc_item01, loc_integer03)
 			endif
 		elseif Func0359(Func0350(loc_integer01))then
-			if loc_unit03 == null or(Func0371(loc_unit03) == 0 and Func0367(loc_unit03, integers084[loc_integer01]) == null)then
-				call Func0362(integers083[loc_integer01], loc_real01, loc_real02, loc_player01, true, Func0378(loc_integer01))
+			if loc_unit03 == null or(Func0371(loc_unit03) == 0 and Func0367(loc_unit03, Item_Real[loc_integer01]) == null)then
+				call Func0362(Item_Dummy[loc_integer01], loc_real01, loc_real02, loc_player01, true, Func0378(loc_integer01))
 			else
-				set loc_item01 = CreateItem(integers083[loc_integer01], loc_real01, loc_real02)
+				set loc_item01 = CreateItem(Item_Dummy[loc_integer01], loc_real01, loc_real02)
 				call SetItemPlayer(loc_item01, loc_player01, true)
 				call SetItemUserData(loc_item01, loc_integer03)
 				call SetItemCharges(loc_item01, Func0378(loc_integer01))
@@ -14757,9 +14761,9 @@ function Func0584 takes player loc_player01, unit loc_unit01, unit loc_unit02, i
 			endif
 		else
 			if Func0371(loc_unit03) == 0 or loc_unit03 == null then
-				call Func0362(integers083[loc_integer01], loc_real01, loc_real02, loc_player01, false, 0)
+				call Func0362(Item_Dummy[loc_integer01], loc_real01, loc_real02, loc_player01, false, 0)
 			else
-				set loc_item01 = UnitAddItemById(loc_unit03, integers084[loc_integer01])
+				set loc_item01 = UnitAddItemById(loc_unit03, Item_Real[loc_integer01])
 				call SetItemPlayer(loc_item01, loc_player01, true)
 				call SetItemUserData(loc_item01, 0)
 			endif
@@ -14767,7 +14771,7 @@ function Func0584 takes player loc_player01, unit loc_unit01, unit loc_unit02, i
 	else
 		if IsUnitType(loc_unit03, UNIT_TYPE_HERO) == true then
 			if loc_integer03 == 0 then
-				call Func0387("PUI_" + I2S(GetPlayerId(GetOwningPlayer(loc_unit03))), integers084[Func0350(loc_integer01)])
+				call Func0387("PUI_" + I2S(GetPlayerId(GetOwningPlayer(loc_unit03))), Item_Real[Func0350(loc_integer01)])
 			endif
 		endif
 	endif
@@ -14897,10 +14901,10 @@ function Func0592 takes nothing returns nothing
 		endif
 		set loc_real01 = Func0589(GetSellingUnit(), loc_unit01)
 		set loc_real02 = Func0590(GetSellingUnit(), loc_unit01)
-		call Func0362(integers083[Func0375(loc_unit01)], loc_real01, loc_real02, loc_player01, true, Func0378(Func0375(loc_unit01)))
+		call Func0362(Item_Dummy[Func0375(loc_unit01)], loc_real01, loc_real02, loc_player01, true, Func0378(Func0375(loc_unit01)))
 	else
 		call Func0585(loc_player01, Func0350(loc_integer01))
-		if integers084[loc_integer01] == 0 then
+		if Item_Real[loc_integer01] == 0 then
 			call Func0114(loc_player01, GetObjectName('n02H'))
 		else
 			set loc_real01 = Func0587(GetSellingUnit(), loc_unit01)
@@ -14962,248 +14966,244 @@ function Func0594 takes unit loc_unit01 returns boolean
 	return loc_integer01 == 'Eevi' or loc_integer01 == 'Eevm' or loc_integer01 == 'E02V' or loc_integer01 == 'E02W' or loc_integer01 == 'E02U'
 endfunction
 
-function Func0595 takes unit loc_unit01, item loc_item01 returns nothing
-	local unit loc_unit02 = loc_unit01
-	local integer loc_integer01 = GetUnitTypeId(loc_unit02)
-	local integer loc_integer02 = Func0354(loc_item01)
-	if IsUnitType(loc_unit02, UNIT_TYPE_MELEE_ATTACKER) == true or IsUnitType(loc_unit02, UNIT_TYPE_HERO) == false then
-		if loc_integer02 == integer218 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer217])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer124 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer123])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer107 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer106])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer243 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer242])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer223 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer222])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer066 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer065])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer195 then
-			if Func0594(loc_unit02) == false then
-				set player005 = GetItemPlayer(loc_item01)
-				call Func0365(loc_item01)
-				set item002 = UnitAddItemById(loc_unit02, integers084[integer194])
-				call SetItemPlayer(item002, player005, false)
-				call SetItemUserData(item002, 1)
+function RestrictedItems_UpdateMeleeRange takes unit u, item it returns nothing
+	local integer id = GetIndexNoMute(it)
+	if IsUnitType(u, UNIT_TYPE_MELEE_ATTACKER) or not IsUnitType(u, UNIT_TYPE_HERO) then
+		if id == EyeOfSkadiRanged then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[EyeOfSkadi])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer124 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer123])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer107 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer106])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer243 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer242])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer223 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer222])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer066 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer065])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == MantaStyle_Ranged then
+			if Func0594(u) == false then
+				set tt_player1 = GetItemPlayer(it)
+				call DestroyItem(it)
+				set tt_item1 = UnitAddItemById(u, Item_Real[MantaStyle])
+				call SetItemPlayer(tt_item1, tt_player1, false)
+				call SetItemUserData(tt_item1, 1)
 			endif
-		elseif loc_integer02 == integer194 then
-			if Func0594(loc_unit02) == true then
-				set player005 = GetItemPlayer(loc_item01)
-				call Func0365(loc_item01)
-				set item002 = UnitAddItemById(loc_unit02, integers084[integer195])
-				call SetItemPlayer(item002, player005, false)
-				call SetItemUserData(item002, 1)
+		elseif id == MantaStyle then
+			if Func0594(u) == true then
+				set tt_player1 = GetItemPlayer(it)
+				call DestroyItem(it)
+				set tt_item1 = UnitAddItemById(u, Item_Real[MantaStyle_Ranged])
+				call SetItemPlayer(tt_item1, tt_player1, false)
+				call SetItemUserData(tt_item1, 1)
 			endif
-		elseif loc_integer02 == integer128 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer127])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+		elseif id == integer128 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer127])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 	else
-		if loc_integer02 == integer217 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer218])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer123 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer124])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer106 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer107])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer242 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer243])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer222 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer223])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer065 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer066])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer194 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer195])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer127 then
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer128])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+		if id == EyeOfSkadi then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[EyeOfSkadiRanged])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer123 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer124])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer106 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer107])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer242 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer243])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer222 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer223])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer065 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer066])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == MantaStyle then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[MantaStyle_Ranged])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer127 then
+			set tt_player1 = GetItemPlayer(it)
+			call DestroyItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer128])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 	endif
-	set loc_unit02 = null
+	set u = null
 endfunction
 
-function Func0596 takes unit loc_unit01, item loc_item01 returns nothing
-	local unit loc_unit02 = loc_unit01
-	local integer loc_integer01 = GetUnitTypeId(loc_unit02)
-	local integer loc_integer02 = Func0354(loc_item01)
-	if IsUnitType(loc_unit02, UNIT_TYPE_MELEE_ATTACKER) == false or IsUnitType(loc_unit02, UNIT_TYPE_HERO) == false then
-		if loc_integer02 == integer218 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer217])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer124 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer123])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer107 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer106])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer243 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer242])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer223 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer222])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer066 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer065])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer195 then
-			if Func0594(loc_unit02) == false then
-				set player005 = GetItemPlayer(loc_item01)
-				call RemoveItem(loc_item01)
-				set item002 = UnitAddItemById(loc_unit02, integers084[integer194])
-				call SetItemPlayer(item002, player005, false)
-				call SetItemUserData(item002, 1)
+function RestrictedItems_UpdateRangeMelee takes unit u, item it returns nothing
+	local integer id = GetIndexNoMute(it)
+	if not IsUnitType(u, UNIT_TYPE_MELEE_ATTACKER) or not IsUnitType(u, UNIT_TYPE_HERO) then
+		if id == EyeOfSkadiRanged then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[EyeOfSkadi])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer124 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer123])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer107 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer106])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer243 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer242])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer223 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer222])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer066 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer065])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == MantaStyle_Ranged then
+			if Func0594(u) == false then
+				set tt_player1 = GetItemPlayer(it)
+				call RemoveItem(it)
+				set tt_item1 = UnitAddItemById(u, Item_Real[MantaStyle])
+				call SetItemPlayer(tt_item1, tt_player1, false)
+				call SetItemUserData(tt_item1, 1)
 			endif
-		elseif loc_integer02 == integer128 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer127])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+		elseif id == integer128 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer127])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 	else
-		if loc_integer02 == integer217 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer218])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer123 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer124])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer106 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer107])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer242 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer243])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer222 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer223])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer065 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer066])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer194 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer195])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-		elseif loc_integer02 == integer127 then
-			set player005 = GetItemPlayer(loc_item01)
-			call RemoveItem(loc_item01)
-			set item002 = UnitAddItemById(loc_unit02, integers084[integer128])
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+		if id == EyeOfSkadi then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[EyeOfSkadiRanged])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer123 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer124])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer106 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer107])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer242 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer243])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer222 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer223])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer065 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer066])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == MantaStyle then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[MantaStyle_Ranged])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+		elseif id == integer127 then
+			set tt_player1 = GetItemPlayer(it)
+			call RemoveItem(it)
+			set tt_item1 = UnitAddItemById(u, Item_Real[integer128])
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 	endif
-	set loc_unit02 = null
+	set u = null
 endfunction
 
-function Func0597 takes unit loc_unit01 returns nothing
-	local integer loc_integer01 = 0
-	local item loc_item01
-	call DisableTrigger(trigger057)
+function Func0597 takes unit u returns nothing
+	local integer i = 0
+	local item it
+	call DisableTrigger(Trig_ManipulateItem)
 	loop
-		exitwhen loc_integer01 > 5
-		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
-		if loc_item01 != null then
-			call Func0596(loc_unit01, loc_item01)
+		exitwhen i > 5
+		set it = UnitItemInSlot(u, i)
+		if it != null then
+			call RestrictedItems_UpdateRangeMelee(u, it)
 		endif
-		set loc_integer01 = loc_integer01 + 1
+		set i = i + 1
 	endloop
-	call EnableTrigger(trigger057)
-	set loc_item01 = null
+	call EnableTrigger(Trig_ManipulateItem)
+	set it = null
 endfunction
 
 function Func0598 takes unit loc_unit01, item loc_item01 returns boolean
@@ -15218,107 +15218,107 @@ function Func0598 takes unit loc_unit01, item loc_item01 returns boolean
 	if loc_integer02 == integer112 then
 		call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Undead\\ReplenishMana\\SpiritTouchTarget.mdl", loc_unit02,"overhead"))
 		call Func0112(GetOwningPlayer(loc_unit02),"Abilities\\Spells\\Human\\Heal\\HealTarget.wav")
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = UnitAddItemById(loc_unit02, integers084[integer116])
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = UnitAddItemById(loc_unit02, Item_Real[integer116])
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
 	if loc_integer02 == integer172 and GetItemCharges(loc_item01) == 0 then
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = UnitAddItemById(loc_unit02, integers084[integer174])
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = UnitAddItemById(loc_unit02, Item_Real[integer174])
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
 	if loc_integer02 == integer129 and GetItemCharges(loc_item01) == 0 then
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = UnitAddItemById(loc_unit02, integers084[integer130])
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = UnitAddItemById(loc_unit02, Item_Real[integer130])
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
-	call DisableTrigger(trigger057)
-	if(loc_integer02 == integer158 or loc_integer02 == integer157 or loc_integer02 == integer159)and(Func0366(loc_unit02, integers084[integer158], loc_item01) != null or Func0366(loc_unit02, integers084[integer157], loc_item01) != null or Func0366(loc_unit02, integers084[integer159], loc_item01) != null)then
+	call DisableTrigger(Trig_ManipulateItem)
+	if(loc_integer02 == integer158 or loc_integer02 == integer157 or loc_integer02 == integer159)and(Func0366(loc_unit02, Item_Real[integer158], loc_item01) != null or Func0366(loc_unit02, Item_Real[integer157], loc_item01) != null or Func0366(loc_unit02, Item_Real[integer159], loc_item01) != null)then
 		call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n02L'))
-		set player005 = GetItemPlayer(loc_item01)
+		set tt_player1 = GetItemPlayer(loc_item01)
 		call RemoveItem(loc_item01)
-		set item002 = CreateItem(integers083[loc_integer02], loc_real01, loc_real02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = CreateItem(Item_Dummy[loc_integer02], loc_real01, loc_real02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
-	if(loc_integer02 == integer123)and(Func0366(loc_unit02, integers084[integer123], loc_item01) != null or Func0366(loc_unit02, integers084[integer124], loc_item01) != null)then
+	if(loc_integer02 == integer123)and(Func0366(loc_unit02, Item_Real[integer123], loc_item01) != null or Func0366(loc_unit02, Item_Real[integer124], loc_item01) != null)then
 		call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n0HL'))
-		set player005 = GetItemPlayer(loc_item01)
+		set tt_player1 = GetItemPlayer(loc_item01)
 		call RemoveItem(loc_item01)
-		set item002 = CreateItem(integers083[loc_integer02], loc_real01, loc_real02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = CreateItem(Item_Dummy[loc_integer02], loc_real01, loc_real02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		set loc_boolean01 = false
 	endif
-	if loc_boolean01 and(loc_integer02 == integer124)and(Func0366(loc_unit02, integers084[integer123], loc_item01) != null or Func0366(loc_unit02, integers084[integer124], loc_item01) != null)then
+	if loc_boolean01 and(loc_integer02 == integer124)and(Func0366(loc_unit02, Item_Real[integer123], loc_item01) != null or Func0366(loc_unit02, Item_Real[integer124], loc_item01) != null)then
 		call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n0HL'))
-		set player005 = GetItemPlayer(loc_item01)
+		set tt_player1 = GetItemPlayer(loc_item01)
 		call RemoveItem(loc_item01)
-		set item002 = CreateItem(integers083[loc_integer02], loc_real01, loc_real02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = CreateItem(Item_Dummy[loc_integer02], loc_real01, loc_real02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		set loc_boolean01 = false
 	endif
-	if(loc_integer02 == integer232 or loc_integer02 == integer231 or loc_integer02 == integer234 or loc_integer02 == integer233)and(Func0366(loc_unit02, integers084[integer232], loc_item01) != null or Func0366(loc_unit02, integers084[integer231], loc_item01) != null or Func0366(loc_unit02, integers084[integer234], loc_item01) != null or Func0366(loc_unit02, integers084[integer233], loc_item01) != null)then
+	if(loc_integer02 == integer232 or loc_integer02 == integer231 or loc_integer02 == integer234 or loc_integer02 == integer233)and(Func0366(loc_unit02, Item_Real[integer232], loc_item01) != null or Func0366(loc_unit02, Item_Real[integer231], loc_item01) != null or Func0366(loc_unit02, Item_Real[integer234], loc_item01) != null or Func0366(loc_unit02, Item_Real[integer233], loc_item01) != null)then
 		call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n02C'))
-		set player005 = GetItemPlayer(loc_item01)
+		set tt_player1 = GetItemPlayer(loc_item01)
 		call RemoveItem(loc_item01)
-		set item002 = CreateItem(integers083[loc_integer02], loc_real01, loc_real02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = CreateItem(Item_Dummy[loc_integer02], loc_real01, loc_real02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
 	if(loc_integer02 == integer207 and IsPlayerEnemy(GetItemPlayer(loc_item01), GetOwningPlayer(loc_unit02)))then
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = UnitAddItemById(loc_unit02, integers084[integer208])
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = UnitAddItemById(loc_unit02, Item_Real[integer208])
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
 	if(loc_integer02 == integer193)and(Func0092(loc_unit02)or Func0248(loc_unit02))then
 		if Func0092(loc_unit02)then
 			call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n02K'))
 		endif
-		set player005 = GetItemPlayer(loc_item01)
+		set tt_player1 = GetItemPlayer(loc_item01)
 		set integer022 = GetItemCharges(loc_item01)
 		call RemoveItem(loc_item01)
 		if loc_integer02 == integer193 then
-			set item002 = CreateItem(integers083[loc_integer02], GetRectCenterX(rect033), GetRectCenterY(rect033))
+			set tt_item1 = CreateItem(Item_Dummy[loc_integer02], GetRectCenterX(rect033), GetRectCenterY(rect033))
 		endif
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		if loc_integer02 == integer193 then
-			call SetItemCharges(item002, integer022)
+			call SetItemCharges(tt_item1, integer022)
 		endif
 	endif
 	if loc_integer02 == integer086 and(loc_integer01 == 'Hvwd' or loc_integer01 == 'U00F')then
 		call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n02J'))
-		set player005 = GetItemPlayer(loc_item01)
+		set tt_player1 = GetItemPlayer(loc_item01)
 		call RemoveItem(loc_item01)
-		set item002 = CreateItem(integers083[loc_integer02], loc_real01, loc_real02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = CreateItem(Item_Dummy[loc_integer02], loc_real01, loc_real02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
 	if loc_boolean01 and(loc_integer02 == integer123 or loc_integer02 == integer124)and(loc_integer01 == 'H06S')then
 		call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n02J'))
-		set player005 = GetItemPlayer(loc_item01)
+		set tt_player1 = GetItemPlayer(loc_item01)
 		call RemoveItem(loc_item01)
-		set item002 = CreateItem(integers083[loc_integer02], loc_real01, loc_real02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = CreateItem(Item_Dummy[loc_integer02], loc_real01, loc_real02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		set loc_boolean01 = false
 	endif
 	if(loc_integer02 == integer186 or loc_integer02 == integer187 or loc_integer02 == integer188 or loc_integer02 == integer189 or loc_integer02 == integer190 or loc_integer02 == integer191)and loc_integer01 == 'U00C' then
 		call DisplayTimedTextToPlayer(GetOwningPlayer(loc_unit02), 0, real003, 10,"|c00ff0303" + GetObjectName('n02P') + "|r")
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	if loc_boolean01 then
-		call Func0595(loc_unit01, loc_item01)
+		call RestrictedItems_UpdateMeleeRange(loc_unit01, loc_item01)
 	endif
 	set loc_unit02 = null
 	set loc_item01 = null
@@ -15365,15 +15365,15 @@ function Func0601 takes unit loc_unit01, item loc_item01 returns boolean
 			set loc_boolean02 = true
 		endif
 		if loc_integer03 != 0 then
-			set player005 = GetItemPlayer(loc_item02)
-			call Func0365(loc_item02)
+			set tt_player1 = GetItemPlayer(loc_item02)
+			call DestroyItem(loc_item02)
 			if loc_boolean02 then
-				set item002 = UnitAddItemById(loc_unit01, integers086[loc_integer03])
+				set tt_item1 = UnitAddItemById(loc_unit01, Item_Mute[loc_integer03])
 			else
-				set item002 = UnitAddItemById(loc_unit01, integers084[loc_integer03])
+				set tt_item1 = UnitAddItemById(loc_unit01, Item_Real[loc_integer03])
 			endif
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 			set loc_boolean01 = true
 		endif
 	else
@@ -15400,15 +15400,15 @@ function Func0601 takes unit loc_unit01, item loc_item01 returns boolean
 			set loc_boolean02 = true
 		endif
 		if loc_integer03 != 0 then
-			set player005 = GetItemPlayer(loc_item02)
-			call Func0365(loc_item02)
+			set tt_player1 = GetItemPlayer(loc_item02)
+			call DestroyItem(loc_item02)
 			if loc_boolean02 then
-				set item002 = UnitAddItemById(loc_unit01, integers086[loc_integer03])
+				set tt_item1 = UnitAddItemById(loc_unit01, Item_Mute[loc_integer03])
 			else
-				set item002 = UnitAddItemById(loc_unit01, integers084[loc_integer03])
+				set tt_item1 = UnitAddItemById(loc_unit01, Item_Real[loc_integer03])
 			endif
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 			set loc_boolean01 = true
 		endif
 	endif
@@ -15485,14 +15485,14 @@ function Func0605 takes nothing returns boolean
 				set loc_boolean02 = true
 			endif
 			if IsPlayerEnemy(loc_player01, loc_player02)then
-				call Func0362(integers083[loc_integer03], ItemSpawnX[GetPlayerId(loc_player01)], ItemSpawnY[GetPlayerId(loc_player01)], loc_player02, loc_boolean02, loc_integer04)
+				call Func0362(Item_Dummy[loc_integer03], ItemSpawnX[GetPlayerId(loc_player01)], ItemSpawnY[GetPlayerId(loc_player01)], loc_player02, loc_boolean02, loc_integer04)
 			else
-				call Func0362(integers083[loc_integer03], ItemSpawnX[GetPlayerId(loc_player02)], ItemSpawnY[GetPlayerId(loc_player02)], loc_player02, loc_boolean02, loc_integer04)
+				call Func0362(Item_Dummy[loc_integer03], ItemSpawnX[GetPlayerId(loc_player02)], ItemSpawnY[GetPlayerId(loc_player02)], loc_player02, loc_boolean02, loc_integer04)
 			endif
 			call Func0114(loc_player01, GetObjectName('n0DR'))
 			if loc_boolean01 == false then
 				set loc_boolean03 = true
-				call Func0365(loc_item01)
+				call DestroyItem(loc_item01)
 			endif
 		elseif boolean054 == false and loc_boolean01 == false and GetItemType(loc_item01) == ITEM_TYPE_CAMPAIGN and Func0374(loc_item01) != 0 and(loc_player01 == loc_player02 or(GetPlayerSlotState((loc_player02)) == PLAYER_SLOT_STATE_LEFT))then
 			if Func0360(loc_integer03)then
@@ -15502,9 +15502,9 @@ function Func0605 takes nothing returns boolean
 			endif
 			if(GetPlayerSlotState((loc_player02)) == PLAYER_SLOT_STATE_LEFT)and Func0351(loc_integer03)then
 			else
-				call Func0365(loc_item01)
+				call DestroyItem(loc_item01)
 				set loc_boolean03 = true
-				set loc_item02 = UnitAddItemById(loc_unit01, integers084[loc_integer03])
+				set loc_item02 = UnitAddItemById(loc_unit01, Item_Real[loc_integer03])
 				set loc_item04 = loc_item02
 				call SetItemPlayer(loc_item02, loc_player02, false)
 				call SetItemUserData(loc_item02, 0)
@@ -15512,15 +15512,15 @@ function Func0605 takes nothing returns boolean
 					call SetItemCharges(loc_item02, loc_integer04)
 				endif
 			endif
-		elseif boolean054 == false and loc_boolean01 == false and GetItemType(loc_item01) == ITEM_TYPE_PERMANENT and loc_player01 != loc_player02 and integers086[Func0353(loc_item01)] != 0 and(GetPlayerSlotState((loc_player02)) == PLAYER_SLOT_STATE_LEFT) == false then
+		elseif boolean054 == false and loc_boolean01 == false and GetItemType(loc_item01) == ITEM_TYPE_PERMANENT and loc_player01 != loc_player02 and Item_Mute[Func0353(loc_item01)] != 0 and(GetPlayerSlotState((loc_player02)) == PLAYER_SLOT_STATE_LEFT) == false then
 			if Func0360(loc_integer03)then
 				set loc_boolean02 = true
 			else
 				set loc_boolean02 = false
 			endif
-			call Func0365(loc_item01)
+			call DestroyItem(loc_item01)
 			set loc_boolean03 = true
-			set loc_item02 = UnitAddItemById(loc_unit01, integers086[loc_integer03])
+			set loc_item02 = UnitAddItemById(loc_unit01, Item_Mute[loc_integer03])
 			set loc_item04 = loc_item02
 			call SetItemPlayer(loc_item02, loc_player02, false)
 			call SetItemUserData(loc_item02, 0)
@@ -15528,47 +15528,47 @@ function Func0605 takes nothing returns boolean
 				call SetItemCharges(loc_item02, loc_integer04)
 			endif
 		elseif loc_boolean01 == false and GetItemType(loc_item01) == ITEM_TYPE_PERMANENT and Func0358(loc_item01)and IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
-			set loc_integer05 = Func0355(loc_unit01)
-			set loc_integer06 = Func0356(loc_unit01)
+			set loc_integer05 = GetHeroAghItemIndex(loc_unit01)
+			set loc_integer06 = GetAghAbilityId(loc_unit01)
 			if loc_integer06 != 0 then
 				call UnitAddAbility(loc_unit01, loc_integer06)
 				call UnitMakeAbilityPermanent(loc_unit01, true, loc_integer06)
 				call SetPlayerAbilityAvailable(loc_player01, loc_integer06, false)
 				if GetUnitTypeId(loc_unit01) == 'H00U' then
-					set unit124 = loc_unit01
+					set tt_unit1 = loc_unit01
 					call ExecuteFunc("Func2880")
 				elseif GetUnitTypeId(loc_unit01) == 'Hmkg' then
-					set unit124 = loc_unit01
-					call ExecuteFunc("Func2123")
+					set tt_unit1 = loc_unit01
+					call ExecuteFunc("EnableFireBlast")
 				endif
 			endif
 			if loc_integer03 != loc_integer05 then
-				call Func0365(loc_item01)
-				set loc_item02 = UnitAddItemById(loc_unit01, integers084[loc_integer05])
+				call DestroyItem(loc_item01)
+				set loc_item02 = UnitAddItemById(loc_unit01, Item_Real[loc_integer05])
 				set loc_item04 = loc_item02
 				call SetItemPlayer(loc_item02, loc_player02, false)
 				call SetItemUserData(loc_item02, 1)
 			endif
 		elseif loc_boolean01 == false and GetItemType(loc_item01) == ITEM_TYPE_ARTIFACT then
-			call DisableTrigger(trigger057)
+			call DisableTrigger(Trig_ManipulateItem)
 			set loc_item03 = Func0368(loc_player02, loc_unit01, loc_integer03, loc_item01)
 			if loc_item03 == null then
 			else
 				call SetItemCharges(loc_item03, loc_integer04 + GetItemCharges(loc_item03))
-				call Func0365(loc_item01)
+				call DestroyItem(loc_item01)
 				set loc_item04 = null
 			endif
-			call EnableTrigger(trigger057)
+			call EnableTrigger(Trig_ManipulateItem)
 		elseif loc_boolean01 and Func0359(Func0350(loc_integer03))then
-			call DisableTrigger(trigger057)
+			call DisableTrigger(Trig_ManipulateItem)
 			if Func0371(loc_unit01) == 0 and Func0369(loc_player02, loc_unit01, loc_integer03) == null then
 				call Func0114(loc_player01, GetObjectName('n02O'))
-				call Func0362(integers083[(loc_integer03)], (((LoadReal(HY, (loc_integer01), (6)))) * 1.0), (((LoadReal(HY, (loc_integer01), (7)))) * 1.0), (loc_player02), (true), (loc_integer04))
+				call Func0362(Item_Dummy[(loc_integer03)], (((LoadReal(HY, (loc_integer01), (6)))) * 1.0), (((LoadReal(HY, (loc_integer01), (7)))) * 1.0), (loc_player02), (true), (loc_integer04))
 			else
 				set loc_item03 = Func0369(loc_player02, loc_unit01, loc_integer03)
 				if loc_item03 == null then
-					call DisableTrigger(trigger057)
-					set loc_item02 = UnitAddItemById(loc_unit01, integers084[loc_integer03])
+					call DisableTrigger(Trig_ManipulateItem)
+					set loc_item02 = UnitAddItemById(loc_unit01, Item_Real[loc_integer03])
 					set loc_item04 = loc_item02
 					call SetItemPlayer(loc_item02, loc_player02, false)
 					call SetItemUserData(loc_item02, 1)
@@ -15577,7 +15577,7 @@ function Func0605 takes nothing returns boolean
 					call SetItemCharges(loc_item03, loc_integer04 + GetItemCharges(loc_item03))
 				endif
 			endif
-			call EnableTrigger(trigger057)
+			call EnableTrigger(Trig_ManipulateItem)
 		elseif loc_boolean01 == true then
 			call Func0584(loc_player02, loc_unit01, null, loc_integer03, (LoadReal(HY, (loc_integer01), (6))), (LoadReal(HY, (loc_integer01), (7))), loc_integer04, 1)
 		elseif loc_boolean01 == false and(GetItemType(loc_item01) == ITEM_TYPE_PERMANENT or GetItemType(loc_item01) == ITEM_TYPE_CAMPAIGN)then
@@ -15592,21 +15592,21 @@ function Func0605 takes nothing returns boolean
 		endif
 	else
 		if GetWidgetLife(loc_item01) > 0 then
-			set loc_integer05 = Func0355(loc_unit01)
-			set loc_integer06 = Func0356(loc_unit01)
-			if Func0367(loc_unit01, integers084[loc_integer05]) == null and GetUnitAbilityLevel(loc_unit01, loc_integer06) > 0 then
+			set loc_integer05 = GetHeroAghItemIndex(loc_unit01)
+			set loc_integer06 = GetAghAbilityId(loc_unit01)
+			if Func0367(loc_unit01, Item_Real[loc_integer05]) == null and GetUnitAbilityLevel(loc_unit01, loc_integer06) > 0 then
 				call UnitRemoveAbility(loc_unit01, loc_integer06)
 				if GetUnitTypeId(loc_unit01) == 'Hmkg' then
-					set unit124 = loc_unit01
-					call ExecuteFunc("Func2124")
+					set tt_unit1 = loc_unit01
+					call ExecuteFunc("DisableFireBlast")
 				endif
 			endif
 			if IsItemOwned(loc_item01) == false then
 				if GetItemType(loc_item01) == ITEM_TYPE_ARTIFACT or Func0360(loc_integer03)then
 					set loc_boolean02 = true
 				endif
-				call Func0362(integers083[loc_integer03], GetItemX(loc_item01), GetItemY(loc_item01), loc_player02, loc_boolean02, loc_integer04)
-				call Func0365(loc_item01)
+				call Func0362(Item_Dummy[loc_integer03], GetItemX(loc_item01), GetItemY(loc_item01), loc_player02, loc_boolean02, loc_integer04)
+				call DestroyItem(loc_item01)
 			endif
 		endif
 	endif
@@ -15625,145 +15625,141 @@ function Func0605 takes nothing returns boolean
 endfunction
 
 function Func0606 takes nothing returns boolean
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	call CleanTrigger(GetTriggeringTrigger())
 	return false
 endfunction
 
 function Func0607 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	call TriggerRegisterTimerEvent(loc_trigger01, 0, false)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0606))
 	set loc_trigger01 = null
 endfunction
 
-function Func0608 takes nothing returns boolean
-	local item loc_item01
-	local integer loc_integer01
-	local unit loc_unit01 = GetTriggerUnit()
-	local trigger loc_trigger01
-	local integer loc_integer02
-	local integer loc_integer03
-	local integer loc_integer04
-	local integer loc_integer05
-	set loc_integer05 = GetPlayerId(GetOwningPlayer(loc_unit01))
-	if(IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true or Func0248(loc_unit01))and IsUnitIllusion(loc_unit01) == false and GetUnitTypeId(loc_unit01) != 'N0MM' then
+function ManipulateItem takes nothing returns boolean
+	local item it = GetManipulatedItem()
+	local unit u = GetTriggerUnit()
+	local integer i = GetPlayerId(GetOwningPlayer(u))
+	local trigger t
+	local integer h
+	local integer id = GetItemTypeId(it)
+	if (IsUnitType(u, UNIT_TYPE_HERO) or Func0248(u)) and not IsUnitIllusion(u) and GetUnitTypeId(u) != 'N0MM' then
 		if GetTriggerEventId() == EVENT_PLAYER_UNIT_PICKUP_ITEM then
-			if GetItemTypeId(GetManipulatedItem()) == integers084[integer111]then
+			if id == Item_Real[integer111]then
 				set integer368 = integer368 + 1
-				set integers095[loc_integer05] = integers095[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer086]then
+				set integers095[i] = integers095[i] + 1
+			elseif id == Item_Real[integer086]then
 				set integer369 = integer369 + 1
-				set integers096[loc_integer05] = integers096[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer229]then
+				set integers096[i] = integers096[i] + 1
+			elseif id == Item_Real[integer229]then
 				set integer370 = integer370 + 1
-				set integers097[loc_integer05] = integers097[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer168]or GetItemTypeId(GetManipulatedItem()) == integers084[integer252]then
+				set integers097[i] = integers097[i] + 1
+			elseif id == Item_Real[integer168]or id == Item_Real[integer252]then
 				set integer371 = integer371 + 1
-				set integers098[loc_integer05] = integers098[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer214]then
+				set integers098[i] = integers098[i] + 1
+			elseif id == Item_Real[integer214]then
 				set integer372 = integer372 + 1
-				set integers103[loc_integer05] = integers103[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer205]then
+				set integers103[i] = integers103[i] + 1
+			elseif id == Item_Real[integer205]then
 				set integer367 = integer367 + 1
-				set integers099[loc_integer05] = integers099[loc_integer05] + 1
-				call UnitAddItemById(loc_unit01, 'I0HM')
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer182]then
+				set integers099[i] = integers099[i] + 1
+				call UnitAddItemById(u, 'I0HM')
+			elseif id == Item_Real[integer182]then
 				set integer373 = integer373 + 1
-				set integers100[loc_integer05] = integers100[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer167]then
+				set integers100[i] = integers100[i] + 1
+			elseif id == Item_Real[integer167]then
 				set integer374 = integer374 + 1
-				set integers101[loc_integer05] = integers101[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer251]then
+				set integers101[i] = integers101[i] + 1
+			elseif id == Item_Real[integer251]then
 				set integer375 = integer375 + 1
-				set integers102[loc_integer05] = integers102[loc_integer05] + 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer132]then
+				set integers102[i] = integers102[i] + 1
+			elseif id == Item_Real[integer132]then
 				set integer376 = integer376 + 1
-				set integers104[loc_integer05] = integers104[loc_integer05] + 1
+				set integers104[i] = integers104[i] + 1
 			endif
 		elseif GetTriggerEventId() == EVENT_PLAYER_UNIT_DROP_ITEM then
-			if GetItemTypeId(GetManipulatedItem()) == integers084[integer111]then
-				set integers095[loc_integer05] = integers095[loc_integer05] - 1
+			if id == Item_Real[integer111]then
+				set integers095[i] = integers095[i] - 1
 				set integer368 = integer368 - 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer086]and GetUnitTypeId(loc_unit01) != 'N0MM' then
-				set integers096[loc_integer05] = integers096[loc_integer05] - 1
+			elseif id == Item_Real[integer086]and GetUnitTypeId(u) != 'N0MM' then
+				set integers096[i] = integers096[i] - 1
 				set integer369 = integer369 - 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer132]then
-				set integers104[loc_integer05] = integers104[loc_integer05] - 1
+			elseif id == Item_Real[integer132]then
+				set integers104[i] = integers104[i] - 1
 				set integer376 = integer376 - 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer229]then
-				set integers097[loc_integer05] = integers097[loc_integer05] - 1
+			elseif id == Item_Real[integer229]then
+				set integers097[i] = integers097[i] - 1
 				set integer370 = integer370 - 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer168]or GetItemTypeId(GetManipulatedItem()) == integers084[integer252]then
+			elseif id == Item_Real[integer168]or id == Item_Real[integer252]then
 				set integer371 = integer371 - 1
-				set integers098[loc_integer05] = integers098[loc_integer05] - 1
-				if integers098[loc_integer05] < 1 or Func0366(loc_unit01, integers084[integer168], GetManipulatedItem()) == null or Func0366(loc_unit01, integers084[integer252], GetManipulatedItem()) == null then
-					call UnitRemoveAbility(loc_unit01, 'A174')
+				set integers098[i] = integers098[i] - 1
+				if integers098[i] < 1 or Func0366(u, Item_Real[integer168], it) == null or Func0366(u, Item_Real[integer252], it) == null then
+					call UnitRemoveAbility(u, 'A174')
 				endif
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer214]and GetUnitTypeId(loc_unit01) != 'N0MM' then
-				set integers103[loc_integer05] = integers103[loc_integer05] - 1
+			elseif id == Item_Real[integer214]and GetUnitTypeId(u) != 'N0MM' then
+				set integers103[i] = integers103[i] - 1
 				set integer372 = integer372 - 1
-			elseif GetItemTypeId(GetManipulatedItem()) == integers084[integer205]or GetItemTypeId(GetManipulatedItem()) == integers086[integer205]then
+			elseif id == Item_Real[integer205]or id == Item_Mute[integer205]then
 				set integer367 = IMaxBJ(integer367 - 1, 0)
-				set integers099[loc_integer05] = IMaxBJ(integers099[loc_integer05] - 1, 0)
-				call UnitRemoveAbility(loc_unit01, 'B0BI')
+				set integers099[i] = IMaxBJ(integers099[i] - 1, 0)
+				call UnitRemoveAbility(u, 'B0BI')
 			endif
 		endif
 	endif
 	if GetTriggerEventId() == EVENT_PLAYER_UNIT_PAWN_ITEM then
-		set loc_item01 = GetSoldItem()
-		call SetItemUserData(loc_item01, -2)
-		set loc_integer03 = Func0355(loc_unit01)
-		set loc_integer04 = Func0356(loc_unit01)
-		if Func0366(loc_unit01, integers084[loc_integer03], loc_item01) == null and GetUnitAbilityLevel(loc_unit01, loc_integer04) > 0 then
-			call UnitRemoveAbility(loc_unit01, loc_integer04)
-			if GetUnitTypeId(loc_unit01) == 'Hmkg' then
-				set unit124 = loc_unit01
-				call ExecuteFunc("Func2124")
+		set it = GetSoldItem()
+		call SetItemUserData(it, -2)
+		set i = GetHeroAghItemIndex(u)
+		set id = GetAghAbilityId(u)
+		if Func0366(u, Item_Real[i], it) == null and GetUnitAbilityLevel(u, id) > 0 then
+			call UnitRemoveAbility(u, id)
+			if GetUnitTypeId(u) == 'Hmkg' then
+				set tt_unit1 = u
+				call ExecuteFunc("DisableFireBlast")
 			endif
 		endif
-		if boolean131 == true then
-			call Func0604(loc_unit01)
+		if boolean131 then
+			call Func0604(u)
 		endif
-	elseif GetItemTypeId(GetManipulatedItem()) != 'I00E' and GetItemTypeId(GetManipulatedItem()) != 'I02M' then
-		set loc_item01 = GetManipulatedItem()
-		if IsUnitIllusion(loc_unit01)or GetItemUserData(loc_item01) == -2 then
-			set loc_item01 = null
-			set loc_unit01 = null
-			set loc_trigger01 = null
+	elseif id != 'I00E' and id != 'I02M' then
+		if IsUnitIllusion(u) or GetItemUserData(it) == -2 then
+			set it = null
+			set u = null
+			set t = null
 			return false
 		endif
 		if GetTriggerEventId() == EVENT_PLAYER_UNIT_PICKUP_ITEM then
-			set loc_integer01 = 1
+			set i = 1
 		else
-			set loc_integer01 = 2
+			set i = 2
 		endif
-		if(loc_integer01 == 1 or(loc_integer01 == 2 and Func0379(loc_item01) == false and GetWidgetLife(loc_item01) > 0))and GetUnitTypeId(loc_unit01) != 'H00J' then
-			set loc_trigger01 = CreateTrigger()
-			set loc_integer02 = GetHandleId(loc_trigger01)
-			call TriggerRegisterTimerEvent(loc_trigger01, 0, false)
-			call TriggerAddCondition(loc_trigger01, Condition(function Func0605))
-			call SaveUnitHandle(HY, (loc_integer02), (26), (loc_unit01))
-			call SaveInteger(HY, (loc_integer02), (97), (loc_integer01))
-			call SaveInteger(HY, (loc_integer02), (93), (Func0353(loc_item01)))
-			if Func0379(loc_item01)then
-				call SaveBoolean(HY, (loc_integer02), (95), (true))
-				call SavePlayerHandle(HY, (loc_integer02), (54), (GetItemPlayer(loc_item01)))
-				call SaveInteger(HY, (loc_integer02), (76), (GetItemCharges(loc_item01)))
-				call SaveReal(HY, (loc_integer02), (6), ((GetItemX(loc_item01)) * 1.0))
-				call SaveReal(HY, (loc_integer02), (7), ((GetItemY(loc_item01)) * 1.0))
+		if(i == 1 or (i == 2 and not Func0379(it) and GetWidgetLife(it) > 0))and GetUnitTypeId(u) != 'H00J' then
+			set t = CreateTrigger()
+			set h = GetHandleId(t)
+			call TriggerRegisterTimerEvent(t, 0, false)
+			call TriggerAddCondition(t, Condition(function Func0605))
+			call SaveUnitHandle(HY, (h), (26), (u))
+			call SaveInteger(HY, (h), (97), (i))
+			call SaveInteger(HY, (h), (93), (Func0353(it)))
+			if Func0379(it)then
+				call SaveBoolean(HY, (h), (95), (true))
+				call SavePlayerHandle(HY, (h), (54), (GetItemPlayer(it)))
+				call SaveInteger(HY, (h), (76), (GetItemCharges(it)))
+				call SaveReal(HY, (h), (6), ((GetItemX(it)) * 1.0))
+				call SaveReal(HY, (h), (7), ((GetItemY(it)) * 1.0))
 			else
-				call SaveBoolean(HY, (loc_integer02), (95), (false))
-				call SaveItemHandle(HY, (loc_integer02), (96), (loc_item01))
-				call SetItemUserData(loc_item01, 0)
+				call SaveBoolean(HY, (h), (95), (false))
+				call SaveItemHandle(HY, (h), (96), (it))
+				call SetItemUserData(it, 0)
 			endif
 		else
 		endif
 	endif
-	set loc_item01 = null
-	set loc_unit01 = null
-	set loc_trigger01 = null
+	set it = null
+	set u = null
+	set t = null
 	return false
 endfunction
 
@@ -15776,9 +15772,6 @@ function Func0609 takes nothing returns boolean
 	return false
 endfunction
 
-function Func0610 takes nothing returns nothing
-	call Func0597(unit124)
-endfunction
 
 function Func0611 takes unit loc_unit01, integer loc_integer01, boolean loc_boolean01 returns nothing
 	local string loc_string01
@@ -15950,10 +15943,10 @@ function Func0618 takes nothing returns boolean
 	endif
 	if(GetTriggerEventId() == EVENT_PLAYER_UNIT_DROP_ITEM and GetItemType(loc_item01) != ITEM_TYPE_PURCHASABLE)or GetTriggerEventId() == EVENT_PLAYER_UNIT_PAWN_ITEM then
 		call Func0617(loc_item01, loc_unit01, false)
-		call Func0387("DRI_" + I2S(GetPlayerId(GetOwningPlayer(loc_unit01))), integers084[Func0350(Func0353(loc_item01))])
+		call Func0387("DRI_" + I2S(GetPlayerId(GetOwningPlayer(loc_unit01))), Item_Real[Func0350(Func0353(loc_item01))])
 	elseif GetTriggerEventId() == EVENT_PLAYER_UNIT_PICKUP_ITEM then
 		call Func0617(loc_item01, loc_unit01, true)
-		call Func0387("PUI_" + I2S(GetPlayerId(GetOwningPlayer(loc_unit01))), integers084[Func0350(Func0353(loc_item01))])
+		call Func0387("PUI_" + I2S(GetPlayerId(GetOwningPlayer(loc_unit01))), Item_Real[Func0350(Func0353(loc_item01))])
 	endif
 	set loc_unit01 = null
 	set loc_item01 = null
@@ -15989,12 +15982,12 @@ endfunction
 function Func0620 takes item loc_item01 returns nothing
 	set integer377 = integer377 + 1
 	set items007[integer377] = loc_item01
-	set reals009[integer377] = (integers087[(Func0372(loc_item01))])
+	set reals009[integer377] = (Item_Cooldown[(Func0372(loc_item01))])
 	call SetItemDroppable(loc_item01, false)
 endfunction
 
 function Func0621 takes nothing returns boolean
-	if GetUnitTypeId(GetTriggerUnit()) != 'e00E' and(integers087[(Func0372(GetManipulatedItem()))]) > 0 then
+	if GetUnitTypeId(GetTriggerUnit()) != 'e00E' and(Item_Cooldown[(Func0372(GetManipulatedItem()))]) > 0 then
 		call Func0620(GetManipulatedItem())
 	endif
 	return false
@@ -16087,168 +16080,168 @@ function Func0626 takes nothing returns nothing
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local integer loc_integer02
 	local item loc_item02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	loop
 		exitwhen loc_integer01 > 5
 		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
 		set loc_integer02 = Func0353(loc_item01)
 		if loc_integer02 == integer151 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer098], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer098], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer110], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer110], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer154 or loc_integer02 == integer155 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer099], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer099], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer104], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer104], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer235 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer095], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer095], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer092], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer092], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer292], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer292], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer236 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer095], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer095], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer092], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer092], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer292], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer292], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer225 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer084], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer084], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer171], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer171], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer297], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer297], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer248 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer067], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer067], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer079], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer079], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer176 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer083], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer083], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer089], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer089], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer177 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer083], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer083], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer089], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer089], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-		elseif loc_integer02 == integer194 then
-			set player005 = GetItemPlayer(loc_item01)
+		elseif loc_integer02 == MantaStyle then
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer166], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer166], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer108], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer108], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer275], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer275], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-		elseif loc_integer02 == integer195 then
-			set player005 = GetItemPlayer(loc_item01)
+		elseif loc_integer02 == MantaStyle_Ranged then
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer166], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer166], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer108], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer108], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer275], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer275], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer126 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer078], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer078], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer244], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer244], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer132 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer067], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer067], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer099], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer099], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer100], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer100], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer182 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer167], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer167], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer166], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer166], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer136 or loc_integer02 == integer137 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer164], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer164], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer154], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer154], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		elseif loc_integer02 == integer252 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set loc_item02 = CreateItem(integers083[integer102], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer102], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
-			set loc_item02 = CreateItem(integers083[integer168], loc_real01, loc_real02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set loc_item02 = CreateItem(Item_Dummy[integer168], loc_real01, loc_real02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 		endif
 		set loc_integer01 = loc_integer01 + 1
 	endloop
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_unit01 = null
 	set loc_item01 = null
 	set loc_item02 = null
@@ -16285,7 +16278,7 @@ function Func0631 takes nothing returns nothing
 	local player loc_player01
 	loop
 		exitwhen loc_integer01 > 16
-		if Func0367(PlayerHeroArray[loc_integer01], integers084[integer229]) != null then
+		if Func0367(PlayerHeroArray[loc_integer01], Item_Real[integer229]) != null then
 			call RemoveUnit(units009[GetPlayerId(GetOwningPlayer(PlayerHeroArray[loc_integer01]))])
 		endif
 		set loc_integer01 = loc_integer01 + 1
@@ -16293,11 +16286,11 @@ function Func0631 takes nothing returns nothing
 endfunction
 
 function Func0632 takes nothing returns boolean
-	return GetItemTypeId(GetManipulatedItem()) == integers084[integer229]and IsUnitType(GetTriggerUnit(), UNIT_TYPE_HERO) == true
+	return GetItemTypeId(GetManipulatedItem()) == Item_Real[integer229]and IsUnitType(GetTriggerUnit(), UNIT_TYPE_HERO) == true
 endfunction
 
 function Func0633 takes nothing returns boolean
-	return IsUnitType(GetTriggerUnit(), UNIT_TYPE_HERO) == true and Func0431(GetUnitTypeId(GetFilterUnit())) == false and Func0367(GetTriggerUnit(), integers084[integer229]) != null
+	return IsUnitType(GetTriggerUnit(), UNIT_TYPE_HERO) == true and Func0431(GetUnitTypeId(GetFilterUnit())) == false and Func0367(GetTriggerUnit(), Item_Real[integer229]) != null
 endfunction
 
 function Func0634 takes nothing returns boolean
@@ -16314,11 +16307,11 @@ function Func0636 takes nothing returns nothing
 endfunction
 
 function Func0637 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()), 1700, Condition(function Func0634))
-	set real002 = 400 + 30 * GetItemCharges(Func0367(GetTriggerUnit(), integers084[integer229]))
+	set real002 = 400 + 30 * GetItemCharges(Func0367(GetTriggerUnit(), Item_Real[integer229]))
 	call ForGroup(loc_group01, function Func0635)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -16330,7 +16323,7 @@ function Func0638 takes nothing returns nothing
 endfunction
 
 function Func0639 takes unit loc_unit01 returns nothing
-	local integer loc_integer01 = GetItemCharges(Func0367(loc_unit01, integers084[integer229]))
+	local integer loc_integer01 = GetItemCharges(Func0367(loc_unit01, Item_Real[integer229]))
 	if loc_integer01 > 0 then
 		call SetUnitState(loc_unit01, UNIT_STATE_MANA, GetUnitState(loc_unit01, UNIT_STATE_MANA) + loc_integer01)
 	endif
@@ -16380,22 +16373,22 @@ function Func0643 takes unit loc_unit01, unit loc_unit02 returns nothing
 	local integer loc_integer01
 	local item loc_item01
 	if GetUnitTypeId(GetSummonedUnit()) == 'o004' then
-		set loc_integer01 = integers084[integer142]
+		set loc_integer01 = Item_Real[integer142]
 	else
-		set loc_integer01 = integers084[integer143]
+		set loc_integer01 = Item_Real[integer143]
 	endif
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	set loc_item01 = Func0367(loc_unit01, loc_integer01)
 	if loc_item01 == null then
-		set player005 = GetOwningPlayer(loc_unit01)
-		set item002 = CreateItem(loc_integer01, 0, 0)
-		call UnitAddItem(loc_unit01, item002)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetOwningPlayer(loc_unit01)
+		set tt_item1 = CreateItem(loc_integer01, 0, 0)
+		call UnitAddItem(loc_unit01, tt_item1)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	else
 		call SetItemCharges(loc_item01, GetItemCharges(loc_item01) + 1)
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 endfunction
 
 function Func0644 takes nothing returns nothing
@@ -16478,12 +16471,12 @@ endfunction
 function Func0649 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = 0
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer02 = GetHandleId(loc_trigger01)
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1300, Condition(function Func0648))
 	call ForGroup(loc_group01, function Func0645)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.1, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0647))
 	call SaveUnitHandle(HY, (loc_integer02), (53), (loc_unit01))
@@ -16570,22 +16563,22 @@ function Func0655 takes unit loc_unit01 returns nothing
 		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
 		set loc_integer02 = Func0372(loc_item01)
 		if loc_integer02 == integer132 and loc_boolean01 == true then
-			call DisableTrigger(trigger057)
-			set player005 = GetItemPlayer(loc_item01)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer133], loc_integer01)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-			call EnableTrigger(trigger057)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer133], loc_integer01)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		if loc_integer02 == integer133 and loc_boolean01 == false then
-			call DisableTrigger(trigger057)
-			set player005 = GetItemPlayer(loc_item01)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer132], loc_integer01)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-			call EnableTrigger(trigger057)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer132], loc_integer01)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		set loc_integer01 = loc_integer01 + 1
 	endloop
@@ -16610,22 +16603,22 @@ function Func0656 takes unit loc_unit01 returns nothing
 		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
 		set loc_integer02 = Func0372(loc_item01)
 		if loc_integer02 == integer214 and loc_boolean01 == true then
-			call DisableTrigger(trigger057)
-			set player005 = GetItemPlayer(loc_item01)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer215], loc_integer01)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-			call EnableTrigger(trigger057)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer215], loc_integer01)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		if loc_integer02 == integer215 and loc_boolean01 == false then
-			call DisableTrigger(trigger057)
-			set player005 = GetItemPlayer(loc_item01)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer214], loc_integer01)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-			call EnableTrigger(trigger057)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer214], loc_integer01)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		set loc_integer01 = loc_integer01 + 1
 	endloop
@@ -16657,22 +16650,22 @@ function Func0658 takes unit loc_unit01 returns nothing
 		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
 		set loc_integer02 = Func0372(loc_item01)
 		if loc_integer02 == integer086 and loc_boolean01 == true then
-			call DisableTrigger(trigger057)
-			set player005 = GetItemPlayer(loc_item01)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer087], loc_integer01)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-			call EnableTrigger(trigger057)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer087], loc_integer01)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		if loc_integer02 == integer087 and loc_boolean01 == false then
-			call DisableTrigger(trigger057)
-			set player005 = GetItemPlayer(loc_item01)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer086], loc_integer01)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
-			call EnableTrigger(trigger057)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer086], loc_integer01)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
+			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		set loc_integer01 = loc_integer01 + 1
 	endloop
@@ -16705,7 +16698,7 @@ function Func0661 takes nothing returns boolean
 	local integer loc_integer02
 	local group loc_group01
 	if integer369 > 0 or integer372 > 0 or integer376 > 0 then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func0660))
 		loop
 			exitwhen loc_integer01 > 5
@@ -16718,7 +16711,7 @@ function Func0661 takes nothing returns boolean
 			set loc_integer01 = loc_integer01 + 1
 		endloop
 		call ForGroup(loc_group01, function Func0659)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_unit01 = null
@@ -16737,11 +16730,11 @@ function Func0662 takes nothing returns nothing
 		if(loc_integer02 == integer113 or loc_integer02 == integer114 or loc_integer02 == integer115)and GetItemUserData(loc_item01) > 0 then
 			call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Undead\\ReplenishMana\\SpiritTouchTarget.mdl", loc_unit01,"overhead"))
 			call Func0112(GetOwningPlayer(loc_unit01),"Abilities\\Spells\\Human\\Heal\\HealTarget.wav")
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer116], loc_integer01)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			set tt_player1 = GetItemPlayer(loc_item01)
+			call DestroyItem(loc_item01)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer116], loc_integer01)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 			call UnitRemoveAbility(loc_unit01, 'B0GI')
 		endif
 		set loc_integer01 = loc_integer01 + 1
@@ -16765,12 +16758,12 @@ function Func0664 takes nothing returns boolean
 endfunction
 
 function Func0665 takes nothing returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, real016, real017, 750, Condition(function Func0663))
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, real104, real105, 750, Condition(function Func0664))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return false
 endfunction
@@ -17032,28 +17025,28 @@ endfunction
 function Func0679 takes nothing returns boolean
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = 1
-	if Func0367(loc_unit01, integers084[integer133]) != null then
+	if Func0367(loc_unit01, Item_Real[integer133]) != null then
 		set loc_integer01 = 2
 	endif
-	if Func0366(loc_unit01, integers084[integer067], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer067], GetManipulatedItem()) != null then
 		set loc_integer01 = 3
 	endif
-	if Func0366(loc_unit01, integers084[integer238], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer238], GetManipulatedItem()) != null then
 		set loc_integer01 = 4
 	endif
-	if Func0366(loc_unit01, integers084[integer157], GetManipulatedItem()) != null or Func0366(loc_unit01, integers084[integer158], GetManipulatedItem()) != null or Func0366(loc_unit01, integers084[integer159], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer157], GetManipulatedItem()) != null or Func0366(loc_unit01, Item_Real[integer158], GetManipulatedItem()) != null or Func0366(loc_unit01, Item_Real[integer159], GetManipulatedItem()) != null then
 		set loc_integer01 = 5
 	endif
-	if Func0366(loc_unit01, integers084[integer248], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer248], GetManipulatedItem()) != null then
 		set loc_integer01 = 6
 	endif
-	if Func0366(loc_unit01, integers084[integer132], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer132], GetManipulatedItem()) != null then
 		set loc_integer01 = 7
 	endif
-	if Func0366(loc_unit01, integers084[integer156], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer156], GetManipulatedItem()) != null then
 		set loc_integer01 = 8
 	endif
-	if Func0366(loc_unit01, integers084[integer179], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer179], GetManipulatedItem()) != null then
 		call UnitAddAbility(loc_unit01, 'A0V0')
 		call SetUnitAbilityLevel(loc_unit01, 'A0V0', loc_integer01)
 		call UnitMakeAbilityPermanent(loc_unit01, true, 'A0V0')
@@ -17067,28 +17060,28 @@ endfunction
 function Func0680 takes nothing returns boolean
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = 1
-	if Func0367(loc_unit01, integers084[integer133]) != null then
+	if Func0367(loc_unit01, Item_Real[integer133]) != null then
 		set loc_integer01 = 2
 	endif
-	if Func0367(loc_unit01, integers084[integer067]) != null then
+	if Func0367(loc_unit01, Item_Real[integer067]) != null then
 		set loc_integer01 = 3
 	endif
-	if Func0367(loc_unit01, integers084[integer238]) != null then
+	if Func0367(loc_unit01, Item_Real[integer238]) != null then
 		set loc_integer01 = 4
 	endif
-	if Func0367(loc_unit01, integers084[integer157]) != null or Func0367(loc_unit01, integers084[integer158]) != null or Func0367(loc_unit01, integers084[integer159]) != null then
+	if Func0367(loc_unit01, Item_Real[integer157]) != null or Func0367(loc_unit01, Item_Real[integer158]) != null or Func0367(loc_unit01, Item_Real[integer159]) != null then
 		set loc_integer01 = 5
 	endif
-	if Func0367(loc_unit01, integers084[integer248]) != null then
+	if Func0367(loc_unit01, Item_Real[integer248]) != null then
 		set loc_integer01 = 6
 	endif
-	if Func0366(loc_unit01, integers084[integer132], GetManipulatedItem()) != null then
+	if Func0366(loc_unit01, Item_Real[integer132], GetManipulatedItem()) != null then
 		set loc_integer01 = 7
 	endif
-	if Func0367(loc_unit01, integers084[integer156]) != null then
+	if Func0367(loc_unit01, Item_Real[integer156]) != null then
 		set loc_integer01 = 8
 	endif
-	if Func0367(loc_unit01, integers084[integer179]) != null then
+	if Func0367(loc_unit01, Item_Real[integer179]) != null then
 		call UnitAddAbility(loc_unit01, 'A0V0')
 		call SetUnitAbilityLevel(loc_unit01, 'A0V0', loc_integer01)
 		call UnitMakeAbilityPermanent(loc_unit01, true, 'A0V0')
@@ -17229,9 +17222,9 @@ function Func0687 takes unit loc_unit01, item loc_item01, integer loc_integer01 
 		endif
 		set loc_integer02 = loc_integer02 + 1
 	endloop
-	set item002 = loc_item01
+	set tt_item1 = loc_item01
 	set loc_item02 = null
-	return item002
+	return tt_item1
 endfunction
 
 function Func0688 takes nothing returns boolean
@@ -17251,7 +17244,7 @@ function Func0688 takes nothing returns boolean
 		call TriggerRegisterTimerEvent(loc_trigger01, 5.5, false)
 	else
 		call SaveBoolean(HY, (GetHandleId(loc_unit01)), (102), (false))
-		call DisableTrigger(trigger057)
+		call DisableTrigger(Trig_ManipulateItem)
 		if integers099[GetPlayerId(GetOwningPlayer(loc_unit01))] > 0 then
 			call SetItemVisible(UnitAddItemById(loc_unit01, 'I0HM'), false)
 		endif
@@ -17260,14 +17253,14 @@ function Func0688 takes nothing returns boolean
 			set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer02)
 			set loc_integer03 = Func0372(loc_item01)
 			if loc_integer03 == integer206 then
-				set player005 = GetItemPlayer(loc_item01)
+				set tt_player1 = GetItemPlayer(loc_item01)
 				call RemoveItem(loc_item01)
 				set loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
 				call UnitAddAbility(loc_unit02, 'AInv')
-				set loc_item02 = UnitAddItemById(loc_unit02, integers084[integer205])
+				set loc_item02 = UnitAddItemById(loc_unit02, Item_Real[integer205])
 				call UnitUseItem(loc_unit02, loc_item02)
-				set item002 = Func0687(loc_unit01, loc_item02, loc_integer02)
-				call SetItemPlayer(loc_item02, player005, false)
+				set tt_item1 = Func0687(loc_unit01, loc_item02, loc_integer02)
+				call SetItemPlayer(loc_item02, tt_player1, false)
 				call SetItemUserData(loc_item02, 1)
 				call UnitRemoveAbility(loc_unit02, 'AInv')
 				set loc_unit02 = null
@@ -17276,7 +17269,7 @@ function Func0688 takes nothing returns boolean
 			set loc_item01 = null
 			set loc_integer02 = loc_integer02 + 1
 		endloop
-		call EnableTrigger(trigger057)
+		call EnableTrigger(Trig_ManipulateItem)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -17293,7 +17286,7 @@ function Func0689 takes unit loc_unit01 returns nothing
 	local integer loc_integer03
 	local unit loc_unit02
 	local item loc_item02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	call SaveBoolean(HY, (GetHandleId(loc_unit01)), (102), (true))
 	call TriggerRegisterTimerEvent(loc_trigger01, 17, false)
 	call TriggerRegisterUnitEvent(loc_trigger01, loc_unit01, EVENT_UNIT_DEATH)
@@ -17304,14 +17297,14 @@ function Func0689 takes unit loc_unit01 returns nothing
 		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer02)
 		set loc_integer03 = Func0372(loc_item01)
 		if loc_integer03 == integer205 or loc_integer03 == integer206 then
-			set player005 = GetItemPlayer(loc_item01)
+			set tt_player1 = GetItemPlayer(loc_item01)
 			call RemoveItem(loc_item01)
 			set loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
 			call UnitAddAbility(loc_unit02, 'AInv')
-			set loc_item02 = UnitAddItemById(loc_unit02, integers084[integer206])
+			set loc_item02 = UnitAddItemById(loc_unit02, Item_Real[integer206])
 			call UnitUseItem(loc_unit02, loc_item02)
-			set item002 = Func0687(loc_unit01, loc_item02, loc_integer02)
-			call SetItemPlayer(loc_item02, player005, false)
+			set tt_item1 = Func0687(loc_unit01, loc_item02, loc_integer02)
+			call SetItemPlayer(loc_item02, tt_player1, false)
 			call SetItemUserData(loc_item02, 1)
 			call UnitRemoveAbility(loc_unit02, 'AInv')
 			call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\DispelMagic\\DispelMagicTarget.mdl", loc_unit01,"origin"))
@@ -17321,7 +17314,7 @@ function Func0689 takes unit loc_unit01 returns nothing
 		set loc_item01 = null
 		set loc_integer02 = loc_integer02 + 1
 	endloop
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_trigger01 = null
 endfunction
 
@@ -17371,12 +17364,12 @@ function Func0692 takes nothing returns boolean
 	if GetSpellAbilityId() == 'A0H6' then
 		call SaveUnitHandle(HY, (GetHandleId(GetTriggerUnit())), (103), (null))
 		call SaveInteger(HY, (GetHandleId(GetTriggerUnit())), (104), (0))
-		if(Func0367(GetTriggerUnit(), integers084[integer113]) != null or Func0367(GetTriggerUnit(), integers086[integer113]) != null)and(GetUnitTypeId(GetSpellTargetUnit()) == 'nfoh' or GetUnitTypeId(GetSpellTargetUnit()) == 'ndfl')then
+		if(Func0367(GetTriggerUnit(), Item_Real[integer113]) != null or Func0367(GetTriggerUnit(), Item_Mute[integer113]) != null)and(GetUnitTypeId(GetSpellTargetUnit()) == 'nfoh' or GetUnitTypeId(GetSpellTargetUnit()) == 'ndfl')then
 			call SaveUnitHandle(HY, (GetHandleId(GetTriggerUnit())), (103), (GetSpellTargetUnit()))
 		elseif Func0555(GetItemTypeId(GetSpellTargetItem()))then
 			call Func0611(GetTriggerUnit(), GetItemTypeId(GetSpellTargetItem()), true)
 			call SaveInteger(HY, (GetHandleId(GetTriggerUnit())), (104), (GetItemTypeId(GetSpellTargetItem())))
-			call Func0365(GetSpellTargetItem())
+			call DestroyItem(GetSpellTargetItem())
 		endif
 	endif
 	return false
@@ -17395,11 +17388,11 @@ function Func0693 takes nothing returns boolean
 		set loc_item02 = CreateItem((LoadInteger(HY, (GetHandleId(loc_item01)), (GetHandleId(loc_unit01)))), GetUnitX(loc_unit01), GetUnitY(loc_unit01))
 		call FlushChildHashtable(HY, (GetHandleId(loc_item01)))
 		set loc_integer04 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer116], loc_integer04)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer116], loc_integer04)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call UnitAddItem(loc_unit01, loc_item02)
@@ -17441,26 +17434,26 @@ function Func0695 takes nothing returns nothing
 		if GetUnitTypeId(loc_unit02) == 'nfoh' or GetUnitTypeId(loc_unit02) == 'ndfl' then
 			call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Undead\\ReplenishMana\\SpiritTouchTarget.mdl", loc_unit01,"overhead"))
 			call Func0112(GetOwningPlayer(loc_unit01),"Abilities\\Spells\\Human\\Heal\\HealTarget.wav")
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer116], loc_integer03)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			set tt_player1 = GetItemPlayer(loc_item01)
+			call DestroyItem(loc_item01)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer116], loc_integer03)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 			call UnitRemoveAbility(loc_unit01, 'B0GI')
 		elseif Func0555(loc_integer02)then
 			set loc_integer04 = Func0691(loc_integer02)
 			call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Undead\\ReplenishMana\\SpiritTouchTarget.mdl", loc_unit01,"overhead"))
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			call DisableTrigger(trigger057)
-			if GetOwningPlayer(loc_unit01) == player005 then
-				set item002 = Func0382(loc_unit01, integers084[loc_integer04], loc_integer03)
+			set tt_player1 = GetItemPlayer(loc_item01)
+			call DestroyItem(loc_item01)
+			call DisableTrigger(Trig_ManipulateItem)
+			if GetOwningPlayer(loc_unit01) == tt_player1 then
+				set tt_item1 = Func0382(loc_unit01, Item_Real[loc_integer04], loc_integer03)
 			else
-				set item002 = Func0382(loc_unit01, integers086[loc_integer04], loc_integer03)
+				set tt_item1 = Func0382(loc_unit01, Item_Mute[loc_integer04], loc_integer03)
 			endif
-			call EnableTrigger(trigger057)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			call EnableTrigger(Trig_ManipulateItem)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 			set loc_item02 = UnitItemInSlot(loc_unit01, loc_integer03)
 			call SaveInteger(HY, (GetHandleId(loc_item02)), (GetHandleId(loc_unit01)), (loc_integer02))
 			call Func0694(loc_unit01, loc_item02)
@@ -17468,38 +17461,38 @@ function Func0695 takes nothing returns nothing
 		endif
 	elseif loc_integer01 == integer116 then
 		set loc_integer03 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer115], loc_integer03)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer115], loc_integer03)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		call UnitRemoveAbility(loc_unit01, 'B0GI')
 	elseif loc_integer01 == integer115 then
 		set loc_integer03 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer114], loc_integer03)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer114], loc_integer03)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		call UnitRemoveAbility(loc_unit01, 'B0GI')
 	elseif loc_integer01 == integer114 then
 		set loc_integer03 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(loc_item01)
-		call Func0365(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer113], loc_integer03)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 0)
+		set tt_player1 = GetItemPlayer(loc_item01)
+		call DestroyItem(loc_item01)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer113], loc_integer03)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 0)
 	elseif Func0351(loc_integer01)then
 		if(LoadInteger(HY, (GetHandleId(loc_item01)), (GetHandleId(loc_unit01)))) > 0 then
 			set boolean067 = true
 			set loc_integer03 = Func0222(loc_unit01, loc_item01)
 			set loc_item02 = CreateItem((LoadInteger(HY, (GetHandleId(loc_item01)), (GetHandleId(loc_unit01)))), GetUnitX(loc_unit01), GetUnitY(loc_unit01))
 			call FlushChildHashtable(HY, (GetHandleId(loc_item01)))
-			set player005 = GetItemPlayer(loc_item01)
-			call Func0365(loc_item01)
-			set item002 = Func0382(loc_unit01, integers084[integer116], loc_integer03)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			set tt_player1 = GetItemPlayer(loc_item01)
+			call DestroyItem(loc_item01)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer116], loc_integer03)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 			call UnitAddItem(loc_unit01, loc_item02)
 			set boolean067 = false
 			call UnitRemoveAbility(loc_unit01, 'B0GI')
@@ -17631,7 +17624,7 @@ function Func0703 takes nothing returns boolean
 	local integer loc_integer12 = (LoadInteger(HY, (loc_integer01), (115)))
 	local integer loc_integer13 = (LoadInteger(HY, (loc_integer01), (116)))
 	local integer loc_integer14 = (LoadInteger(HY, (loc_integer01), (117)))
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if GetTriggerEvalCount(loc_trigger01) == 1 then
 		call UnitAddAbility(loc_unit01, loc_integer02)
 		if booleans015[GetPlayerId(GetOwningPlayer(loc_unit01))] == false then
@@ -17641,58 +17634,58 @@ function Func0703 takes nothing returns boolean
 		endif
 	else
 		if loc_integer03 > 0 then
-			set item002 = CreateItem(loc_integer03, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player01, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer03, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player01, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer09 > 0 then
-			call SetItemCharges(item002, loc_integer09)
+			call SetItemCharges(tt_item1, loc_integer09)
 		endif
 		if loc_integer04 > 0 then
-			set item002 = CreateItem(loc_integer04, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player02, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer04, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player02, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer10 > 0 then
-			call SetItemCharges(item002, loc_integer10)
+			call SetItemCharges(tt_item1, loc_integer10)
 		endif
 		if loc_integer05 > 0 then
-			set item002 = CreateItem(loc_integer05, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player03, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer05, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player03, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer11 > 0 then
-			call SetItemCharges(item002, loc_integer11)
+			call SetItemCharges(tt_item1, loc_integer11)
 		endif
 		if loc_integer06 > 0 then
-			set item002 = CreateItem(loc_integer06, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player04, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer06, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player04, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer12 > 0 then
-			call SetItemCharges(item002, loc_integer12)
+			call SetItemCharges(tt_item1, loc_integer12)
 		endif
 		if loc_integer07 > 0 then
-			set item002 = CreateItem(loc_integer07, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player05, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer07, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player05, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer13 > 0 then
-			call SetItemCharges(item002, loc_integer13)
+			call SetItemCharges(tt_item1, loc_integer13)
 		endif
 		if loc_integer08 > 0 then
-			set item002 = CreateItem(loc_integer08, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player06, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer08, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player06, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer14 > 0 then
-			call SetItemCharges(item002, loc_integer14)
+			call SetItemCharges(tt_item1, loc_integer14)
 		endif
 		if booleans015[GetPlayerId(GetOwningPlayer(loc_unit01))] == false then
 			call UnitRemoveType(loc_unit01, UNIT_TYPE_PEON)
@@ -17702,7 +17695,7 @@ function Func0703 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_player01 = null
@@ -17796,12 +17789,12 @@ function Func0704 takes nothing returns boolean
 	if GetItemType(loc_item07) == ITEM_TYPE_ARTIFACT or Func0360(Func0353(loc_item07))then
 		set loc_integer14 = GetItemCharges(loc_item07)
 	endif
-	call Func0365(loc_item01)
-	call Func0365(loc_item02)
-	call Func0365(loc_item03)
-	call Func0365(loc_item04)
-	call Func0365(loc_item05)
-	call Func0365(loc_item06)
+	call DestroyItem(loc_item01)
+	call DestroyItem(loc_item02)
+	call DestroyItem(loc_item03)
+	call DestroyItem(loc_item04)
+	call DestroyItem(loc_item05)
+	call DestroyItem(loc_item06)
 	if loc_integer02 == 'n00I' then
 		set loc_integer15 = 'S009'
 	elseif loc_integer02 == 'n022' then
@@ -17931,7 +17924,7 @@ function Func0707 takes nothing returns boolean
 	local integer loc_integer12 = (LoadInteger(HY, (loc_integer01), (115)))
 	local integer loc_integer13 = (LoadInteger(HY, (loc_integer01), (116)))
 	local integer loc_integer14 = (LoadInteger(HY, (loc_integer01), (117)))
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if GetTriggerEvalCount(loc_trigger01) == 1 then
 		call UnitAddAbility(loc_unit01, loc_integer02)
 		if booleans015[GetPlayerId(GetOwningPlayer(loc_unit01))] == false then
@@ -17941,58 +17934,58 @@ function Func0707 takes nothing returns boolean
 		endif
 	else
 		if loc_integer03 > 0 then
-			set item002 = CreateItem(loc_integer03, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player01, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer03, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player01, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer09 > 0 then
-			call SetItemCharges(item002, loc_integer09)
+			call SetItemCharges(tt_item1, loc_integer09)
 		endif
 		if loc_integer04 > 0 then
-			set item002 = CreateItem(loc_integer04, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player02, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer04, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player02, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer10 > 0 then
-			call SetItemCharges(item002, loc_integer10)
+			call SetItemCharges(tt_item1, loc_integer10)
 		endif
 		if loc_integer05 > 0 then
-			set item002 = CreateItem(loc_integer05, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player03, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer05, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player03, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer11 > 0 then
-			call SetItemCharges(item002, loc_integer11)
+			call SetItemCharges(tt_item1, loc_integer11)
 		endif
 		if loc_integer06 > 0 then
-			set item002 = CreateItem(loc_integer06, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player04, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer06, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player04, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer12 > 0 then
-			call SetItemCharges(item002, loc_integer12)
+			call SetItemCharges(tt_item1, loc_integer12)
 		endif
 		if loc_integer07 > 0 then
-			set item002 = CreateItem(loc_integer07, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player05, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer07, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player05, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer13 > 0 then
-			call SetItemCharges(item002, loc_integer13)
+			call SetItemCharges(tt_item1, loc_integer13)
 		endif
 		if loc_integer08 > 0 then
-			set item002 = CreateItem(loc_integer08, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-			call UnitAddItem(loc_unit01, item002)
-			call SetItemPlayer(item002, loc_player06, false)
-			call SetItemUserData(item002, 1)
+			set tt_item1 = CreateItem(loc_integer08, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
+			call UnitAddItem(loc_unit01, tt_item1)
+			call SetItemPlayer(tt_item1, loc_player06, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 		if loc_integer14 > 0 then
-			call SetItemCharges(item002, loc_integer14)
+			call SetItemCharges(tt_item1, loc_integer14)
 		endif
 		if booleans015[GetPlayerId(GetOwningPlayer(loc_unit01))] == false then
 			call UnitRemoveType(loc_unit01, UNIT_TYPE_PEON)
@@ -18003,7 +17996,7 @@ function Func0707 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_player01 = null
@@ -18100,12 +18093,12 @@ function Func0708 takes unit loc_unit01 returns nothing
 	if GetItemType(loc_item07) == ITEM_TYPE_ARTIFACT or Func0360(Func0353(loc_item07))then
 		set loc_integer13 = GetItemCharges(loc_item07)
 	endif
-	call Func0365(loc_item01)
-	call Func0365(loc_item02)
-	call Func0365(loc_item03)
-	call Func0365(loc_item04)
-	call Func0365(loc_item05)
-	call Func0365(loc_item06)
+	call DestroyItem(loc_item01)
+	call DestroyItem(loc_item02)
+	call DestroyItem(loc_item03)
+	call DestroyItem(loc_item04)
+	call DestroyItem(loc_item05)
+	call DestroyItem(loc_item06)
 	if IsSentinel(GetOwningPlayer(loc_unit01))then
 		set loc_integer15 = 'S00I'
 	else
@@ -18156,9 +18149,9 @@ function Func0709 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	local item loc_item01 = Func0157(loc_unit01, integers084[integer288])
+	local item loc_item01 = Func0157(loc_unit01, Item_Real[integer288])
 	if loc_item01 == null then
-		set loc_item01 = Func0157(loc_unit01, integers086[integer288])
+		set loc_item01 = Func0157(loc_unit01, Item_Mute[integer288])
 	endif
 	if loc_item01 != null then
 		call RemoveItem(loc_item01)
@@ -18195,15 +18188,15 @@ function Func0712 takes nothing returns boolean
 	local item loc_item01 = GetManipulatedItem()
 	local integer loc_integer01 = GetItemTypeId(loc_item01)
 	local integer loc_integer02
-	if(loc_integer01 == integers084[integer144]or loc_integer01 == integers084[integer156])and IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
+	if(loc_integer01 == Item_Real[integer144]or loc_integer01 == Item_Real[integer156])and IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
 		set reals010[GetPlayerId(GetOwningPlayer(loc_unit01))] = GetItemX(loc_item01)
 		set reals011[GetPlayerId(GetOwningPlayer(loc_unit01))] = GetItemY(loc_item01)
 	endif
 	call Func0615(loc_unit01, loc_item01)
 	call Func0616(loc_unit01, loc_item01)
-	if(GetItemTypeId(loc_item01) == integers084[integer231]or GetItemTypeId(loc_item01) == integers084[integer232])and Func0093(loc_unit01)then
+	if(GetItemTypeId(loc_item01) == Item_Real[integer231]or GetItemTypeId(loc_item01) == Item_Real[integer232])and Func0093(loc_unit01)then
 		call UnitRemoveItem(loc_unit01, loc_item01)
-	elseif GetItemTypeId(loc_item01) == integers084[integer239]and IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
+	elseif GetItemTypeId(loc_item01) == Item_Real[integer239]and IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
 		set loc_integer02 = (LoadInteger(HY, (GetHandleId(loc_unit01)), (750)))
 		if loc_integer02 > 0 then
 			if(LoadBoolean(HY, (GetHandleId(loc_unit01)), (751))) == false then
@@ -18211,19 +18204,19 @@ function Func0712 takes nothing returns boolean
 				call SetItemCharges(loc_item01, loc_integer02)
 			endif
 		endif
-	elseif GetItemTypeId(loc_item01) == integers084[integer193]and GetUnitTypeId(loc_unit01) != 'n00L' and boolean065 == false then
-		set unit242 = loc_unit01
+	elseif GetItemTypeId(loc_item01) == Item_Real[integer193]and GetUnitTypeId(loc_unit01) != 'n00L' and boolean065 == false then
+		set AegisHolder = loc_unit01
 		set boolean065 = true
 		call Func0387("AegisOn", GetPlayerId(GetOwningPlayer(loc_unit01)))
 		call Func0144(bj_FORCE_ALL_PLAYERS, 10.00, strings001[GetPlayerId(GetOwningPlayer(loc_unit01))] + GetUnitName(loc_unit01) + "|r " + GetObjectName('n0EQ'))
-	elseif GetItemTypeId(loc_item01) == integers084[integer288]and Func0091(loc_unit01)then
+	elseif GetItemTypeId(loc_item01) == Item_Real[integer288]and Func0091(loc_unit01)then
 		call Func0710(loc_unit01)
-	elseif GetItemTypeId(loc_item01) == integers084[integer357]and GetUnitTypeId(loc_unit01) == 'Emoo' then
+	elseif GetItemTypeId(loc_item01) == Item_Real[integer357]and GetUnitTypeId(loc_unit01) == 'Emoo' then
 		call SetPlayerTechResearched(GetOwningPlayer(loc_unit01), 'R00J', 1)
-	elseif GetItemTypeId(loc_item01) == integers084[integer360]and GetUnitTypeId(loc_unit01) == 'H00I' then
-		set unit124 = loc_unit01
+	elseif GetItemTypeId(loc_item01) == Item_Real[integer360]and GetUnitTypeId(loc_unit01) == 'H00I' then
+		set tt_unit1 = loc_unit01
 		call ExecuteFunc("Func2943")
-	elseif GetItemTypeId(loc_item01) == integers084[integer355]and GetUnitTypeId(loc_unit01) == 'Ucrl' then
+	elseif GetItemTypeId(loc_item01) == Item_Real[integer355]and GetUnitTypeId(loc_unit01) == 'Ucrl' then
 		call UnitAddAbility(loc_unit01, 'A2KB')
 		call UnitRemoveAbility(loc_unit01, 'A2KB')
 		call AddUnitAnimationProperties(loc_unit01,"upgrade", true)
@@ -18370,23 +18363,23 @@ function Func0722 takes nothing returns boolean
 		set loc_real01 = Func0141(real010, real011, GetUnitX(GetFilterUnit()), GetUnitY(GetFilterUnit()))
 		if loc_real01 < real009 then
 			set real009 = loc_real01
-			set unit124 = GetFilterUnit()
+			set tt_unit1 = GetFilterUnit()
 		endif
 	endif
 	return false
 endfunction
 
 function Func0723 takes unit loc_unit01, real loc_real01, real loc_real02 returns unit
-	local group loc_group01 = Func0030()
-	set unit124 = null
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = null
 	set unit125 = loc_unit01
 	set real009 = 99999
 	set real010 = loc_real01
 	set real011 = loc_real02
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 99999, Condition(function Func0722))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
-	return unit124
+	return tt_unit1
 endfunction
 
 function Func0724 takes unit loc_unit01 returns boolean
@@ -18405,23 +18398,23 @@ function Func0726 takes nothing returns boolean
 		set loc_real01 = Func0141(real010, real011, GetUnitX(GetFilterUnit()), GetUnitY(GetFilterUnit()))
 		if loc_real01 < real009 then
 			set real009 = loc_real01
-			set unit124 = GetFilterUnit()
+			set tt_unit1 = GetFilterUnit()
 		endif
 	endif
 	return false
 endfunction
 
 function Func0727 takes unit loc_unit01, real loc_real01, real loc_real02 returns unit
-	local group loc_group01 = Func0030()
-	set unit124 = null
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = null
 	set unit125 = loc_unit01
 	set real009 = 99999
 	set real010 = loc_real01
 	set real011 = loc_real02
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 99999, Condition(function Func0726))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
-	return unit124
+	return tt_unit1
 endfunction
 
 function Func0728 takes nothing returns boolean
@@ -18472,7 +18465,7 @@ function Func0728 takes nothing returns boolean
 			call PauseUnit(loc_unit01, true)
 			call PauseUnit(loc_unit01, false)
 			call Func0172(loc_real01, loc_real02, 240)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call ExecuteFunc("Func3750")
 		endif
 	endif
@@ -18542,7 +18535,7 @@ function Func0729 takes nothing returns boolean
 		call PauseUnit(loc_unit01, true)
 		call PauseUnit(loc_unit01, false)
 		call Func0172(loc_real01, loc_real02, 240)
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		call ExecuteFunc("Func3750")
 		call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\MassTeleport\\MassTeleportTarget.mdl", GetUnitX(loc_unit01), GetUnitY(loc_unit01)))
 	endif
@@ -18751,7 +18744,7 @@ function Func0735 takes nothing returns nothing
 	local unit loc_unit03
 	local integer loc_integer01
 	local integer loc_integer02
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetUnitFacing(loc_unit01) * bj_DEGTORAD
 	local real loc_real02 = GetUnitX(loc_unit01) + 50 * Cos(loc_real01)
 	local real loc_real03 = GetUnitY(loc_unit01) + 50 * Sin(loc_real01)
@@ -18770,7 +18763,7 @@ function Func0735 takes nothing returns nothing
 	set integer379 = GetUnitTypeId(loc_unit01)
 	call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(GetTriggerUnit()), Condition(function Func0734))
 	call ForGroup(loc_group01, function Func0733)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), loc_integer01, loc_real02, loc_real03, GetUnitFacing(loc_unit01))
 	call SaveInteger(HY, (GetHandleId(loc_unit02)), (784), (integer379))
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Undead\\RaiseSkeletonWarrior\\RaiseSkeleton.mdl", loc_unit02,"origin"))
@@ -18806,10 +18799,10 @@ function Func0739 takes nothing returns nothing
 	local group loc_group01
 	local unit loc_unit01
 	if GetSpellAbilityId() == 'ACch' then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(GetTriggerUnit()), Condition(function Func0738))
 		set loc_unit01 = FirstOfGroup(loc_group01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		if loc_unit01 != null then
 			call KillUnit(loc_unit01)
 		endif
@@ -18927,10 +18920,10 @@ endfunction
 
 function Func0746 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 775, Condition(function Func0306))
 	call ForGroup(loc_group01, function Func0745)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -18956,12 +18949,12 @@ endfunction
 
 function Func0749 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit247 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
 	call UnitAddAbility(unit247, 'A1EV')
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 525, Condition(function Func0310))
 	call ForGroup(loc_group01, function Func0748)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -19053,11 +19046,11 @@ function Func0757 takes unit loc_unit01 returns unit
 	if GetUnitAbilityLevel(loc_unit01, 'A04R') == 0 then
 		return loc_unit01
 	endif
-	set unit124 = unit249
-	set loc_group01 = Func0030()
+	set tt_unit1 = unit249
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 900, Condition(function Func0283))
 	set unit248 = FirstOfGroup(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	return unit248
 endfunction
 
@@ -19118,12 +19111,12 @@ endfunction
 
 function Func0762 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local item loc_item01 = Func0157(loc_unit01, integers084[integer288])
+	local item loc_item01 = Func0157(loc_unit01, Item_Real[integer288])
 	if loc_item01 == null then
-		set loc_item01 = Func0157(loc_unit01, integers086[integer288])
+		set loc_item01 = Func0157(loc_unit01, Item_Mute[integer288])
 	endif
 	if loc_item01 != null then
-		call Func0365(loc_item01)
+		call DestroyItem(loc_item01)
 		call UnitRemoveAbility(loc_unit01, 'A0VR')
 		call UnitAddAbility(loc_unit01, 'A0VU')
 		call SetUnitState(loc_unit01, UNIT_STATE_MANA, 400)
@@ -19168,7 +19161,7 @@ function Func0765 takes nothing returns boolean
 	local real loc_real03 = GetUnitX(loc_unit01)
 	local real loc_real04
 	local real loc_real05 = GetUnitY(loc_unit01)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer02 = GetTriggerEvalCount(loc_trigger01)
 	local integer loc_integer03
 	call SetUnitX(loc_unit02, GetUnitX(loc_unit01))
@@ -19178,7 +19171,7 @@ function Func0765 takes nothing returns boolean
 	set unit251 = (LoadUnitHandle(HY, (loc_integer01), (132)))
 	if GetTriggerEvalCount(loc_trigger01) > 33 then
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
@@ -19188,13 +19181,13 @@ function Func0765 takes nothing returns boolean
 			exitwhen loc_integer03 > 36
 			set loc_real02 = loc_real03 + loc_real01 * Cos(360 * loc_integer03 / 36 * bj_DEGTORAD)
 			set loc_real04 = loc_real05 + loc_real01 * Sin(360 * loc_integer03 / 36 * bj_DEGTORAD)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group02, loc_real02, loc_real04, 150, Condition(function Func0282))
 			call ForGroup(loc_group02, function Func0764)
 			set loc_integer03 = loc_integer03 + 1
 		endloop
 	endif
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	set loc_trigger01 = null
 	set loc_unit02 = null
 	set loc_group01 = null
@@ -19207,7 +19200,7 @@ function Func0766 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'h091', loc_real01, loc_real02, 0)
@@ -19311,13 +19304,13 @@ function Func0772 takes nothing returns nothing
 endfunction
 
 function Func0773 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 1225, Condition(function Func0313))
 	call ForGroup(loc_group01, function Func0772)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -19421,11 +19414,11 @@ function Func0779 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local player loc_player01 = GetOwningPlayer(loc_unit01)
 	if(IsSentinel(loc_player01)and boolean068 == false)or(IsSentinel(loc_player01) == false and boolean069 == false)then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set player013 = loc_player01
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 12000, Condition(function Func0776))
 		call ForGroup(loc_group01, function Func0777)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		if IsSentinel(loc_player01)then
 			set boolean068 = true
 			call Func0778(loc_unit01, loc_player01)
@@ -19622,7 +19615,7 @@ endfunction
 
 function Func0793 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (20)))
 	local trigger loc_trigger01
@@ -19975,10 +19968,10 @@ function Func0814 takes nothing returns nothing
 	local boolean loc_boolean02 = false
 	local integer loc_integer02
 	local group loc_group01
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 925, Condition(function Func0304))
 	call ForGroup(loc_group01, function Func0813)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -20004,12 +19997,12 @@ function Func0818 takes nothing returns boolean
 endfunction
 
 function Func0819 takes unit loc_unit01 returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolean loc_boolean01
 	set player014 = GetOwningPlayer(loc_unit01)
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1050, Condition(function Func0818))
 	set loc_boolean01 = FirstOfGroup(loc_group01) != null
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	return loc_boolean01
 endfunction
 
@@ -20038,7 +20031,7 @@ function Func0820 takes nothing returns boolean
 		set loc_integer02 = (LoadInteger(HY, (loc_integer01), (34)))
 		set loc_integer02 = loc_integer02 + 1
 		call SaveInteger(HY, (loc_integer01), (34), (loc_integer02))
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set player014 = GetOwningPlayer(loc_unit01)
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1050, Condition(function Func0818))
 		if GetUnitAbilityLevel(loc_unit01, 'B09Y') > 0 then
@@ -20060,7 +20053,7 @@ function Func0820 takes nothing returns boolean
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -20099,10 +20092,10 @@ endfunction
 
 function Func0822 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1225, Condition(function Func0303))
 	call ForGroup(loc_group01, function Func0821)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -20126,12 +20119,12 @@ endfunction
 
 function Func0826 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetSpellTargetX()
 	local real loc_real02 = GetSpellTargetY()
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 600 + 25, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func0825)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\DarkLightningNova.mdx", loc_real01, loc_real02))
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -20263,13 +20256,13 @@ function Func0835 takes nothing returns boolean
 			set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
 			set loc_integer02 = Func0372(loc_item01)
 			if loc_integer02 == integer132 then
-				call DisableTrigger(trigger057)
-				set player005 = GetItemPlayer(loc_item01)
+				call DisableTrigger(Trig_ManipulateItem)
+				set tt_player1 = GetItemPlayer(loc_item01)
 				call RemoveItem(loc_item01)
-				set item002 = Func0382(loc_unit01, integers084[integer133], loc_integer01)
-				call SetItemPlayer(item002, player005, false)
-				call SetItemUserData(item002, 1)
-				call EnableTrigger(trigger057)
+				set tt_item1 = Func0382(loc_unit01, Item_Real[integer133], loc_integer01)
+				call SetItemPlayer(tt_item1, tt_player1, false)
+				call SetItemUserData(tt_item1, 1)
+				call EnableTrigger(Trig_ManipulateItem)
 			endif
 			set loc_integer01 = loc_integer01 + 1
 		endloop
@@ -20401,11 +20394,11 @@ function Func0841 takes nothing returns nothing
 endfunction
 
 function Func0842 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1050 + 25, Condition(function Func0313))
 	call ForGroup(loc_group01, function Func0841)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -20434,7 +20427,7 @@ function Func0846 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	call SetItemCharges(Func0367(loc_unit01, integers084[integer229]), GetItemCharges(Func0367(loc_unit01, integers084[integer229])) + 1)
+	call SetItemCharges(Func0367(loc_unit01, Item_Real[integer229]), GetItemCharges(Func0367(loc_unit01, Item_Real[integer229])) + 1)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	if GetUnitTypeId(loc_unit01) == 'Npbm' then
@@ -20785,11 +20778,11 @@ function Func0871 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 25 + 600, Condition(function Func0307))
 	call ForGroup(loc_group01, function Func0870)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	set loc_group01 = null
@@ -21000,7 +20993,7 @@ function Func0879 takes nothing returns nothing
 	if GetUnitTypeId(loc_unit01) == 'H00I' then
 		call Func0878(loc_unit01, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
 	endif
-	set unit242 = null
+	set AegisHolder = null
 	call TriggerRegisterTimerEvent(loc_trigger01, 5, false)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0877))
 	call SaveUnitHandle(HY, (loc_integer01), (14), (loc_unit01))
@@ -21020,35 +21013,35 @@ function Func0881 takes nothing returns nothing
 	local item loc_item01 = GetManipulatedItem()
 	local integer loc_integer01 = Func0372(loc_item01)
 	local integer loc_integer02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if GetUnitTypeId(loc_unit01) != 'H00J' then
 		if loc_integer01 == integer157 then
 			set loc_integer02 = Func0222(loc_unit01, loc_item01)
-			set player005 = GetItemPlayer(GetManipulatedItem())
+			set tt_player1 = GetItemPlayer(GetManipulatedItem())
 			call RemoveItem(loc_item01)
-			call DisableTrigger(trigger057)
-			set item002 = Func0382(loc_unit01, integers084[integer158], loc_integer02)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer158], loc_integer02)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 		elseif loc_integer01 == integer158 then
 			set loc_integer02 = Func0222(loc_unit01, loc_item01)
-			set player005 = GetItemPlayer(GetManipulatedItem())
+			set tt_player1 = GetItemPlayer(GetManipulatedItem())
 			call RemoveItem(loc_item01)
-			call DisableTrigger(trigger057)
-			set item002 = Func0382(loc_unit01, integers084[integer159], loc_integer02)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer159], loc_integer02)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 		elseif loc_integer01 == integer159 then
 			set loc_integer02 = Func0222(loc_unit01, loc_item01)
-			set player005 = GetItemPlayer(GetManipulatedItem())
+			set tt_player1 = GetItemPlayer(GetManipulatedItem())
 			call RemoveItem(loc_item01)
-			call DisableTrigger(trigger057)
-			set item002 = Func0382(loc_unit01, integers084[integer157], loc_integer02)
-			call SetItemPlayer(item002, player005, false)
-			call SetItemUserData(item002, 1)
+			call DisableTrigger(Trig_ManipulateItem)
+			set tt_item1 = Func0382(loc_unit01, Item_Real[integer157], loc_integer02)
+			call SetItemPlayer(tt_item1, tt_player1, false)
+			call SetItemUserData(tt_item1, 1)
 		endif
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_unit01 = null
 	set loc_item01 = null
 endfunction
@@ -21058,53 +21051,53 @@ function Func0882 takes nothing returns nothing
 	local item loc_item01 = GetManipulatedItem()
 	local integer loc_integer01 = Func0372(loc_item01)
 	local integer loc_integer02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if loc_integer01 == integer154 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer155], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer155], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	elseif loc_integer01 == integer155 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer154], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer154], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
 	if loc_integer01 == integer136 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer137], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer137], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	elseif loc_integer01 == integer137 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer136], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer136], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
 	if loc_integer01 == integer210 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer211], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer211], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	elseif loc_integer01 == integer211 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer210], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer210], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_unit01 = null
 	set loc_item01 = null
 endfunction
@@ -21114,23 +21107,23 @@ function Func0883 takes nothing returns nothing
 	local item loc_item01 = GetManipulatedItem()
 	local integer loc_integer01 = Func0372(loc_item01)
 	local integer loc_integer02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if loc_integer01 == integer212 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer213], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer213], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	elseif loc_integer01 == integer213 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer212], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer212], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_unit01 = null
 	set loc_item01 = null
 endfunction
@@ -21140,30 +21133,30 @@ function Func0884 takes nothing returns nothing
 	local item loc_item01 = GetManipulatedItem()
 	local integer loc_integer01 = Func0372(loc_item01)
 	local integer loc_integer02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if loc_integer01 == integer172 and GetItemCharges(loc_item01) == 0 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer174], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer174], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	elseif loc_integer01 == integer173 and GetItemCharges(loc_item01) == 0 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer175], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer175], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	elseif loc_integer01 == integer129 and GetItemCharges(loc_item01) == 0 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer130], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer130], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_unit01 = null
 	set loc_item01 = null
 endfunction
@@ -21173,57 +21166,57 @@ function Func0885 takes nothing returns nothing
 	local item loc_item01 = GetManipulatedItem()
 	local integer loc_integer01 = Func0372(loc_item01)
 	local integer loc_integer02
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if loc_integer01 == integer186 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer187], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
-		call Func0620(item002)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer187], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
+		call Func0620(tt_item1)
 	elseif loc_integer01 == integer187 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer188], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
-		call Func0620(item002)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer188], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
+		call Func0620(tt_item1)
 	elseif loc_integer01 == integer188 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer189], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
-		call Func0620(item002)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer189], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
+		call Func0620(tt_item1)
 	elseif loc_integer01 == integer189 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer190], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
-		call Func0620(item002)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer190], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
+		call Func0620(tt_item1)
 	elseif loc_integer01 == integer190 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer191], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
-		call Func0620(item002)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer191], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
+		call Func0620(tt_item1)
 	elseif loc_integer01 == integer191 then
 		set loc_integer02 = Func0222(loc_unit01, loc_item01)
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(loc_item01)
-		set item002 = Func0382(loc_unit01, integers084[integer192], loc_integer02)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
-		call Func0620(item002)
+		set tt_item1 = Func0382(loc_unit01, Item_Real[integer192], loc_integer02)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
+		call Func0620(tt_item1)
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_unit01 = null
 	set loc_item01 = null
 endfunction
@@ -21231,29 +21224,29 @@ endfunction
 function Func0886 takes nothing returns boolean
 	local integer loc_integer01
 	local real loc_real01
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if Func0372(GetManipulatedItem()) == integer232 then
 		set loc_real01 = GetUnitState(GetTriggerUnit(), UNIT_STATE_MAX_LIFE) - GetUnitState(GetTriggerUnit(), UNIT_STATE_LIFE)
 		set loc_integer01 = Func0222(GetTriggerUnit(), GetManipulatedItem())
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(GetManipulatedItem())
-		set item002 = Func0382(GetTriggerUnit(), integers084[integer231], loc_integer01)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(GetTriggerUnit(), Item_Real[integer231], loc_integer01)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		call SetUnitState(GetTriggerUnit(), UNIT_STATE_LIFE, Func0134(GetUnitState(GetTriggerUnit(), UNIT_STATE_MAX_LIFE) - loc_real01, 1))
 		call Func0044(GetTriggerUnit(), 4298, 0.04)
 	endif
 	if Func0372(GetManipulatedItem()) == integer231 then
 		set loc_real01 = GetUnitState(GetTriggerUnit(), UNIT_STATE_MAX_LIFE) - GetUnitState(GetTriggerUnit(), UNIT_STATE_LIFE)
 		set loc_integer01 = Func0222(GetTriggerUnit(), GetManipulatedItem())
-		set player005 = GetItemPlayer(GetManipulatedItem())
+		set tt_player1 = GetItemPlayer(GetManipulatedItem())
 		call RemoveItem(GetManipulatedItem())
-		set item002 = Func0382(GetTriggerUnit(), integers084[integer232], loc_integer01)
-		call SetItemPlayer(item002, player005, false)
-		call SetItemUserData(item002, 1)
+		set tt_item1 = Func0382(GetTriggerUnit(), Item_Real[integer232], loc_integer01)
+		call SetItemPlayer(tt_item1, tt_player1, false)
+		call SetItemUserData(tt_item1, 1)
 		call SetUnitState(GetTriggerUnit(), UNIT_STATE_LIFE, Func0134(GetUnitState(GetTriggerUnit(), UNIT_STATE_MAX_LIFE) - loc_real01, 1))
 	endif
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	return false
 endfunction
 
@@ -21261,22 +21254,22 @@ function Func0887 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local player loc_player01 = GetItemPlayer(GetManipulatedItem())
 	local item loc_item01
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	call RemoveItem(GetManipulatedItem())
-	set loc_item01 = UnitAddItemById(loc_unit01, integers084[integer098])
+	set loc_item01 = UnitAddItemById(loc_unit01, Item_Real[integer098])
 	call SetItemPlayer(loc_item01, loc_player01, false)
 	call SetItemUserData(loc_item01, 1)
-	set loc_item01 = UnitAddItemById(loc_unit01, integers084[integer110])
+	set loc_item01 = UnitAddItemById(loc_unit01, Item_Real[integer110])
 	call SetItemPlayer(loc_item01, loc_player01, false)
 	call SetItemUserData(loc_item01, 1)
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_unit01 = null
 	set loc_player01 = null
 	set loc_item01 = null
 endfunction
 
 function Func0888 takes nothing returns nothing
-	if GetItemTypeId(GetManipulatedItem()) == integers084[integer151]then
+	if GetItemTypeId(GetManipulatedItem()) == Item_Real[integer151]then
 		call Func0114(GetOwningPlayer(GetTriggerUnit()), GetObjectName('n0G1'))
 	endif
 endfunction
@@ -21301,7 +21294,7 @@ function Func0890 takes nothing returns nothing
 	local item loc_item01 = GetManipulatedItem()
 	local integer loc_integer01 = Func0372(loc_item01)
 	local trigger loc_trigger01
-	if(loc_integer01 == integer194 or loc_integer01 == integer195)and(LoadBoolean(HY, (GetHandleId(loc_unit01)), (129))) == true then
+	if(loc_integer01 == MantaStyle or loc_integer01 == MantaStyle_Ranged)and(LoadBoolean(HY, (GetHandleId(loc_unit01)), (129))) == true then
 		set loc_trigger01 = CreateTrigger()
 		call TriggerRegisterTimerEvent(loc_trigger01, 0.41, false)
 		call TriggerAddCondition(loc_trigger01, Condition(function Func0889))
@@ -21337,54 +21330,51 @@ function Func0893 takes nothing returns nothing
 	call SaveInteger(HY, (400 + GetPlayerId(GetOwningPlayer(GetKillingUnit()))), (79), ((LoadInteger(HY, (400 + GetPlayerId(GetOwningPlayer(GetKillingUnit()))), (79))) + 1))
 endfunction
 
-function Func0894 takes nothing returns nothing
-	local location loc_location01 = GetRectCenter(rect033)
-	set unit001 = CreateUnitAtLoc(Player(12), 'n00L', loc_location01, bj_UNIT_FACING)
-	call SetUnitAcquireRange(unit001, 150)
-	call Func0529(unit001)
-	call RemoveLocation(loc_location01)
-	call UnitAddItem(unit001, CreateItem(integers084[integer193], 0, 0))
-	call UnitAddAbility(unit001, 'A142')
-	set loc_location01 = GetRectCenter(rect019)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect020)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect021)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect022)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect023)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect024)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect025)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect026)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect027)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect028)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect047)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect049)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-endfunction
-
-function Func0895 takes nothing returns nothing
-	call Func0894()
+function InitNeutralsDots takes nothing returns nothing
+	local location l = GetRectCenter(rect033)
+	set Roshan = CreateUnitAtLoc(Player(12), 'n00L', l, bj_UNIT_FACING)
+	call SetUnitAcquireRange(Roshan, 150)
+	call RoshanCheckLoc(Roshan)
+	call RemoveLocation(l)
+	call UnitAddItem(Roshan, CreateItem(Item_Real[integer193], 0, 0))
+	call UnitAddAbility(Roshan, 'A142')
+	set l = GetRectCenter(rect019)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect020)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect021)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect022)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect023)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect024)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect025)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect026)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect027)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect028)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect047)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = GetRectCenter(rect049)
+	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
+	call RemoveLocation(l)
+	set l = null
 endfunction
 
 function Func0896 takes nothing returns boolean
@@ -21947,355 +21937,347 @@ function Func0929 takes nothing returns nothing
 	call SetPlayerTechResearchedSwap('R00B', (GetPlayerTechCountSimple('R00B', Scourges[0]) + 1), Scourges[0])
 endfunction
 
-function Func0930 takes nothing returns nothing
-	local location loc_location01 = GetRectCenter(rect050)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbdo', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbds', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ngst', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'n026', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nggr', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbdk', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbwm', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nogm', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nomg', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nfpc', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nfpu', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nsth', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nstl', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nsat', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nwlg', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nkol', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nkob', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nkot', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ncnk', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ncen', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ngns', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nftb', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nfsh', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ngh1', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'npfl', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nowe', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nowb', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nmrm', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nmrr', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nmrl', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ndtr', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ndtw', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'n0LC', loc_location01, bj_UNIT_FACING))
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'n0LD', loc_location01, bj_UNIT_FACING))
-	call RemoveLocation(loc_location01)
+// function Func0930 takes nothing returns nothing
+// 	local location l = GetRectCenter(rect050)
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbdo', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbds', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ngst', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'n026', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nggr', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbdk', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nbwm', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nogm', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nomg', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nfpc', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nfpu', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nsth', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nstl', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nsat', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nwlg', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nkol', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nkob', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nkot', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ncnk', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ncen', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ngns', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nftb', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nfsh', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ngh1', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'npfl', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nowe', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nowb', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nmrm', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nmrr', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'nmrl', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ndtr', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'ndtw', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'n0LC', l, bj_UNIT_FACING))
+// 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'n0LD', l, bj_UNIT_FACING))
+// 	call RemoveLocation(l)
+// 	set l = null
+// endfunction
+
+function Func0931 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'n0HW', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'n0HX', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'n0HW', x, y, 0), x, y)
 endfunction
 
-function Func0931 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'n0HW', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'n0HX', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'n0HW', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0932 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'njg1', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'njg1', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'njga', x, y, 0), x, y)
 endfunction
 
-function Func0932 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'njg1', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'njg1', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'njga', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0933 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nbdo', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nbdo', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nbds', x, y, 0), x, y)
 endfunction
 
-function Func0933 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nbdo', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nbdo', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nbds', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0934 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nbdk', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nbdk', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nbwm', x, y, 0), x, y)
 endfunction
 
-function Func0934 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nbdk', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nbdk', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nbwm', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0935 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'ngst', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'ngst', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nggr', x, y, 0), x, y)
 endfunction
 
-function Func0935 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'ngst', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'ngst', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nggr', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0937 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'n0LC', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'n0LD', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'n0LD', x, y, 0), x, y)
 endfunction
 
-function Func0936 takes nothing returns boolean
-	call CleanTrigger(GetTriggeringTrigger())
-	call IssueTargetOrder(GetTriggerUnit(),"unholyfrenzy", GetTriggerUnit())
-	return false
+function Func0938 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nogm', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nogm', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nomg', x, y, 0), x, y)
 endfunction
 
-function Func0937 takes real loc_real01, real loc_real02 returns nothing
-	local unit loc_unit01
-	set loc_unit01 = CreateUnit(Neutrals, 'n0LC', loc_real01, loc_real02, 0)
-	call SetUnitPosition(loc_unit01, loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'n0LD', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'n0LD', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	set loc_unit01 = null
+function Func0939 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nfpc', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nfpu', x, y, 0), x, y)
 endfunction
 
-function Func0938 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nogm', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nogm', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nomg', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0940 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nsth', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', x, y, 0), x, y)
 endfunction
 
-function Func0939 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nfpc', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nfpu', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0941 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', x, y, 0), x, y)
 endfunction
 
-function Func0940 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nsth', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0942 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nwlg', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nwlg', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'n00S', x, y, 0), x, y)
 endfunction
 
-function Func0941 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0943 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'n026', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'n026', x, y, 0), x, y)
 endfunction
 
-function Func0942 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nwlg', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nwlg', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'n00S', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0944 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nkol', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nkot', x, y, 0), x, y)
 endfunction
 
-function Func0943 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'n026', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'n026', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0945 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nfsh', x, y, 0), x, y)
 endfunction
 
-function Func0944 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nkol', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nkot', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0946 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'ncen', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'ncnk', x, y, 0), x, y)
 endfunction
 
-function Func0945 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nfsh', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0947 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', x, y, 0), x, y)
 endfunction
 
-function Func0946 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'ncen', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'ncnk', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0948 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nkol', x, y, 0), x, y)
 endfunction
 
-function Func0947 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0949 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'ngh1', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'npfl', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'npfl', x, y, 0), x, y)
 endfunction
 
-function Func0948 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nkol', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0950 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'nowe', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nowb', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'nowb', x, y, 0), x, y)
 endfunction
 
-function Func0949 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'ngh1', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'npfl', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'npfl', loc_real01, loc_real02, 0), loc_real01, loc_real02)
+function Func0951 takes real x, real y returns nothing
+	call SetUnitPosition(CreateUnit(Neutrals, 'ndtr', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'ndtr', x, y, 0), x, y)
+	call SetUnitPosition(CreateUnit(Neutrals, 'ndtw', x, y, 0), x, y)
 endfunction
 
-function Func0950 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'nowe', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nowb', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'nowb', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-endfunction
-
-function Func0951 takes real loc_real01, real loc_real02 returns nothing
-	call SetUnitPosition(CreateUnit(Neutrals, 'ndtr', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'ndtr', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-	call SetUnitPosition(CreateUnit(Neutrals, 'ndtw', loc_real01, loc_real02, 0), loc_real01, loc_real02)
-endfunction
-
-function Func0952 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0939(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0940(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0950(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0951(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0952 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0939(x, y)
+	elseif i == 2 then
+		call Func0940(x, y)
+	elseif i == 3 then
+		call Func0950(x, y)
+	elseif i == 4 then
+		call Func0951(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0953 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0939(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0940(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0950(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0951(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0953 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0939(x, y)
+	elseif i == 2 then
+		call Func0940(x, y)
+	elseif i == 3 then
+		call Func0950(x, y)
+	elseif i == 4 then
+		call Func0951(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0954 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0939(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0940(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0950(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0951(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0954 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0939(x, y)
+	elseif i == 2 then
+		call Func0940(x, y)
+	elseif i == 3 then
+		call Func0950(x, y)
+	elseif i == 4 then
+		call Func0951(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0955 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0939(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0940(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0950(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0951(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0955 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0939(x, y)
+	elseif i == 2 then
+		call Func0940(x, y)
+	elseif i == 3 then
+		call Func0950(x, y)
+	elseif i == 4 then
+		call Func0951(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0956 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0943(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0938(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0941(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0942(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0956 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0943(x, y)
+	elseif i == 2 then
+		call Func0938(x, y)
+	elseif i == 3 then
+		call Func0941(x, y)
+	elseif i == 4 then
+		call Func0942(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0957 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0943(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0938(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0941(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0942(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0957 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0943(x, y)
+	elseif i == 2 then
+		call Func0938(x, y)
+	elseif i == 3 then
+		call Func0941(x, y)
+	elseif i == 4 then
+		call Func0942(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0958 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0943(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0938(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0941(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0942(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0958 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0943(x, y)
+	elseif i == 2 then
+		call Func0938(x, y)
+	elseif i == 3 then
+		call Func0941(x, y)
+	elseif i == 4 then
+		call Func0942(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0959 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0943(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0938(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0941(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0942(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0946(loc_real01, loc_real02)
+function Func0959 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0943(x, y)
+	elseif i == 2 then
+		call Func0938(x, y)
+	elseif i == 3 then
+		call Func0941(x, y)
+	elseif i == 4 then
+		call Func0942(x, y)
+	elseif i == 5 then
+		call Func0946(x, y)
 	endif
 endfunction
 
-function Func0960 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 6)
-	if loc_integer01 == 1 then
-		call Func0949(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0948(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0947(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0944(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0945(loc_real01, loc_real02)
-	elseif loc_integer01 == 6 then
-		call Func0931(loc_real01, loc_real02)
+function Func0960 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 6)
+	if i == 1 then
+		call Func0949(x, y)
+	elseif i == 2 then
+		call Func0948(x, y)
+	elseif i == 3 then
+		call Func0947(x, y)
+	elseif i == 4 then
+		call Func0944(x, y)
+	elseif i == 5 then
+		call Func0945(x, y)
+	elseif i == 6 then
+		call Func0931(x, y)
 	endif
 endfunction
 
-function Func0961 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 6)
-	if loc_integer01 == 1 then
-		call Func0949(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0948(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0947(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0944(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0945(loc_real01, loc_real02)
-	elseif loc_integer01 == 6 then
-		call Func0931(loc_real01, loc_real02)
+function Func0961 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 6)
+	if i == 1 then
+		call Func0949(x, y)
+	elseif i == 2 then
+		call Func0948(x, y)
+	elseif i == 3 then
+		call Func0947(x, y)
+	elseif i == 4 then
+		call Func0944(x, y)
+	elseif i == 5 then
+		call Func0945(x, y)
+	elseif i == 6 then
+		call Func0931(x, y)
 	endif
 endfunction
 
-function Func0962 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0932(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0933(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0934(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0935(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0937(loc_real01, loc_real02)
+function Func0962 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0932(x, y)
+	elseif i == 2 then
+		call Func0933(x, y)
+	elseif i == 3 then
+		call Func0934(x, y)
+	elseif i == 4 then
+		call Func0935(x, y)
+	elseif i == 5 then
+		call Func0937(x, y)
 	endif
 endfunction
 
-function Func0963 takes real loc_real01, real loc_real02 returns nothing
-	local integer loc_integer01 = GetRandomInt(1, 5)
-	if loc_integer01 == 1 then
-		call Func0932(loc_real01, loc_real02)
-	elseif loc_integer01 == 2 then
-		call Func0933(loc_real01, loc_real02)
-	elseif loc_integer01 == 3 then
-		call Func0934(loc_real01, loc_real02)
-	elseif loc_integer01 == 4 then
-		call Func0935(loc_real01, loc_real02)
-	elseif loc_integer01 == 5 then
-		call Func0937(loc_real01, loc_real02)
+function Func0963 takes real x, real y returns nothing
+	local integer i = GetRandomInt(1, 5)
+	if i == 1 then
+		call Func0932(x, y)
+	elseif i == 2 then
+		call Func0933(x, y)
+	elseif i == 3 then
+		call Func0934(x, y)
+	elseif i == 4 then
+		call Func0935(x, y)
+	elseif i == 5 then
+		call Func0937(x, y)
 	endif
 endfunction
 
@@ -22323,112 +22305,112 @@ function Func0965 takes group loc_group01 returns boolean
 	return FirstOfGroup(loc_group01) == null
 endfunction
 
-function Func0966 takes nothing returns boolean
-	local group loc_group01
-	local rect loc_rect01
-	local rect loc_rect02
-	if boolean120 == false then
+function SpawnNeutrals takes nothing returns boolean
+	local group g
+	local rect checkRect
+	local rect spawnRect
+	if Mode_NN then
 		return false
 	endif
-	set loc_rect01 = rect034
-	set loc_rect02 = rect019
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0962(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	set checkRect = rect034
+	set spawnRect = rect019
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0962(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect035
-	set loc_rect02 = rect020
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0963(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect035
+	set spawnRect = rect020
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0963(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect036
-	set loc_rect02 = rect021
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0952(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect036
+	set spawnRect = rect021
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0952(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect037
-	set loc_rect02 = rect022
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0954(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect037
+	set spawnRect = rect022
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0954(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect038
-	set loc_rect02 = rect023
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0957(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect038
+	set spawnRect = rect023
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0957(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect039
-	set loc_rect02 = rect024
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0956(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect039
+	set spawnRect = rect024
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0956(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect040
-	set loc_rect02 = rect025
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0958(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect040
+	set spawnRect = rect025
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0958(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect042
-	set loc_rect02 = rect026
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0959(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect042
+	set spawnRect = rect026
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0959(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect041
-	set loc_rect02 = rect027
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0955(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect041
+	set spawnRect = rect027
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0955(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect043
-	set loc_rect02 = rect028
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0960(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect043
+	set spawnRect = rect028
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0960(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect046
-	set loc_rect02 = rect047
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0961(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect046
+	set spawnRect = rect047
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0961(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = rect048
-	set loc_rect02 = rect049
-	set loc_group01 = Func0030()
-	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0011))
-	if Func0965(loc_group01)then
-		call Func0953(GetRectCenterX(loc_rect02), GetRectCenterY(loc_rect02))
+	call KillGroup(g)
+	set checkRect = rect048
+	set spawnRect = rect049
+	set g = GetAvailableGroup()
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
+	if Func0965(g)then
+		call Func0953(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
-	call Func0029(loc_group01)
-	set loc_rect01 = null
-	set loc_rect02 = null
-	set loc_group01 = null
+	call KillGroup(g)
+	set checkRect = null
+	set spawnRect = null
+	set g = null
 	return false
 endfunction
 
@@ -26199,7 +26181,7 @@ function Func1061 takes nothing returns boolean
 endfunction
 
 function Func1062 takes nothing returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set boolean081 = false
 	set boolean082 = false
 	set boolean083 = false
@@ -26226,14 +26208,14 @@ function Func1062 takes nothing returns boolean
 	call GroupEnumUnitsInRect(loc_group01, rect190, Condition(function Func1059))
 	call GroupEnumUnitsInRect(loc_group01, rect191, Condition(function Func1060))
 	call GroupEnumUnitsInRect(loc_group01, rect192, Condition(function Func1061))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return false
 endfunction
 
 function Func1063 takes nothing returns boolean
 	call CleanTrigger(GetTriggeringTrigger())
-	call TriggerEvaluate(trigger024)
+	call TriggerEvaluate(Trig_SpawnNeutrals)
 	return false
 endfunction
 
@@ -26262,7 +26244,7 @@ function Func1064 takes nothing returns boolean
 			endif
 			call TriggerEvaluate(trigger056)
 		endif
-		call TriggerRegisterTimerEvent(trigger024, 60, true)
+		call TriggerRegisterTimerEvent(Trig_SpawnNeutrals, 60, true)
 		set loc_trigger01 = CreateTrigger()
 		call TriggerRegisterTimerEvent(loc_trigger01, 30, false)
 		call TriggerAddCondition(loc_trigger01, Condition(function Func1063))
@@ -26316,9 +26298,9 @@ endfunction
 function Func1066 takes nothing returns nothing
 	local unit loc_unit01 = GetAttacker()
 	local unit loc_unit02 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 900, Condition(function Func1065))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DisableTrigger(GetTriggeringTrigger())
 	if unit252 != null then
 		call IssueTargetOrder(loc_unit01,"attack", unit252)
@@ -26507,23 +26489,23 @@ function Func1074 takes nothing returns boolean
 		set loc_real01 = Func0141(real010, real011, GetUnitX(GetFilterUnit()), GetUnitY(GetFilterUnit()))
 		if loc_real01 < real009 then
 			set real009 = loc_real01
-			set unit124 = GetFilterUnit()
+			set tt_unit1 = GetFilterUnit()
 		endif
 	endif
 	return false
 endfunction
 
 function Func1075 takes unit loc_unit01, real loc_real01, real loc_real02 returns unit
-	local group loc_group01 = Func0030()
-	set unit124 = null
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = null
 	set unit125 = loc_unit01
 	set real009 = 99999
 	set real010 = loc_real01
 	set real011 = loc_real02
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 2000, Condition(function Func1074))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
-	return unit124
+	return tt_unit1
 endfunction
 
 function Func1076 takes nothing returns boolean
@@ -26604,14 +26586,14 @@ function Func1081 takes nothing returns nothing
 endfunction
 
 function Func1082 takes nothing returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRect(loc_group01, rect044, Condition(function Func0011))
 	call ForGroup(loc_group01, function Func1080)
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRect(loc_group01, rect045, Condition(function Func0011))
 	call ForGroup(loc_group01, function Func1081)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return false
 endfunction
@@ -26740,10 +26722,10 @@ function Func1087 takes nothing returns nothing
 endfunction
 
 function Func1088 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 12000, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func1087)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -26836,15 +26818,15 @@ function Func1099 takes nothing returns boolean
 		call Func1098()
 	elseif IsUnitType(GetAttacker(), UNIT_TYPE_HERO) == true or Func0248(GetAttacker())then
 		set integer403 = GetPlayerId(GetOwningPlayer(GetAttacker()))
-		if integers095[integer403] > 0 and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and GetUnitTypeId(GetTriggerUnit()) != 'n00L' and IsUnitIllusion(GetAttacker()) == false and Func0352(GetAttacker(), integers084[integer111]) == true then
+		if integers095[integer403] > 0 and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and GetUnitTypeId(GetTriggerUnit()) != 'n00L' and IsUnitIllusion(GetAttacker()) == false and Func0352(GetAttacker(), Item_Real[integer111]) == true then
 			call Func0667()
 		endif
-		if integers098[integer403] > 0 and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and IsUnitIllusion(GetAttacker()) == false and(Func0352(GetAttacker(), integers084[integer168]) == true or Func0352(GetAttacker(), integers084[integer252]) == true)then
+		if integers098[integer403] > 0 and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and IsUnitIllusion(GetAttacker()) == false and(Func0352(GetAttacker(), Item_Real[integer168]) == true or Func0352(GetAttacker(), Item_Real[integer252]) == true)then
 			call Func0676()
 		endif
-		if integers100[integer403] > 0 and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and IsUnitIllusion(GetAttacker()) == false and Func0352(GetAttacker(), integers084[integer182]) == true then
+		if integers100[integer403] > 0 and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and IsUnitIllusion(GetAttacker()) == false and Func0352(GetAttacker(), Item_Real[integer182]) == true then
 			call Func0671()
-		elseif(integers101[integer403] > 0 or integers102[integer403] > 0)and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and IsUnitIllusion(GetAttacker()) == false and(Func0352(GetAttacker(), integers084[integer167]) == true or Func0352(GetAttacker(), integers084[integer251]) == true)then
+		elseif(integers101[integer403] > 0 or integers102[integer403] > 0)and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and IsUnitIllusion(GetAttacker()) == false and(Func0352(GetAttacker(), Item_Real[integer167]) == true or Func0352(GetAttacker(), Item_Real[integer251]) == true)then
 			call Func0675()
 		endif
 	elseif GetUnitAbilityLevel(GetAttacker(), 'A17S') > 0 and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false then
@@ -26928,11 +26910,11 @@ endfunction
 function Func1104 takes destructable loc_destructable01 returns boolean
 	local real loc_real01 = GetDestructableX(loc_destructable01)
 	local real loc_real02 = GetDestructableY(loc_destructable01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolean loc_boolean01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 250, Condition(function Func0323))
 	set loc_boolean01 = FirstOfGroup(loc_group01) != null
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return loc_boolean01
 endfunction
@@ -27320,8 +27302,8 @@ function Func1120 takes nothing returns nothing
 	set boolean093 = false
 endfunction
 
-function Func1121 takes nothing returns nothing
-	set boolean094 = true
+function SpawnRoshan_Cmd takes nothing returns nothing
+	set IsSpawnRoshan = true
 endfunction
 
 function Func1122 takes nothing returns nothing
@@ -27340,17 +27322,17 @@ function Func1124 takes nothing returns boolean
 endfunction
 
 function Func1125 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function Func1124))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set boolean043 = true
 endfunction
 
 function Func1126 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function Func1124))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set boolean043 = true
 endfunction
@@ -27363,9 +27345,9 @@ function Func1127 takes nothing returns boolean
 endfunction
 
 function Func1128 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func1127))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set boolean043 = true
 endfunction
@@ -27386,13 +27368,13 @@ endfunction
 function Func1131 takes nothing returns nothing
 	local string loc_string01 = SubString(GetEventPlayerChatString(), 6, StringLength(GetEventPlayerChatString()))
 	local integer loc_integer01 = S2I(loc_string01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if loc_integer01 < 1 then
 		set loc_integer01 = 1
 	endif
 	set integer022 = loc_integer01
 	call GroupEnumUnitsOfPlayer(loc_group01, GetTriggerPlayer(), Condition(function Func1130))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set boolean043 = true
 endfunction
@@ -27413,9 +27395,9 @@ function Func1133 takes nothing returns boolean
 endfunction
 
 function Func1134 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, GetTriggerPlayer(), Condition(function Func1133))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set boolean043 = true
 endfunction
@@ -27488,7 +27470,7 @@ function Func1140 takes nothing returns nothing
 endfunction
 
 function Func1141 takes nothing returns nothing
-	call TriggerEvaluate(trigger024)
+	call TriggerEvaluate(Trig_SpawnNeutrals)
 endfunction
 
 function Func1142 takes nothing returns nothing
@@ -27712,7 +27694,7 @@ function Func1144 takes nothing returns nothing
 	call TriggerRegisterPlayerChatEvent(loc_trigger01, Scourges[3],"-roshan", true)
 	call TriggerRegisterPlayerChatEvent(loc_trigger01, Scourges[4],"-roshan", true)
 	call TriggerRegisterPlayerChatEvent(loc_trigger01, Scourges[5],"-roshan", true)
-	call TriggerAddAction(loc_trigger01, function Func1121)
+	call TriggerAddAction(loc_trigger01, function SpawnRoshan_Cmd)
 	set loc_trigger01 = CreateTrigger()
 	call TriggerRegisterPlayerChatEvent(loc_trigger01, Sentinels[1],"-respawn", true)
 	call TriggerRegisterPlayerChatEvent(loc_trigger01, Sentinels[2],"-respawn", true)
@@ -27971,10 +27953,10 @@ function Func1163 takes unit loc_unit01, unit loc_unit02 returns nothing
 	set unit254 = loc_unit02
 	set integer406 = loc_integer02
 	call ForGroup(loc_group01, function Func1161)
-	set loc_group02 = Func0030()
+	set loc_group02 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 500, Condition(function Func1160))
 	call ForGroup(loc_group02, function Func1159)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	call TimerStart((LoadTimerHandle(HY, (loc_integer01), (141))), 2, false, function Func1162)
 	set loc_group01 = null
 	set loc_unit03 = null
@@ -28025,7 +28007,7 @@ function Func1166 takes unit loc_unit01 returns nothing
 	set integer407 = integer407 + 1
 	call SaveBoolean(HY, (loc_integer01), (142), (true))
 	call SaveInteger(HY, (loc_integer01), (143), (integer407))
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call SaveGroupHandle(HY, (loc_integer01), (144), (loc_group01))
 	set loc_trigger01 = CreateTrigger()
 	call TriggerRegisterUnitEvent(loc_trigger01, loc_unit01, EVENT_UNIT_ISSUED_TARGET_ORDER)
@@ -28082,7 +28064,7 @@ function Func1170 takes nothing returns nothing
 	local integer loc_integer01
 	set loc_trigger01 = CreateTrigger()
 	call TriggerAddAction(loc_trigger01, function Func1169)
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function Func0011))
 	loop
 		set loc_unit01 = FirstOfGroup(loc_group01)
@@ -28099,8 +28081,8 @@ function Func1170 takes nothing returns nothing
 			call SaveUnitHandle(HY, (GetHandleId(loc_unit01)), (145), (loc_unit02))
 		endif
 	endloop
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function Func0011))
 	loop
 		set loc_unit01 = FirstOfGroup(loc_group01)
@@ -28117,7 +28099,7 @@ function Func1170 takes nothing returns nothing
 			call SaveUnitHandle(HY, (GetHandleId(loc_unit01)), (145), (loc_unit02))
 		endif
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func1171 takes nothing returns nothing
@@ -28187,7 +28169,7 @@ function Func1176 takes nothing returns boolean
 		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[0], EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, Condition(function Func0011))
 		call TriggerAddCondition(loc_trigger01, Condition(function Func1174))
 		set loc_trigger01 = CreateTrigger()
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function Func0011))
 		loop
 			set loc_unit01 = FirstOfGroup(loc_group01)
@@ -28197,8 +28179,8 @@ function Func1176 takes nothing returns boolean
 				call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 600, Condition(function Func0011))
 			endif
 		endloop
-		call Func0029(loc_group01)
-		set loc_group01 = Func0030()
+		call KillGroup(loc_group01)
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function Func0011))
 		loop
 			set loc_unit01 = FirstOfGroup(loc_group01)
@@ -28208,7 +28190,7 @@ function Func1176 takes nothing returns boolean
 				call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 600, Condition(function Func0011))
 			endif
 		endloop
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call TriggerAddCondition(loc_trigger01, Condition(function Func1172))
 		set loc_trigger01 = CreateTrigger()
 		call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_ATTACKED)
@@ -28243,14 +28225,14 @@ function Func1179 takes nothing returns nothing
 		call SetPlayerAlliance(Scourges[0], Scourges[loc_integer01], ConvertAllianceType(5), false)
 		set loc_integer01 = loc_integer01 + 1
 	endloop
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function Func0011))
 	call ForGroup(loc_group01, function Func1178)
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function Func0011))
 	call ForGroup(loc_group01, function Func1178)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -28591,7 +28573,7 @@ endfunction
 
 function Func1191 takes nothing returns nothing
 	local player loc_player01 = GetTriggerPlayer()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01
 	local integer loc_integer02
 	local location loc_location01
@@ -28684,7 +28666,7 @@ function Func1191 takes nothing returns nothing
 		endif
 		exitwhen PlayerHeroArray[GetPlayerId(GetTriggerPlayer())] != null
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 	call RemoveLocation(loc_location02)
 	call RemoveLocation(loc_location03)
@@ -28858,7 +28840,7 @@ function Func1195 takes unit loc_unit01, unit loc_unit02 returns nothing
 	set loc_integer01 = integers078[GetPlayerId(loc_player01)]
 	set integers078[GetPlayerId(loc_player01)] = integers078[GetPlayerId(loc_player02)]
 	set integers078[GetPlayerId(loc_player02)] = loc_integer01
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if GetUnitAbilityLevel(loc_unit01, 'A03E') > 0 then
 		set unit128 = loc_unit01
 		set unit129 = loc_unit02
@@ -28888,16 +28870,16 @@ function Func1195 takes unit loc_unit01, unit loc_unit02 returns nothing
 	endif
 	call FlushChildHashtable(HY, (800 + GetPlayerId(GetOwningPlayer(loc_unit01))))
 	call FlushChildHashtable(HY, (800 + GetPlayerId(GetOwningPlayer(loc_unit02))))
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	set bj_groupEnumOwningPlayer = loc_player01
 	call GroupEnumUnitsInRect(loc_group01, GetWorldBounds(), filterGetUnitsInRectOfPlayer)
 	call ForGroup(loc_group01, function Func1194)
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	set bj_groupEnumOwningPlayer = loc_player02
 	call GroupEnumUnitsInRect(loc_group01, GetWorldBounds(), filterGetUnitsInRectOfPlayer)
 	call ForGroup(loc_group01, function Func1194)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call SetUnitOwner(loc_unit02, loc_player01, true)
 	call SetUnitOwner(loc_unit01, loc_player02, true)
 	set PlayerHeroArray[GetPlayerId(loc_player01)] = loc_unit02
@@ -28983,36 +28965,36 @@ function Func1195 takes unit loc_unit01, unit loc_unit02 returns nothing
 		call UnitAddItem(loc_unit01, loc_item01)
 	endif
 	call RemoveUnit(loc_unit03)
-	call EnableTrigger(trigger057)
-	if(IsUnitType(loc_unit01, UNIT_TYPE_MELEE_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit01, integers084[integer124]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, integers084[integer124]))
-	elseif(IsUnitType(loc_unit01, UNIT_TYPE_RANGED_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit01, integers084[integer123]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, integers084[integer123]))
+	call EnableTrigger(Trig_ManipulateItem)
+	if(IsUnitType(loc_unit01, UNIT_TYPE_MELEE_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit01, Item_Real[integer124]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, Item_Real[integer124]))
+	elseif(IsUnitType(loc_unit01, UNIT_TYPE_RANGED_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit01, Item_Real[integer123]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, Item_Real[integer123]))
 	endif
-	if(IsUnitType(loc_unit02, UNIT_TYPE_MELEE_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit02, integers084[integer124]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, integers084[integer124]))
-	elseif(IsUnitType(loc_unit02, UNIT_TYPE_RANGED_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit02, integers084[integer123]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, integers084[integer123]))
+	if(IsUnitType(loc_unit02, UNIT_TYPE_MELEE_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit02, Item_Real[integer124]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, Item_Real[integer124]))
+	elseif(IsUnitType(loc_unit02, UNIT_TYPE_RANGED_ATTACKER) == true or GetUnitTypeId(loc_unit01) == 'H06S')and Func0367(loc_unit02, Item_Real[integer123]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, Item_Real[integer123]))
 	endif
-	if GetUnitTypeId(loc_unit01) == 'H06S' and Func0367(loc_unit01, integers084[integer123]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, integers084[integer123]))
-	elseif GetUnitTypeId(loc_unit01) == 'H06S' and Func0367(loc_unit01, integers084[integer124]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, integers084[integer124]))
+	if GetUnitTypeId(loc_unit01) == 'H06S' and Func0367(loc_unit01, Item_Real[integer123]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, Item_Real[integer123]))
+	elseif GetUnitTypeId(loc_unit01) == 'H06S' and Func0367(loc_unit01, Item_Real[integer124]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, Item_Real[integer124]))
 	endif
-	if GetUnitTypeId(loc_unit02) == 'H06S' and Func0367(loc_unit02, integers084[integer123]) != null then
-		call UnitRemoveItem(loc_unit02, Func0367(loc_unit02, integers084[integer123]))
-	elseif GetUnitTypeId(loc_unit02) == 'H06S' and Func0367(loc_unit02, integers084[integer124]) != null then
-		call UnitRemoveItem(loc_unit02, Func0367(loc_unit02, integers084[integer124]))
+	if GetUnitTypeId(loc_unit02) == 'H06S' and Func0367(loc_unit02, Item_Real[integer123]) != null then
+		call UnitRemoveItem(loc_unit02, Func0367(loc_unit02, Item_Real[integer123]))
+	elseif GetUnitTypeId(loc_unit02) == 'H06S' and Func0367(loc_unit02, Item_Real[integer124]) != null then
+		call UnitRemoveItem(loc_unit02, Func0367(loc_unit02, Item_Real[integer124]))
 	endif
-	if(IsUnitType(loc_unit01, UNIT_TYPE_MELEE_ATTACKER) == true)and Func0367(loc_unit01, integers084[integer243]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, integers084[integer243]))
-	elseif(IsUnitType(loc_unit01, UNIT_TYPE_RANGED_ATTACKER) == true)and Func0367(loc_unit01, integers084[integer123]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, integers084[integer123]))
+	if(IsUnitType(loc_unit01, UNIT_TYPE_MELEE_ATTACKER) == true)and Func0367(loc_unit01, Item_Real[integer243]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, Item_Real[integer243]))
+	elseif(IsUnitType(loc_unit01, UNIT_TYPE_RANGED_ATTACKER) == true)and Func0367(loc_unit01, Item_Real[integer123]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit01, Item_Real[integer123]))
 	endif
-	if(IsUnitType(loc_unit02, UNIT_TYPE_MELEE_ATTACKER) == true)and Func0367(loc_unit02, integers084[integer243]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, integers084[integer243]))
-	elseif(IsUnitType(loc_unit02, UNIT_TYPE_RANGED_ATTACKER) == true)and Func0367(loc_unit02, integers084[integer242]) != null then
-		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, integers084[integer242]))
+	if(IsUnitType(loc_unit02, UNIT_TYPE_MELEE_ATTACKER) == true)and Func0367(loc_unit02, Item_Real[integer243]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, Item_Real[integer243]))
+	elseif(IsUnitType(loc_unit02, UNIT_TYPE_RANGED_ATTACKER) == true)and Func0367(loc_unit02, Item_Real[integer242]) != null then
+		call UnitRemoveItem(loc_unit01, Func0367(loc_unit02, Item_Real[integer242]))
 	endif
 	call ClearSelectionForPlayer(loc_player01)
 	call SelectUnitAddForPlayer(loc_unit02, loc_player01)
@@ -29020,9 +29002,9 @@ function Func1195 takes unit loc_unit01, unit loc_unit02 returns nothing
 	call SelectUnitAddForPlayer(loc_unit01, loc_player02)
 	call FlushChildHashtable(HY, (800 + GetPlayerId(loc_player01)))
 	call FlushChildHashtable(HY, (800 + GetPlayerId(loc_player02)))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call ExecuteFunc("Func2883")
-	set unit124 = loc_unit02
+	set tt_unit1 = loc_unit02
 	call ExecuteFunc("Func2883")
 	call Func0386(GetOwningPlayer(loc_unit01),"9", GetUnitTypeId(loc_unit01))
 	call Func0386(GetOwningPlayer(loc_unit02),"9", GetUnitTypeId(loc_unit02))
@@ -29083,13 +29065,13 @@ function Func1200 takes nothing returns nothing
 		loop
 			exitwhen loc_integer01 > 5
 			if IsSentinel(GetTriggerPlayer())then
-				set player005 = Sentinels[loc_integer01]
+				set tt_player1 = Sentinels[loc_integer01]
 			else
-				set player005 = Scourges[loc_integer01]
+				set tt_player1 = Scourges[loc_integer01]
 			endif
-			set unit124 = PlayerHeroArray[GetPlayerId(player005)]
-			if not(unit125 == null or GetOwningPlayer(unit125) != GetTriggerPlayer()or unit124 == null or GetOwningPlayer(unit124) != player005 or player005 == GetTriggerPlayer())then
-				if Func1199(unit125, unit124, false)then
+			set tt_unit1 = PlayerHeroArray[GetPlayerId(tt_player1)]
+			if not(unit125 == null or GetOwningPlayer(unit125) != GetTriggerPlayer()or tt_unit1 == null or GetOwningPlayer(tt_unit1) != tt_player1 or tt_player1 == GetTriggerPlayer())then
+				if Func1199(unit125, tt_unit1, false)then
 					return
 				endif
 			endif
@@ -29102,16 +29084,16 @@ function Func1200 takes nothing returns nothing
 	endif
 	set unit125 = PlayerHeroArray[GetPlayerId(GetTriggerPlayer())]
 	if IsSentinel(GetTriggerPlayer())then
-		set player005 = Sentinels[loc_integer01]
+		set tt_player1 = Sentinels[loc_integer01]
 	else
-		set player005 = Scourges[loc_integer01]
+		set tt_player1 = Scourges[loc_integer01]
 	endif
-	set unit124 = PlayerHeroArray[GetPlayerId(player005)]
-	if unit125 == null or GetOwningPlayer(unit125) != GetTriggerPlayer()or unit124 == null or GetOwningPlayer(unit124) != player005 or player005 == GetTriggerPlayer()then
+	set tt_unit1 = PlayerHeroArray[GetPlayerId(tt_player1)]
+	if unit125 == null or GetOwningPlayer(unit125) != GetTriggerPlayer()or tt_unit1 == null or GetOwningPlayer(tt_unit1) != tt_player1 or tt_player1 == GetTriggerPlayer()then
 		call Func0114(GetTriggerPlayer(), GetObjectName('n02Z'))
 		return
 	endif
-	call Func1199(unit125, unit124, true)
+	call Func1199(unit125, tt_unit1, true)
 endfunction
 
 function Func1201 takes nothing returns nothing
@@ -30134,9 +30116,9 @@ function Func1262 takes nothing returns nothing
 endfunction
 
 function Func1263 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 12000, Condition(function Func1260))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -30596,7 +30578,7 @@ function Func1289 takes unit loc_unit01, player loc_player01 returns nothing
 		loop
 			exitwhen loc_integer01 > 5
 			set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
-			if GetUnitTypeId(loc_unit01) != 'H00J' and loc_item01 != null and(GetItemPlayer(loc_item01) != GetOwningPlayer(loc_unit01)and Func0353(loc_item01) != integer207 and Func0353(loc_item01) != integer208)and GetItemTypeId(loc_item01) != integers084[integer193]then
+			if GetUnitTypeId(loc_unit01) != 'H00J' and loc_item01 != null and(GetItemPlayer(loc_item01) != GetOwningPlayer(loc_unit01)and Func0353(loc_item01) != integer207 and Func0353(loc_item01) != integer208)and GetItemTypeId(loc_item01) != Item_Real[integer193]then
 				call UnitRemoveItem(loc_unit01, loc_item01)
 			endif
 			set loc_integer01 = loc_integer01 + 1
@@ -30639,8 +30621,8 @@ function Func1292 takes nothing returns nothing
 endfunction
 
 function Func1293 takes player loc_player01, player loc_player02 returns nothing
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	set player008 = loc_player01
 	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function Func1290))
 	set player008 = loc_player02
@@ -30651,8 +30633,8 @@ function Func1293 takes player loc_player01, player loc_player02 returns nothing
 	call EnumItemsInRect(GetWorldBounds(), Condition(function Func0167), function Func1292)
 	set player008 = loc_player02
 	call EnumItemsInRect(GetWorldBounds(), Condition(function Func0167), function Func1292)
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
 	set loc_group01 = null
 	set loc_group02 = null
 endfunction
@@ -36918,7 +36900,7 @@ endfunction
 
 function Func1432 takes nothing returns boolean
 	local integer loc_integer01
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01
 	local location loc_location01 = GetRectCenter(rect011)
 	local location loc_location02 = GetRectCenter(rect004)
@@ -36931,10 +36913,10 @@ function Func1432 takes nothing returns boolean
 	local real loc_real02
 	local real loc_real03
 	local integer loc_integer05
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	call GroupEnumUnitsInRect(loc_group02, GetWorldBounds(), Condition(function Func0011))
 	call ForGroup(loc_group02, function Func1431)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	set loc_integer01 = 1
 	set loc_integer03 = 1
 	set loc_integer04 = 1
@@ -37007,7 +36989,7 @@ function Func1432 takes nothing returns boolean
 		set loc_integer03 = loc_integer03 + 1
 	endloop
 	call ForGroup(loc_group01, function Func1428)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_integer03 = 1
 	loop
 		exitwhen loc_integer03 > loc_integer02
@@ -37900,8 +37882,8 @@ function Func1458 takes nothing returns nothing
 	set boolean010 = true
 endfunction
 
-function Func1459 takes nothing returns nothing
-	set boolean120 = false
+function ModeNN_Init takes nothing returns nothing
+	set Mode_NN = true
 	call Func0144(bj_FORCE_ALL_PLAYERS, 10, GetObjectName('n0HA'))
 	call DisableTrigger(GetTriggeringTrigger())
 endfunction
@@ -37920,7 +37902,7 @@ function Func1461 takes nothing returns nothing
 	call TriggerAddAction(loc_trigger01, function Func1460)
 	call SaveTriggerHandle(HY, (GetHandleId(loc_trigger01)), (174), (loc_trigger02))
 	call TriggerRegisterPlayerChatEvent(loc_trigger02, PlayerModeTyper,"-noneutrals", true)
-	call TriggerAddAction(loc_trigger02, function Func1459)
+	call TriggerAddAction(loc_trigger02, function ModeNN_Init)
 endfunction
 
 function Func1462 takes nothing returns nothing
@@ -38103,8 +38085,8 @@ endfunction
 function Func1485 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer02
 	local integer loc_integer03
 	local real loc_real01
@@ -38182,8 +38164,8 @@ function Func1485 takes nothing returns boolean
 		endif
 		set loc_integer04 = loc_integer04 + 1
 	endloop
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
 	set loc_group01 = null
 	set loc_group02 = null
 	return false
@@ -38368,11 +38350,11 @@ function Func1492 takes player loc_player01 returns nothing
 	local integer loc_integer01 = 0
 	local item loc_item01
 	local integer loc_integer02 = GetPlayerId(loc_player01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set player021 = loc_player01
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 99999, Condition(function Func1491))
 	call ForGroup(loc_group01, function Func1490)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func1493 takes player loc_player01 returns nothing
@@ -38484,7 +38466,7 @@ function Func1501 takes unit loc_unit01, integer loc_integer01, player loc_playe
 	loop
 		exitwhen loc_integer02 > 5
 		if GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer02)) == 'I02M' then
-			call Func0365(UnitItemInSlot(loc_unit01, loc_integer02))
+			call DestroyItem(UnitItemInSlot(loc_unit01, loc_integer02))
 		endif
 		set loc_integer02 = loc_integer02 + 1
 	endloop
@@ -38894,7 +38876,7 @@ endfunction
 function Func1526 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = GetEnumUnit()
 	local integer loc_integer02 = integer022
 	call PauseUnit(loc_unit02, true)
@@ -38922,7 +38904,7 @@ function Func1527 takes nothing returns boolean
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (6)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (7)))
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (5)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local ubersplat loc_ubersplat01 = CreateUbersplat(loc_real01, loc_real02,"THNN", 255, 255, 255, 255, false, false)
 	call SetUbersplatRenderAlways(loc_ubersplat01, true)
 	call Func0176(GetOwningPlayer(loc_unit01), 4, loc_real01, loc_real02, 400)
@@ -38936,11 +38918,11 @@ function Func1527 takes nothing returns boolean
 	call CleanTrigger(loc_trigger01)
 	call DestroyEffect(AddSpecialEffect("Objects\\Spawnmodels\\Naga\\NagaDeath\\NagaDeath.mdl", loc_real01, loc_real02))
 	call DestroyEffect(AddSpecialEffect("effects\\TidalErruption.mdx", loc_real01, loc_real02))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set integer022 = loc_integer02
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 215 + 25, Condition(function Func0290))
 	call ForGroup(loc_group01, function Func1526)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	return false
@@ -39344,7 +39326,7 @@ function Func1545 takes nothing returns nothing
 endfunction
 
 function Func1546 takes nothing returns boolean
-	if(IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitInGroup(GetFilterUnit(), group007) == false then
+	if(IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitInGroup(GetFilterUnit(), group007) == false then
 		call GroupAddUnit(group007, GetFilterUnit())
 		return true
 	endif
@@ -39385,14 +39367,14 @@ function Func1548 takes nothing returns boolean
 		call SetUnitVertexColor(loc_unit01, 255, 255, 255, 190)
 	elseif loc_integer02 < 150 then
 	endif
-	set loc_group02 = Func0030()
+	set loc_group02 = GetAvailableGroup()
 	set group007 = loc_group01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit261 = loc_unit01
 	set integer435 = loc_integer03
 	call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 425, Condition(function Func1546))
 	call ForGroup(loc_group02, function Func1545)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	call SetUnitX(loc_unit01, loc_real06)
 	call SetUnitY(loc_unit01, loc_real07)
 	if loc_integer02 == 140 then
@@ -39404,13 +39386,13 @@ function Func1548 takes nothing returns boolean
 		call SetUnitY(loc_unit02, loc_real07)
 	endif
 	if loc_integer02 == 150 then
-		set loc_group02 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 425 + 25, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func1547)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call KillUnit(loc_unit01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -39470,7 +39452,7 @@ function Func1549 takes nothing returns nothing
 	call SaveUnitHandle(HY, (loc_integer01), (186), (loc_unit03))
 	call SaveReal(HY, (loc_integer01), (66), ((loc_real06) * 1.0))
 	call SaveReal(HY, (loc_integer01), (67), ((loc_real07) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call DestroyEffect(AddSpecialEffect(loc_string01, Func0120(loc_real08), Func0122(loc_real09)))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.02, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1548))
@@ -39512,14 +39494,14 @@ function Func1553 takes unit loc_unit01, unit loc_unit02, real loc_real01 return
 	set unit263 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit02), GetUnitY(loc_unit02), 0)
 	call Func0183(unit263, 'A0X6')
 	call SetUnitAbilityLevel(unit263, 'A0X6', Func0337(real262))
-	set unit124 = loc_unit01
-	set loc_group01 = Func0030()
+	set tt_unit1 = loc_unit01
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 175 + 25, Condition(function Func0283))
 	if GetUnitTypeId(loc_unit02) != 'h0BD' then
 		call GroupAddUnit(loc_group01, loc_unit02)
 	endif
 	call ForGroup(loc_group01, function Func1552)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffect("Abilities\\Weapons\\DemolisherFireMissile\\DemolisherFireMissile.mdl", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
 endfunction
 
@@ -39839,10 +39821,10 @@ function Func1570 takes nothing returns nothing
 		set unit002 = loc_unit01
 		set real002 = 8 + GetUnitAbilityLevel(loc_unit01, ('A0IL')) * 6
 		set loc_boolexpr01 = Condition(function Func1568)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 650, loc_boolexpr01)
 		call ForGroup(loc_group01, function Func1569)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_integer02 = loc_integer02 + 1
 		call SaveInteger(HY, (loc_integer01), (28), (loc_integer02))
 	endif
@@ -39922,7 +39904,7 @@ function Func1578 takes nothing returns nothing
 	local unit loc_unit02 = GetSpellTargetUnit()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0E3')
 	local real loc_real01 = (0.35 + 0.25 * loc_integer01) * (GetUnitState(loc_unit02, UNIT_STATE_MAX_MANA) - GetUnitState(loc_unit02, UNIT_STATE_MANA))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Weapons\\DragonHawkMissile\\DragonHawkMissile.mdl", loc_unit02,"chest"))
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Weapons\\SpiritOfVengeanceMissile\\SpiritOfVengeanceMissile.mdl", loc_unit02,"chest"))
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\Enchantment.mdx", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
@@ -39931,7 +39913,7 @@ function Func1578 takes nothing returns nothing
 	set unit264 = loc_unit01
 	call ForGroup(loc_group01, function Func1577)
 	call PlaySoundOnUnitBJ(sound017, 100, loc_unit02)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_unit02 = null
 	set loc_group01 = null
@@ -40155,7 +40137,7 @@ function Func1595 takes nothing returns nothing
 endfunction
 
 function Func1596 takes unit loc_unit01, real loc_real01, real loc_real02, group loc_group01 returns nothing
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local unit loc_unit02
 	call Func0172(loc_real01, loc_real02, 150)
 	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 150, Condition(function Func0011))
@@ -40171,7 +40153,7 @@ function Func1596 takes unit loc_unit01, real loc_real01, real loc_real02, group
 		endif
 		call GroupRemoveUnit(loc_group02, loc_unit02)
 	endloop
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 endfunction
 
 function Func1597 takes nothing returns nothing
@@ -40206,7 +40188,7 @@ function Func1597 takes nothing returns nothing
 	endif
 	if(loc_real07 > 1 and loc_boolean01 == false)then
 		call PauseTimer(GetExpiredTimer())
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call RemoveUnit(loc_unit01)
 		call DestroyTimer(GetExpiredTimer())
@@ -40238,7 +40220,7 @@ function Func1598 takes nothing returns nothing
 	set loc_integer01 = GetHandleId(loc_timer01)
 	call SaveUnitHandle(HY, (loc_integer01), (14), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer01), (290), (loc_unit02))
-	call SaveGroupHandle(HY, (loc_integer01), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (133), (GetAvailableGroup()))
 	call SaveReal(HY, (loc_integer01), (284), ((loc_real01) * 1.0))
 	call SaveReal(HY, (loc_integer01), (285), ((loc_real02) * 1.0))
 	call SaveReal(HY, (loc_integer01), (286), ((loc_real03) * 1.0))
@@ -40251,7 +40233,7 @@ function Func1598 takes nothing returns nothing
 	set loc_integer02 = GetHandleId(loc_timer02)
 	call SaveUnitHandle(HY, (loc_integer02), (14), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer02), (290), (loc_unit03))
-	call SaveGroupHandle(HY, (loc_integer02), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer02), (133), (GetAvailableGroup()))
 	call SaveReal(HY, (loc_integer02), (284), ((loc_real01) * 1.0))
 	call SaveReal(HY, (loc_integer02), (285), ((loc_real02) * 1.0))
 	call SaveReal(HY, (loc_integer02), (286), ((loc_real03) * 1.0))
@@ -40300,7 +40282,7 @@ function Func1601 takes nothing returns boolean
 	local real loc_real03 = (LoadReal(HY, (loc_integer01), (7)))
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (22)))
 	if GetTriggerEvalCount(loc_trigger01) > 16 then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
@@ -40315,7 +40297,7 @@ function Func1601 takes nothing returns boolean
 endfunction
 
 function Func1602 takes nothing returns nothing
-	call Func0109(unit124, GetEnumUnit(), 1, real009)
+	call Func0109(tt_unit1, GetEnumUnit(), 1, real009)
 endfunction
 
 function Func1603 takes nothing returns nothing
@@ -40328,8 +40310,8 @@ function Func1603 takes nothing returns nothing
 	local real loc_real01 = bj_RADTODEG * Atan2(GetUnitY(loc_unit02) - GetUnitY(loc_unit01), GetUnitX(loc_unit02) - GetUnitX(loc_unit01))
 	local real loc_real02
 	local real loc_real03
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	if loc_integer02 == 0 then
 		set loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A289')
 	endif
@@ -40381,10 +40363,10 @@ function Func1603 takes nothing returns nothing
 		call SetUnitAbilityLevel(loc_unit03, 'A0NY', loc_integer02)
 		call IssueImmediateOrder(loc_unit03,"thunderclap")
 	endif
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	call GroupRemoveUnit(loc_group01, loc_unit02)
 	set real009 = 100 * loc_integer02
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call ForGroup(loc_group01, function Func1602)
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -40491,13 +40473,13 @@ function Func1613 takes nothing returns nothing
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0OO')
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02
 	local trigger loc_trigger01
 	local integer loc_integer02
 	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function Func0011))
 	call ForGroup(loc_group01, function Func1612)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Orc\\FeralSpirit\\feralspiritdone.mdl", loc_real01, loc_real02))
 	if(loc_integer01 == 1)then
 		set loc_unit02 = CreateUnit(loc_player01, 'n01Q', loc_real01, loc_real02, 270)
@@ -41086,10 +41068,10 @@ function Func1639 takes nothing returns nothing
 endfunction
 
 function Func1640 takes player loc_player01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function Func1638))
 	call ForGroup(loc_group01, function Func1639)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -41209,7 +41191,7 @@ function Func1650 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (317)))
 	set integer437 = GetHandleId(loc_unit01)
 	call ForGroup(loc_group01, function Func1649)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	set loc_trigger01 = null
@@ -41218,7 +41200,7 @@ endfunction
 
 function Func1651 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local trigger loc_trigger01 = CreateTrigger()
 	if IsUnitType(loc_unit01, UNIT_TYPE_HERO) == false then
 		set loc_unit01 = PlayerHeroArray[GetPlayerId(GetOwningPlayer(loc_unit01))]
@@ -41281,7 +41263,7 @@ endfunction
 function Func1659 takes nothing returns nothing
 	local location loc_location01 = GetUnitLoc(GetTriggerUnit())
 	local location loc_location02 = GetUnitLoc(GetSpellTargetUnit())
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if(UnitHasBuffBJ(GetSpellTargetUnit(), 'B02U') == true)then
 		call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(GetSpellTargetUnit()), Condition(function Func1656))
 		call ForGroupBJ(loc_group01, function Func1658)
@@ -41296,7 +41278,7 @@ function Func1659 takes nothing returns nothing
 		call IssueTargetOrder(bj_lastCreatedUnit,"acidbomb", GetSpellTargetUnit())
 		call SetUnitUserData(bj_lastCreatedUnit, 1)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 	call RemoveLocation(loc_location02)
 endfunction
@@ -41419,10 +41401,10 @@ function Func1672 takes nothing returns nothing
 	local unit loc_unit02 = GetSpellTargetUnit()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2ON')
 	local real loc_real01
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set real265 = 100 + loc_integer01 * 75
 	set unit265 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 190 + 25, Condition(function Func0290))
 	call ForGroup(loc_group01, function Func1671)
 	set loc_real01 = real265
@@ -41482,14 +41464,14 @@ function Func1676 takes nothing returns boolean
 		call UnitRemoveAbility(loc_unit01, 'A2O4')
 		call UnitRemoveAbility(loc_unit01, 'B0GB')
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit266 = loc_unit02
 		set unit267 = loc_unit01
 		set integer438 = loc_integer02
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 105 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func1675)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -41520,14 +41502,14 @@ function Func1678 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	set unit266 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 99999, Condition(function Func0305))
 	call ForGroup(loc_group01, function Func1677)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -41741,7 +41723,7 @@ function Func1694 takes nothing returns boolean
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (157)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02
 	call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(loc_unit01), Condition(function Func1693))
 	loop
@@ -41750,7 +41732,7 @@ function Func1694 takes nothing returns boolean
 		call GroupRemoveUnit(loc_group01, loc_unit02)
 		call KillUnit(loc_unit02)
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	set loc_unit01 = null
@@ -41866,7 +41848,7 @@ endfunction
 function Func1702 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0LT')
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02
 	if loc_integer01 == 0 then
 		set loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A1CS')
@@ -41881,8 +41863,8 @@ function Func1702 takes nothing returns nothing
 		endif
 		call GroupRemoveUnit(loc_group01, loc_unit02)
 	endloop
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	set bj_groupEnumOwningPlayer = GetOwningPlayer(loc_unit01)
 	call GroupEnumUnitsInRect(loc_group01, GetWorldBounds(), filterGetUnitsInRectOfPlayer)
 	loop
@@ -41894,7 +41876,7 @@ function Func1702 takes nothing returns nothing
 		endif
 		call GroupRemoveUnit(loc_group01, loc_unit02)
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func1703 takes nothing returns nothing
@@ -41913,15 +41895,15 @@ endfunction
 function Func1705 takes unit loc_unit01, real loc_real01, real loc_real02 returns nothing
 	local real loc_real03
 	local real loc_real04
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0Z6')
 	local real loc_real05 = 40 + 40 * loc_integer01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit268 = loc_unit01
 	set real266 = loc_real05
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 600, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func1704)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_real03 = loc_real01
 	set loc_real04 = loc_real02
 	call DestroyEffect(AddSpecialEffect("Abilities\\Weapons\\FlyingMachine\\FlyingMachineImpact.mdl", loc_real03, loc_real04))
@@ -42133,7 +42115,7 @@ function Func1715 takes nothing returns nothing
 	call SaveUnitHandle(HY, (loc_integer01), (17), (loc_unit01))
 	call SaveReal(HY, (loc_integer01), (13), ((loc_real04) * 1.0))
 	call SaveInteger(HY, (loc_integer01), (5), (integer022))
-	call SaveUnitHandle(HY, (loc_integer01), (2), (unit124))
+	call SaveUnitHandle(HY, (loc_integer01), (2), (tt_unit1))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.04, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1714))
 	set loc_trigger01 = null
@@ -42164,10 +42146,10 @@ function Func1718 takes trigger loc_trigger01, unit loc_unit01, real loc_real01,
 	local real loc_real04 = 200
 	local rect loc_rect01 = Rect(loc_real01 - loc_real03, loc_real02 - loc_real03, loc_real01 + loc_real03, loc_real02 + loc_real03)
 	local rect loc_rect02 = Rect(loc_real01 - loc_real03 - loc_real04, loc_real02 - loc_real03 - loc_real04, loc_real01 + loc_real03 + loc_real04, loc_real02 + loc_real03 + loc_real04)
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
-	local group loc_group03 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
+	local group loc_group03 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0290))
 	call GroupEnumUnitsInRect(loc_group02, loc_rect02, Condition(function Func0290))
 	set group002 = loc_group01
@@ -42179,9 +42161,9 @@ function Func1718 takes trigger loc_trigger01, unit loc_unit01, real loc_real01,
 	call ForGroup(loc_group02, function Func1717)
 	set integer022 = loc_integer01
 	call ForGroup(loc_group03, function Func1715)
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
-	call Func0029(loc_group03)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
+	call KillGroup(loc_group03)
 	call RemoveRect(loc_rect01)
 	call RemoveRect(loc_rect02)
 	set loc_group01 = null
@@ -42273,11 +42255,11 @@ function Func1723 takes nothing returns boolean
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (19)))
 	local group loc_group01
 	if boolean132 == false then
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit269 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 175 + 25, Condition(function Func0290))
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
@@ -42316,8 +42298,8 @@ function Func1725 takes nothing returns boolean
 endfunction
 
 function Func1726 takes nothing returns nothing
-	call SetUnitX(GetEnumUnit(), GetUnitX(unit124))
-	call SetUnitY(GetEnumUnit(), GetUnitY(unit124))
+	call SetUnitX(GetEnumUnit(), GetUnitX(tt_unit1))
+	call SetUnitY(GetEnumUnit(), GetUnitY(tt_unit1))
 endfunction
 
 function Func1727 takes nothing returns boolean
@@ -42399,12 +42381,12 @@ function Func1727 takes nothing returns boolean
 	call SaveInteger(HY, (loc_integer01), (5), (loc_integer02))
 	call SavePlayerHandle(HY, (loc_integer01), (154), (loc_player01))
 	set loc_real05 = loc_real05 + 110
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	set loc_rect01 = Rect(loc_real01 - loc_real05, loc_real02 - loc_real05, loc_real01 + loc_real05, loc_real02 + loc_real05)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRect(loc_group01, loc_rect01, Condition(function Func0316))
 	call ForGroup(loc_group01, function Func1726)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_group01 = null
 	set loc_unit01 = null
@@ -42455,7 +42437,7 @@ endfunction
 function Func1732 takes nothing returns nothing
 	if IsUnitInGroup(GetEnumUnit(), group002) == false then
 		call GroupAddUnit(group002, GetEnumUnit())
-		call Func1731(unit124, GetEnumUnit())
+		call Func1731(tt_unit1, GetEnumUnit())
 	endif
 endfunction
 
@@ -42481,19 +42463,19 @@ function Func1733 takes nothing returns boolean
 		if loc_integer03 == loc_integer02 then
 			set loc_real01 = 225
 		endif
-		set loc_group02 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set group002 = loc_group01
 		call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit01), GetUnitY(loc_unit01), loc_real01, Condition(function Func0289))
 		call ForGroup(loc_group02, function Func1732)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 	endif
 	if loc_integer03 == (loc_integer02)then
 		if loc_unit02 != null then
 			call PauseUnit(loc_unit02, false)
 		endif
 		call Func0172(GetUnitX(loc_unit01), GetUnitY(loc_unit01), 100)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -42519,18 +42501,18 @@ function Func1734 takes nothing returns boolean
 	local unit loc_unit02
 	local trigger loc_trigger02 = (LoadTriggerHandle(HY, (loc_integer01), (11)))
 	local integer loc_integer04 = GetHandleId(loc_trigger02)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit03 = null
 	local integer loc_integer05 = 'u00V'
 	local real loc_real04 = 125
 	if loc_integer03 == 1 then
 		set loc_real04 = 100
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real02, loc_real03, loc_real04, Condition(function Func0269))
 	call GroupRemoveUnit(loc_group01, loc_unit01)
 	set loc_unit03 = GroupPickRandomUnit(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_unit03 != null or loc_integer03 == loc_integer02 or loc_integer03 == (loc_integer02 - 1)or loc_integer03 == (loc_integer02 - 2)then
 		set loc_integer05 = 'u00U'
 	endif
@@ -42550,7 +42532,7 @@ function Func1734 takes nothing returns boolean
 		call SaveInteger(HY, (loc_integer04), (18), (loc_integer03))
 		call SaveUnitHandle(HY, (loc_integer04), (17), (loc_unit03))
 		call SaveUnitHandle(HY, (loc_integer04), (14), (loc_unit01))
-		call SaveGroupHandle(HY, (loc_integer04), (16), (Func0030()))
+		call SaveGroupHandle(HY, (loc_integer04), (16), (GetAvailableGroup()))
 	elseif loc_integer03 > loc_integer02 then
 		set loc_unit03 = null
 		call FlushChildHashtable(HY, (loc_integer01))
@@ -42560,7 +42542,7 @@ function Func1734 takes nothing returns boolean
 		call SaveInteger(HY, (loc_integer04), (18), (loc_integer03))
 		call SaveUnitHandle(HY, (loc_integer04), (17), (loc_unit03))
 		call SaveUnitHandle(HY, (loc_integer04), (14), (loc_unit01))
-		call SaveGroupHandle(HY, (loc_integer04), (16), (Func0030()))
+		call SaveGroupHandle(HY, (loc_integer04), (16), (GetAvailableGroup()))
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -42617,16 +42599,16 @@ function Func1737 takes nothing returns nothing
 endfunction
 
 function Func1738 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local unit loc_unit02
 	local unit loc_unit03 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0Z4')
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 300, Condition(function Func0291))
 	set loc_unit02 = GroupPickRandomUnit(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\FlakCannons\\FlakTarget.mdl", loc_unit01,"origin"))
 	if loc_unit02 != null then
 		call Func0183(loc_unit03, 'A0Z7')
@@ -42686,7 +42668,7 @@ function Func1743 takes nothing returns nothing
 endfunction
 
 function Func1744 takes unit loc_unit01, real loc_real01, real loc_real02, integer loc_integer01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if loc_integer01 == 1 then
 		set integer441 = 105
 	elseif loc_integer01 == 2 then
@@ -42697,16 +42679,16 @@ function Func1744 takes unit loc_unit01, real loc_real01, real loc_real02, integ
 		set integer441 = 310
 	endif
 	set unit270 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 230 + 25, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func1743)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
 function Func1745 takes nothing returns nothing
-	local unit loc_unit01 = CreateUnit(GetOwningPlayer(unit124), 'e00E', GetUnitX(GetEnumUnit()), GetUnitY(GetEnumUnit()), 0)
-	if GetUnitAbilityLevel(unit124, 'A03R') > 0 then
+	local unit loc_unit01 = CreateUnit(GetOwningPlayer(tt_unit1), 'e00E', GetUnitX(GetEnumUnit()), GetUnitY(GetEnumUnit()), 0)
+	if GetUnitAbilityLevel(tt_unit1, 'A03R') > 0 then
 		call Func0183(loc_unit01, 'A10T')
 	else
 		call Func0183(loc_unit01, 'A2S6')
@@ -42725,11 +42707,11 @@ function Func1746 takes nothing returns boolean
 	local real loc_real02
 	local real loc_real03
 	local real loc_real04
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 710, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func1745)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_integer03 == 1 then
 		set loc_real01 = GetRandomReal(0, 90)
 	elseif loc_integer03 == 2 then
@@ -42919,13 +42901,13 @@ function Func1762 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	elseif IsUnitEnemy(GetTriggerUnit(), GetOwningPlayer(loc_unit01)) == true and IsUnitType(GetTriggerUnit(), UNIT_TYPE_STRUCTURE) == false and GetUnitAbilityLevel(GetTriggerUnit(), 'A04R') == 0 then
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit271 = loc_unit01
 		set real267 = 100 + 40 * loc_integer03
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 285, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func1761)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call DestroyEffect(AddSpecialEffect("Abilities\\Weapons\\Bolt\\BoltImpact.mdl", GetUnitX(loc_unit01), GetUnitY(loc_unit01)))
 		call DestroyEffect(AddSpecialEffect("Abilities\\Weapons\\Bolt\\BoltImpact.mdl", GetUnitX(loc_unit01), GetUnitY(loc_unit01)))
 		call ShowUnit(loc_unit01, false)
@@ -43024,16 +43006,16 @@ endfunction
 
 function Func1768 takes unit loc_unit01, unit loc_unit02 returns nothing
 	local integer loc_integer01 = GetHandleId(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (200))))
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (201))))
 	call SaveInteger(HY, (GetHandleId((loc_unit01))), ((4264)), (2))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit272 = loc_unit01
 	set real268 = GetUnitAbilityLevel(loc_unit01, 'A0QW') * 20 + 10
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 300, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func1767)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Human\\Thunderclap\\ThunderClapCaster.mdl", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
 	set loc_group01 = null
 endfunction
@@ -43232,7 +43214,7 @@ function Func1782 takes nothing returns boolean
 	local real loc_real09 = (LoadReal(HY, (loc_integer01), (198)))
 	local real loc_real10 = GetUnitState(loc_unit02, UNIT_STATE_MANA)
 	local real loc_real11 = (25 + 25 * loc_integer02) * (10 + 0.01 * GetUnitState(loc_unit02, UNIT_STATE_MAX_MANA)) / 100
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real12 = (LoadReal(HY, (loc_integer01), (199)))
 	set loc_real12 = loc_real12 + 25 + 25 * loc_integer02
 	call SaveReal(HY, (loc_integer01), (199), ((loc_real12) * 1.0))
@@ -43248,14 +43230,14 @@ function Func1782 takes nothing returns boolean
 	call SetUnitY(loc_unit02, loc_real07)
 	call SetUnitPosition(loc_unit01, loc_real06, loc_real07)
 	call SetUnitPosition(loc_unit03, loc_real06, loc_real07)
-	set unit124 = loc_unit02
+	set tt_unit1 = loc_unit02
 	set unit273 = loc_unit02
 	set integer442 = loc_integer01
 	set integer443 = loc_integer02
 	set real269 = loc_real12
 	call GroupEnumUnitsInRange(loc_group01, loc_real06, loc_real07, 75 + 75 * loc_integer02, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func1781)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_integer03 = loc_integer03 - 1
 	call SaveInteger(HY, (loc_integer01), (194), (loc_integer03))
 	call SetUnitVertexColor(loc_unit02, 255, 255, 255, 0)
@@ -43371,7 +43353,7 @@ function Func1786 takes nothing returns nothing
 	set loc_trigger01 = null
 endfunction
 
-function Func1787 takes unit loc_unit01 returns nothing
+function DK_DragonForm_TailFix takes unit loc_unit01 returns nothing
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2AI')
 	if GetUnitTypeId(loc_unit01) == 'Hlgr' then
 		call SetUnitAbilityLevel(loc_unit01, 'A0AR', loc_integer01)
@@ -43386,7 +43368,7 @@ function Func1788 takes nothing returns nothing
 	if loc_integer01 == 1 then
 		call Func0183(loc_unit01, 'A0AR')
 	endif
-	call Func1787(loc_unit01)
+	call DK_DragonForm_TailFix(loc_unit01)
 	set loc_unit01 = null
 endfunction
 
@@ -43517,92 +43499,91 @@ function Func1798 takes nothing returns boolean
 endfunction
 
 function Func1799 takes nothing returns nothing
-	local trigger loc_trigger01 = CreateTrigger()
-	local unit loc_unit01 = GetTriggerUnit()
-	local unit loc_unit02 = GetAttacker()
-	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	call TriggerRegisterUnitEvent(loc_trigger01, loc_unit01, EVENT_UNIT_DAMAGED)
-	call TriggerRegisterTimerEvent(loc_trigger01, 2.5, false)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func1798))
-	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit02))
-	call SaveUnitHandle(HY, (loc_integer01), (17), (loc_unit01))
-	set loc_trigger01 = null
-	set loc_unit01 = null
-	set loc_unit02 = null
+	local trigger t = CreateTrigger()
+	local unit target = GetTriggerUnit()
+	local unit attacker = GetAttacker()
+	local integer h = GetHandleId(t)
+	call TriggerRegisterUnitEvent(t, target, EVENT_UNIT_DAMAGED)
+	call TriggerRegisterTimerEvent(t, 2.5, false)
+	call TriggerAddCondition(t, Condition(function Func1798))
+	call SaveUnitHandle(HY, (h), (2), (attacker))
+	call SaveUnitHandle(HY, (h), (17), (target))
+	set t = null
+	set target = null
+	set attacker = null
 endfunction
 
-function Func1800 takes nothing returns boolean
+function DK_DragonForm_Damaged takes nothing returns boolean
 	if GetAttacker() == (LoadUnitHandle(HY, (GetHandleId(GetTriggeringTrigger())), (2)))and IsUnitAlly(GetAttacker(), GetOwningPlayer(GetTriggerUnit())) == false and GetUnitAbilityLevel(GetAttacker(), 'A0O4') > 0 then
 		call Func1799()
 	endif
 	return false
 endfunction
 
-function Func1801 takes nothing returns nothing
-	local unit loc_unit01 = GetTriggerUnit()
-	local trigger loc_trigger01 = CreateTrigger()
-	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_ATTACKED)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func1800))
-	call SaveUnitHandle(HY, (GetHandleId(loc_trigger01)), (2), (loc_unit01))
-	set loc_unit01 = null
-	set loc_trigger01 = null
+function DK_DragonForm_Attacked takes nothing returns nothing
+	local unit u = GetTriggerUnit()
+	local trigger t = CreateTrigger()
+	call Func0168(t, EVENT_PLAYER_UNIT_ATTACKED)
+	call TriggerAddCondition(t, Condition(function DK_DragonForm_Damaged))
+	call SaveUnitHandle(HY, (GetHandleId(t)), (2), (u))
+	set u = null
+	set t = null
 endfunction
 
-function Func1802 takes nothing returns boolean
-	local trigger loc_trigger01 = GetTriggeringTrigger()
-	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	call Func1787(loc_unit01)
-	call CleanTrigger(loc_trigger01)
-	call FlushChildHashtable(HY, (loc_integer01))
-	set loc_trigger01 = null
-	set loc_unit01 = null
+function DK_DragonForm_Duration takes nothing returns boolean
+	local trigger t = GetTriggeringTrigger()
+	local integer h = GetHandleId(t)
+	local unit u = (LoadUnitHandle(HY, (h), (2)))
+	call DK_DragonForm_TailFix(u)
+	call CleanTrigger(t)
+	call FlushChildHashtable(HY, (h))
+	set t = null
+	set u = null
 	return false
 endfunction
 
-function Func1803 takes nothing returns boolean
-	local trigger loc_trigger01 = GetTriggeringTrigger()
-	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	call Func1787(loc_unit01)
-	call CleanTrigger(loc_trigger01)
-	call FlushChildHashtable(HY, (loc_integer01))
-	set loc_trigger01 = null
-	set loc_unit01 = null
+function DK_DragonForm_OnDeath takes nothing returns boolean
+	local trigger t = GetTriggeringTrigger()
+	local integer h = GetHandleId(t)
+	local unit u = (LoadUnitHandle(HY, (h), (2)))
+	call DK_DragonForm_TailFix(u)
+	call CleanTrigger(t)
+	call FlushChildHashtable(HY, (h))
+	set t = null
+	set u = null
 	return false
 endfunction
 
 function Func1804 takes nothing returns nothing
-	if GetUnitAbilityLevel(unit124, 'A0AR') > 0 then
-		call Func1787(unit124)
+	if GetUnitAbilityLevel(tt_unit1, 'A0AR') > 0 then
+		call DK_DragonForm_TailFix(tt_unit1)
 	endif
 endfunction
 
-function Func1805 takes nothing returns nothing
-	local unit loc_unit01 = GetTriggerUnit()
-	local trigger loc_trigger01 = CreateTrigger()
-	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	call TriggerRegisterTimerEvent(loc_trigger01, 0.01, false)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func1802))
-	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	set loc_trigger01 = CreateTrigger()
-	set loc_integer01 = GetHandleId(loc_trigger01)
-	call TriggerRegisterDeathEvent(loc_trigger01, loc_unit01)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func1803))
-	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	set loc_unit01 = null
-	set loc_trigger01 = null
+function DK_DragonForm_SpellEffect takes nothing returns nothing
+	local unit u = GetTriggerUnit()
+	local trigger t = CreateTrigger()
+	local integer h = GetHandleId(t)
+	call TriggerRegisterTimerEvent(t, 0.01, false)
+	call TriggerAddCondition(t, Condition(function DK_DragonForm_Duration))
+	call SaveUnitHandle(HY, (h), (2), (u))
+	set t = CreateTrigger()
+	set h = GetHandleId(t)
+	call TriggerRegisterDeathEvent(t, u)
+	call TriggerAddCondition(t, Condition(function DK_DragonForm_OnDeath))
+	call SaveUnitHandle(HY, (h), (2), (u))
+	set u = null
+	set t = null
 endfunction
 
-function Func1806 takes nothing returns boolean
+function DK_DragonForm_Init takes nothing returns boolean
 	if GetTriggerEventId() == EVENT_PLAYER_UNIT_SPELL_EFFECT then
 		if GetSpellAbilityId() == 'A03G' then
-			call Func1805()
+			call DK_DragonForm_SpellEffect()
 		endif
 	else
-		if GetLearnedSkill() == 'A03G' and IsUnitIllusion(GetTriggerUnit()) == false and GetUnitAbilityLevel(GetTriggerUnit(), 'A03G') == 1 then
-			call Func1801()
+		if GetLearnedSkill() == 'A03G' and not IsUnitIllusion(GetTriggerUnit()) and GetUnitAbilityLevel(GetTriggerUnit(), 'A03G') == 1 then
+			call DK_DragonForm_Attacked()
 		endif
 	endif
 	return false
@@ -43612,7 +43593,7 @@ function Func1807 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_SPELL_EFFECT)
 	call Func0168(loc_trigger01, EVENT_PLAYER_HERO_SKILL)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func1806))
+	call TriggerAddCondition(loc_trigger01, Condition(function DK_DragonForm_Init))
 	set loc_trigger01 = null
 endfunction
 
@@ -43679,8 +43660,8 @@ function Func1813 takes nothing returns nothing
 	local real loc_real05
 	local real loc_real06
 	local real loc_real07
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	if loc_unit02 == null then
 		set loc_real03 = GetLocationX(loc_location01)
 		set loc_real04 = GetLocationY(loc_location01)
@@ -43704,8 +43685,8 @@ function Func1813 takes nothing returns nothing
 	set integer022 = GetUnitAbilityLevel(loc_unit01, 'A0SK')
 	set real009 = integer022 * 50 + 75
 	call ForGroup(loc_group01, function Func1812)
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
 	set loc_unit01 = null
 	set loc_location01 = null
 endfunction
@@ -43844,7 +43825,7 @@ function Func1827 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetPlayerId(GetOwningPlayer(loc_unit01))
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0DH')
 	if loc_integer02 == 0 then
@@ -43862,7 +43843,7 @@ function Func1827 takes nothing returns nothing
 	if GetUnitAbilityLevel(loc_unit01, 'A1OB') > 0 then
 		call ForGroup(loc_group01, function Func1825)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -43924,7 +43905,7 @@ function Func1832 takes nothing returns nothing
 endfunction
 
 function Func1833 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) != GetUnitState(GetFilterUnit(), UNIT_STATE_MAX_LIFE)
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) != GetUnitState(GetFilterUnit(), UNIT_STATE_MAX_LIFE)
 endfunction
 
 function Func1834 takes nothing returns boolean
@@ -43939,11 +43920,11 @@ function Func1834 takes nothing returns boolean
 		call CleanTrigger(loc_trigger01)
 	else
 		call SaveInteger(HY, (loc_integer01), (28), (loc_integer02 + 1))
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 300, Condition(function Func1833))
 		set loc_unit02 = GroupPickRandomUnit(loc_group01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call SetUnitState(loc_unit02, UNIT_STATE_LIFE, GetUnitState(loc_unit02, UNIT_STATE_LIFE) + 10)
 	endif
 	set loc_trigger01 = null
@@ -44395,10 +44376,10 @@ function Func1871 takes nothing returns boolean
 	else
 		set loc_real01 = GetUnitX(loc_unit01)
 		set loc_real02 = GetUnitY(loc_unit01)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 400, Condition(function Func1869))
 		call ForGroup(loc_group01, function Func1870)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit02 = null
 	set loc_unit01 = null
@@ -44480,7 +44461,7 @@ function Func1876 takes nothing returns nothing
 endfunction
 
 function Func1877 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
@@ -44493,7 +44474,7 @@ function Func1877 takes nothing returns nothing
 	set real009 = loc_integer01 * 70
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 425, Condition(function Func0281))
 	call ForGroup(loc_group01, function Func1876)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit02 = null
 	set loc_group01 = null
 	set loc_unit01 = null
@@ -44586,7 +44567,7 @@ function Func1884 takes nothing returns nothing
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00U', loc_real01, loc_real02, 0)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0S8')
 	local real loc_real03 = 6
 	local integer loc_integer02 = 1
@@ -44603,10 +44584,10 @@ function Func1884 takes nothing returns nothing
 	set real270 = loc_integer01 * 50 + 50
 	set integer444 = loc_integer01
 	set integer445 = loc_integer02
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 400, Condition(function Func0287))
 	call ForGroup(loc_group01, function Func1883)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit02 = null
 	set loc_unit01 = null
@@ -44723,7 +44704,7 @@ endfunction
 function Func1893 takes nothing returns nothing
 	if IsUnitInGroup(GetEnumUnit(), group002) == false then
 		call GroupAddUnit(group002, GetEnumUnit())
-		call Func0109(unit124, GetEnumUnit(), 1, real009)
+		call Func0109(tt_unit1, GetEnumUnit(), 1, real009)
 	endif
 endfunction
 
@@ -44738,20 +44719,20 @@ function Func1894 takes nothing returns boolean
 	local real loc_real02
 	local real loc_real03
 	if GetTriggerEventId() == EVENT_UNIT_DEATH then
-		set unit124 = CreateUnit(GetOwningPlayer(loc_unit01), 'h06O', GetUnitX((LoadUnitHandle(HY, (loc_integer01), (14)))), GetUnitY((LoadUnitHandle(HY, (loc_integer01), (14)))), 0)
-		call SetUnitScale(unit124, 2.5, 2.5, 2.5)
-		call KillUnit(unit124)
+		set tt_unit1 = CreateUnit(GetOwningPlayer(loc_unit01), 'h06O', GetUnitX((LoadUnitHandle(HY, (loc_integer01), (14)))), GetUnitY((LoadUnitHandle(HY, (loc_integer01), (14)))), 0)
+		call SetUnitScale(tt_unit1, 2.5, 2.5, 2.5)
+		call KillUnit(tt_unit1)
 		call SetUnitPosition((LoadUnitHandle(HY, (loc_integer01), (14))), GetUnitX(loc_unit01), GetUnitY(loc_unit01))
 		call ShowUnit((LoadUnitHandle(HY, (loc_integer01), (14))), false)
 		call ShowUnit((LoadUnitHandle(HY, (loc_integer01), (14))), true)
 		call SelectUnitAddForPlayer((LoadUnitHandle(HY, (loc_integer01), (14))), GetOwningPlayer((LoadUnitHandle(HY, (loc_integer01), (14)))))
 		set units023[GetPlayerId(GetOwningPlayer(loc_unit01))] = null
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	elseif GetTriggerEvalCount(loc_trigger01) > 120 then
 		set units023[GetPlayerId(GetOwningPlayer(loc_unit01))] = null
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call SetUnitScale(loc_unit01, 2.5, 2.5, 2.5)
@@ -44759,13 +44740,13 @@ function Func1894 takes nothing returns boolean
 	else
 		set loc_real02 = GetUnitX(loc_unit01)
 		set loc_real03 = GetUnitY(loc_unit01)
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		set group002 = loc_group01
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set real009 = loc_integer02 * 70
 		call GroupEnumUnitsInRange(loc_group02, loc_real02, loc_real03, 225 + 25, Condition(function Func0294))
 		call ForGroup(loc_group02, function Func1893)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call SetUnitX(loc_unit01, Func0120(loc_real02 + 15 * Cos(loc_real01 * bj_DEGTORAD)))
 		call SetUnitY(loc_unit01, Func0122(loc_real03 + 15 * Sin(loc_real01 * bj_DEGTORAD)))
 	endif
@@ -44779,7 +44760,7 @@ endfunction
 function Func1895 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetUnitX(loc_unit01)
@@ -44862,7 +44843,7 @@ function Func1902 takes nothing returns nothing
 	local location loc_location01
 	local real loc_real01
 	local real loc_real02
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if loc_unit02 == null then
 		set loc_location01 = GetSpellTargetLoc()
 	else
@@ -44873,7 +44854,7 @@ function Func1902 takes nothing returns nothing
 	set real272 = loc_real01
 	set real273 = loc_real02
 	if IsUnitAlly(loc_unit01, GetOwningPlayer(loc_unit02)) == true or Func0028(GetSpellTargetUnit()) == false then
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 150, Condition(function Func0283))
 		call Func0201(CreateFogModifierRadiusLocBJ(true, GetOwningPlayer(loc_unit01), FOG_OF_WAR_VISIBLE, loc_location01, 1000.00), 2.25 + 0.75 * GetUnitAbilityLevel(loc_unit01, 'A21E'))
 		set loc_integer01 = 1
@@ -44886,7 +44867,7 @@ function Func1902 takes nothing returns nothing
 	endif
 	call RemoveLocation(loc_location01)
 	call ForGroup(loc_group01, function Func1901)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_fogmodifier01 = null
 	set loc_unit01 = null
 	set loc_unit02 = null
@@ -45007,11 +44988,11 @@ function Func1914 takes nothing returns nothing
 		set real274 = 999999
 		set real275 = GetSpellTargetX()
 		set real276 = GetSpellTargetY()
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func1913)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_unit02 = unit275
 		set loc_group01 = null
 	endif
@@ -45580,17 +45561,17 @@ function Func1945 takes unit loc_unit01, unit loc_unit02 returns nothing
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0O8')
 	local real loc_real01 = GetUnitX(loc_unit02)
 	local real loc_real02 = GetUnitY(loc_unit02)
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	set integer448 = loc_integer02
 	set unit277 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 300 + 25, Condition(function Func0296))
 	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 300 + 25, Condition(function Func0277))
 	call GroupAddGroup(loc_group02, loc_group01)
 	call ForGroup(loc_group01, function Func1944)
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
 	set loc_trigger01 = null
 	set loc_group01 = null
 	set loc_group02 = null
@@ -45739,19 +45720,19 @@ function Func1953 takes nothing returns boolean
 		set loc_real05 = loc_real02 + 100 * loc_integer03 * Sin(loc_real03 * bj_DEGTORAD)
 		if ModuloInteger(loc_integer02, 10) == 0 then
 		endif
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit278 = loc_unit01
 		set group008 = loc_group02
 		set real277 = (0.6 + 0.4 * loc_integer04) - (loc_integer02 * 0.05)
 		set integer449 = loc_integer04
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real04, loc_real05, 150 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func1952)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_integer03 = loc_integer03 + 1
 	endloop
 	if loc_integer02 == 20 * (0.6 + 0.4 * loc_integer04)then
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -45790,7 +45771,7 @@ function Func1954 takes nothing returns boolean
 		call SaveReal(HY, (loc_integer01), (7), ((loc_real02) * 1.0))
 		call SaveReal(HY, (loc_integer01), (137), ((loc_real03) * 1.0))
 		call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-		call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+		call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 		call TriggerEvaluate(loc_trigger01)
 	elseif loc_integer02 >= (0.4 + 0.6 + 0.4 * loc_integer03) / .05 then
 		set loc_integer04 = 0
@@ -45936,7 +45917,7 @@ function Func1964 takes nothing returns nothing
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local location loc_location01
 	local unit loc_unit02
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if GetSpellTargetUnit() == null then
 		set loc_location01 = GetSpellTargetLoc()
 	else
@@ -45945,7 +45926,7 @@ function Func1964 takes nothing returns nothing
 	call Func1960(bj_RADTODEG * Atan2(GetLocationY(loc_location01) - loc_real02, GetLocationX(loc_location01) - loc_real01), loc_real01, loc_real02)
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 2000, Condition(function Func1959))
 	call ForGroup(loc_group01, function Func1961)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
 	call Func0183(loc_unit02, 'A0OB')
 	call SetUnitAbilityLevel(loc_unit02, 'A0OB', loc_integer01)
@@ -46005,14 +45986,14 @@ function Func1968 takes nothing returns boolean
 endfunction
 
 function Func1969 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 450, Condition(function Func0330))
-	set unit124 = GroupPickRandomUnit(loc_group01)
-	if unit124 != null then
-		call Func1967(loc_unit01, unit124)
+	set tt_unit1 = GroupPickRandomUnit(loc_group01)
+	if tt_unit1 != null then
+		call Func1967(loc_unit01, tt_unit1)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -46039,7 +46020,7 @@ function Func1970 takes nothing returns boolean
 	else
 		call SaveInteger(HY, (loc_integer01), (28), (loc_integer04 + 1))
 		call Func1969(loc_unit01)
-		if unit124 == null then
+		if tt_unit1 == null then
 			call KillUnit(loc_unit02)
 			call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 			call FlushChildHashtable(HY, (loc_integer01))
@@ -46168,13 +46149,13 @@ function Func1978 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit279 = loc_unit01
 		set integer450 = GetUnitAbilityLevel(loc_unit01, 'A05G')
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 275, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func1977)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -46278,12 +46259,12 @@ function Func1987 takes nothing returns nothing
 		set real278 = 999999
 		set real279 = GetSpellTargetX()
 		set real280 = GetSpellTargetY()
-		set unit124 = loc_unit02
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit02
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func0312))
 		call GroupRemoveUnit(loc_group01, loc_unit02)
 		call ForGroup(loc_group01, function Func1986)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_unit01 = unit280
 		set loc_group01 = null
 	endif
@@ -46706,7 +46687,7 @@ endfunction
 
 function Func2013 takes nothing returns nothing
 	local unit loc_unit01 = GetEnumUnit()
-	local unit loc_unit02 = CreateUnit(player005, 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
+	local unit loc_unit02 = CreateUnit(tt_player1, 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
 	call Func0183(loc_unit02, 'A10W')
 	call SetUnitAbilityLevel(loc_unit02, 'A10W', integer451)
 	call IssueTargetOrder(loc_unit02,"drunkenhaze", loc_unit01)
@@ -46734,9 +46715,9 @@ function Func2014 takes nothing returns boolean
 		else
 			set integer451 = 3
 		endif
-		set player005 = loc_player01
+		set tt_player1 = loc_player01
 		call ForGroup(loc_group01, function Func2013)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -46774,13 +46755,13 @@ endfunction
 function Func2016 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
 	call KillUnit(CreateUnit(GetOwningPlayer(loc_unit01), 'h06P', loc_real01, loc_real02, 0))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 700, Condition(function Func0290))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.4, false)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2015))
@@ -46973,7 +46954,7 @@ function Func2028 takes nothing returns nothing
 endfunction
 
 function Func2029 takes nothing returns boolean
-	if(GetUnitTypeId((GetFilterUnit())) == 'u009')or(Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
+	if(GetUnitTypeId((GetFilterUnit())) == 'u009')or(Func0095(GetFilterUnit()) == false and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
 		if(LoadInteger(HY, (integer452), (GetHandleId(GetFilterUnit())))) < integer022 then
 			return true
 		endif
@@ -46988,7 +46969,7 @@ function Func2030 takes nothing returns boolean
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (217)))
 	local integer loc_integer03 = (LoadInteger(HY, (loc_integer01), (216)))
 	local integer loc_integer04 = (LoadInteger(HY, (loc_integer01), (218)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local unit loc_unit02
@@ -46998,12 +46979,12 @@ function Func2030 takes nothing returns boolean
 		set loc_real03 = -1 * loc_real03
 		set loc_real04 = -1 * loc_real04
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set integer022 = loc_integer04
 	set integer452 = GetHandleId(loc_trigger01)
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 700, Condition(function Func2029))
 	set loc_unit02 = GroupPickRandomUnit(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if IsDead(loc_unit01) == false and loc_unit02 != null and(GetUnitTypeId((loc_unit02)) == 'u009') == false then
 		call SaveInteger(HY, (integer452), (GetHandleId(loc_unit02)), ((LoadInteger(HY, (integer452), (GetHandleId(loc_unit02)))) + 1))
 		call Func0153("effects\\Eclipse.mdx", loc_unit02,"origin", 3)
@@ -47095,11 +47076,11 @@ function Func2036 takes nothing returns boolean
 	local group loc_group01
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (17)))
 	if IsDead(loc_unit02)then
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 175 + 25, Condition(function Func0282))
 		set loc_unit02 = GroupPickRandomUnit(loc_group01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
@@ -47130,7 +47111,7 @@ function Func2038 takes nothing returns boolean
 	set real283 = GetUnitAbilityLevel(loc_unit01, 'A0KV') * 75
 	set unit281 = loc_unit01
 	call ForGroup(loc_group01, function Func2037)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	set loc_trigger01 = null
@@ -47151,14 +47132,14 @@ function Func2040 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit281 = loc_unit01
-	set group002 = Func0030()
+	set group002 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 900, Condition(function Func0282))
 	call ForGroup(loc_group01, function Func2039)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = group002
 	call ForGroup(loc_group01, function Func2034)
 	call SaveGroupHandle(HY, (loc_integer01), (22), (loc_group01))
@@ -47166,10 +47147,10 @@ function Func2040 takes nothing returns nothing
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.5, false)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2038))
 	set unit281 = loc_unit01
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 175 + 25, Condition(function Func0282))
 	set loc_unit02 = GroupPickRandomUnit(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = CreateTrigger()
 	set loc_integer01 = GetHandleId(loc_trigger01)
 	call SaveUnitHandle(HY, (loc_integer01), (14), (loc_unit01))
@@ -47228,13 +47209,13 @@ function Func2047 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(loc_timer01)
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (220)))
 	call ForGroup(loc_group01, function Func2046)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func0158(loc_timer01)
 endfunction
 
 function Func2048 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local timer loc_timer01 = CreateTimer()
 	local integer loc_integer01 = GetHandleId(loc_timer01)
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, ('A0KU'))
@@ -47278,11 +47259,11 @@ function Func2052 takes nothing returns nothing
 endfunction
 
 function Func2053 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit002 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 800, Condition(function Func2051))
 	call ForGroup(loc_group01, function Func2052)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2054 takes unit loc_unit01 returns nothing
@@ -47482,7 +47463,7 @@ function Func2066 takes nothing returns nothing
 	local real loc_real06 = Func0120(GetUnitX(loc_unit02) + 30 * Cos(loc_real03))
 	local real loc_real07 = Func0122(GetUnitY(loc_unit02) + 30 * Sin(loc_real03))
 	local boolexpr loc_boolexpr01 = Condition(function Func2064)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit03
 	local unit loc_unit04
 	local real loc_real08
@@ -47492,7 +47473,7 @@ function Func2066 takes nothing returns nothing
 	set unit002 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real06, loc_real07, 140, loc_boolexpr01)
 	set loc_unit04 = FirstOfGroup(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_unit04 != null then
 		if IsUnitType(loc_unit04, UNIT_TYPE_HERO) == true then
 			set integers137[GetPlayerId(GetOwningPlayer(loc_unit01))] = integers137[GetPlayerId(GetOwningPlayer(loc_unit01))] + 1
@@ -47614,7 +47595,7 @@ function Func2073 takes nothing returns boolean
 	local real loc_real05 = (LoadReal(HY, (loc_integer01), (24)))
 	local real loc_real06 = loc_real04 + 1000 * 0.05 * Cos(loc_real01)
 	local real loc_real07 = loc_real05 + 1000 * 0.05 * Sin(loc_real01)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (239)))
 	call SaveReal(HY, (loc_integer01), (23), ((loc_real06) * 1.0))
 	call SaveReal(HY, (loc_integer01), (24), ((loc_real07) * 1.0))
@@ -47624,7 +47605,7 @@ function Func2073 takes nothing returns boolean
 	call GroupEnumUnitsInRange(loc_group02, loc_real02, loc_real03, 200 + 25, Condition(function Func2071))
 	call ForGroup(loc_group02, function Func2072)
 	call GroupAddGroup(loc_group02, loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	set loc_integer02 = loc_integer02 - 1
 	call SaveInteger(HY, (loc_integer01), (194), (loc_integer02))
 	call SetUnitX(loc_unit01, Func0120(loc_real06))
@@ -47639,7 +47620,7 @@ function Func2073 takes nothing returns boolean
 		call SaveBoolean(HY, (GetHandleId(loc_unit01)), (225), (false))
 		call SetUnitInvulnerable(loc_unit01, false)
 		call SetUnitPathing(loc_unit01, true)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -47659,7 +47640,7 @@ function Func2074 takes nothing returns nothing
 	local real loc_real04 = GetLocationY(loc_location01)
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = GetPlayerId(GetOwningPlayer(loc_unit01))
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
 	call UnitAddAbility(loc_unit02, 'A2N4')
@@ -48173,24 +48154,24 @@ function Func2103 takes nothing returns boolean
 		endif
 		call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), 'A24E', false)
 		call ForGroup(loc_group02, function Func2101)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit282 = loc_unit01
 		set unit283 = loc_unit02
 		set group009 = loc_group02
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 1250 + 25, Condition(function Func0274))
 		call ForGroup(loc_group01, function Func2102)
 		set group010 = loc_group01
-		set group011 = Func0030()
+		set group011 = GetAvailableGroup()
 		call ForGroup(loc_group02, function Func2100)
 		call GroupRemoveGroup(group011, loc_group02)
-		call Func0029(loc_group01)
-		call Func0029(group011)
+		call KillGroup(loc_group01)
+		call KillGroup(group011)
 	endif
 	set loc_trigger01 = null
 	set loc_group01 = null
@@ -48212,7 +48193,7 @@ function Func2104 takes nothing returns nothing
 	call TriggerRegisterDeathEvent(loc_trigger01, loc_unit01)
 	call TriggerRegisterUnitEvent(loc_trigger01, loc_unit01, EVENT_UNIT_SPELL_EFFECT)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2103))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer01), (19), (loc_unit02))
 	call SaveEffectHandle(HY, (loc_integer01), (32), (AddSpecialEffectTarget("war3mapImported\\SongOfTheSiren_2.mdx", loc_unit01,"origin")))
@@ -48267,12 +48248,12 @@ function Func2109 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\RipTide09.mdx", loc_real01, loc_real02))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450 + 25, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func2108)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_group01 = null
 endfunction
@@ -48285,15 +48266,15 @@ function Func2111 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = 0
-	set group012 = Func0030()
+	set group012 = GetAvailableGroup()
 	set unit284 = loc_unit01
 	call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(loc_unit01), Condition(function Func2110))
 	call GroupAddUnit(loc_group01, loc_unit01)
 	call ForGroup(loc_group01, function Func2109)
-	call Func0029(loc_group01)
-	call Func0029(group012)
+	call KillGroup(loc_group01)
+	call KillGroup(group012)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -48337,10 +48318,10 @@ endfunction
 
 function Func2117 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set real009 = Func0161(GetUnitX(loc_unit01), GetUnitY(loc_unit01), GetUnitX(unit285), GetUnitY(unit285))
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 700, Condition(function Func2116))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -48348,9 +48329,9 @@ endfunction
 function Func2118 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local unit loc_unit02 = unit285
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 700, Condition(function Func2115))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -48382,7 +48363,7 @@ endfunction
 function Func2121 takes unit loc_unit01 returns integer
 	local real loc_real01 = GetRandomReal(0, 100)
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A088')
-	local boolean loc_boolean01 = Func0367(loc_unit01, integers084[integer320]) != null
+	local boolean loc_boolean01 = Func0367(loc_unit01, Item_Real[integer320]) != null
 	local integer loc_integer02 = 0
 	local integer loc_integer03 = GetPlayerId(GetOwningPlayer(loc_unit01))
 	set loc_boolean01 = false
@@ -48467,17 +48448,17 @@ function Func2122 takes nothing returns nothing
 	set loc_unit03 = null
 endfunction
 
-function Func2123 takes nothing returns nothing
-	local unit loc_unit01 = unit124
-	call Func0183(loc_unit01, 'A2KQ')
-	call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), 'A2KQ', true)
-	set loc_unit01 = null
+function EnableFireBlast takes nothing returns nothing
+	local unit u = tt_unit1
+	call Func0183(u, 'A2KQ')
+	call SetPlayerAbilityAvailable(GetOwningPlayer(u), 'A2KQ', true)
+	set u = null
 endfunction
 
-function Func2124 takes nothing returns nothing
-	local unit loc_unit01 = unit124
-	call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), 'A2KQ', false)
-	set loc_unit01 = null
+function DisableFireBlast takes nothing returns nothing
+	local unit u = tt_unit1
+	call SetPlayerAbilityAvailable(GetOwningPlayer(u), 'A2KQ', false)
+	set u = null
 endfunction
 
 function Func2125 takes nothing returns boolean
@@ -48627,7 +48608,7 @@ endfunction
 function Func2131 takes integer loc_integer01 returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer02 = loc_integer01
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02
 	local unit loc_unit03
 	local integer loc_integer03 = GetSpellAbilityId()
@@ -48660,7 +48641,7 @@ function Func2131 takes integer loc_integer01 returns nothing
 		call Func0183(loc_unit02, 'Aloc')
 		call GroupRemoveUnit(loc_group01, loc_unit03)
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2132 takes nothing returns boolean
@@ -48699,7 +48680,7 @@ endfunction
 
 function Func2137 takes nothing returns nothing
 	local boolexpr loc_boolexpr01 = Condition(function Func2135)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetUnitX(GetSpellTargetUnit())
 	local real loc_real02 = GetUnitY(GetSpellTargetUnit())
 	set real002 = 90 * GetUnitAbilityLevel(GetTriggerUnit(), ('A08N'))
@@ -48708,7 +48689,7 @@ function Func2137 takes nothing returns nothing
 	endif
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 250, loc_boolexpr01)
 	call ForGroup(loc_group01, function Func2136)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2138 takes nothing returns nothing
@@ -48829,7 +48810,7 @@ function Func2145 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A10D')
 	local unit loc_unit02 = GetSpellTargetUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolean loc_boolean01 = Func0028(GetSpellTargetUnit())
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 700, Condition(function Func2144))
 	if loc_boolean01 then
@@ -48837,7 +48818,7 @@ function Func2145 takes nothing returns nothing
 	else
 		call Func2143(loc_unit01, loc_integer01, loc_unit02, true)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_unit02 = null
 	set loc_group01 = null
@@ -48853,10 +48834,10 @@ endfunction
 
 function Func2147 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set real009 = Func0161(GetUnitX(loc_unit01), GetUnitY(loc_unit01), GetUnitX(GetSpellTargetUnit()), GetUnitY(GetSpellTargetUnit()))
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 700, Condition(function Func2146))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -48899,7 +48880,7 @@ endfunction
 
 function Func2151 takes nothing returns nothing
 	local unit loc_unit01 = GetAttacker()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetRandomInt(1, 100)
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0DB')
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, 'A0YK')
@@ -48908,7 +48889,7 @@ function Func2151 takes nothing returns nothing
 	local integer loc_integer05 = 12
 	set integer022 = 0
 	call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(loc_unit01), Condition(function Func2150))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if integer022 < loc_integer04 and GetUnitAbilityLevel(loc_unit01, 'BNdo') == 0 then
 		if IsUnitIllusion(loc_unit01) == false and loc_integer01 <= (loc_integer05 + 2 * loc_integer03)then
 			set loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
@@ -48965,7 +48946,7 @@ endfunction
 
 function Func2157 takes nothing returns boolean
 	if GetUnitTypeId(GetFilterUnit()) == HeroID[21]and GetOwningPlayer(GetFilterUnit()) == GetOwningPlayer(GetTriggerUnit())and IsUnitIllusion(GetFilterUnit()) == false then
-		set unit124 = GetFilterUnit()
+		set tt_unit1 = GetFilterUnit()
 	endif
 	return false
 endfunction
@@ -48973,13 +48954,13 @@ endfunction
 function Func2158 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local unit loc_unit02
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01
 	local real loc_real02
-	set unit124 = null
+	set tt_unit1 = null
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1000, Condition(function Func2157))
-	call Func0029(loc_group01)
-	set loc_unit02 = unit124
+	call KillGroup(loc_group01)
+	set loc_unit02 = tt_unit1
 	if loc_unit02 != null then
 		set loc_real01 = GetUnitX(loc_unit02)
 		set loc_real02 = GetUnitY(loc_unit02)
@@ -49028,11 +49009,11 @@ endfunction
 
 function Func2164 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func2162)
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 650, loc_boolexpr01)
 	call ForGroup(loc_group01, function Func2163)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2165 takes nothing returns nothing
@@ -49057,13 +49038,13 @@ function Func2167 takes nothing returns boolean
 endfunction
 
 function Func2168 takes unit loc_unit01 returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolean loc_boolean01 = false
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 375, Condition(function Func2167))
 	if FirstOfGroup(loc_group01) != null then
 		set loc_boolean01 = true
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return loc_boolean01
 endfunction
@@ -49369,11 +49350,11 @@ function Func2181 takes nothing returns boolean
 			call CleanTrigger(loc_trigger01)
 		endif
 	elseif GetUnitTypeId(loc_unit01) == 'h0BT' then
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 110, Condition(function Func0283))
 		set loc_unit03 = Func0243(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		if loc_unit03 != null then
 			call Func2179(loc_unit02, loc_unit03)
 			set loc_real02 = GetUnitX(loc_unit01)
@@ -49496,11 +49477,11 @@ function Func2187 takes nothing returns nothing
 		set real287 = 999999
 		set real288 = GetSpellTargetX()
 		set real289 = GetSpellTargetY()
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func0297))
 		call ForGroup(loc_group01, function Func2185)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_unit02 = unit288
 		set loc_group01 = null
 	endif
@@ -49539,7 +49520,7 @@ endfunction
 
 function Func2190 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (21)))
 	call SetUnitState(loc_unit02, UNIT_STATE_LIFE, GetUnitState(loc_unit02, UNIT_STATE_LIFE) + loc_real01)
@@ -49578,13 +49559,13 @@ function Func2192 takes nothing returns boolean
 			call UnitRemoveAbility(loc_unit02, 'B0EL')
 		endif
 		call DestroyEffect(AddSpecialEffectTarget("Objects\\Spawnmodels\\NightElf\\EntBirthTarget\\EntBirthTarget.mdl", loc_unit02,"origin"))
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 525, Condition(function Func0307))
 		set unit290 = loc_unit02
 		set real290 = 15 + 15 * loc_integer02
 		call ForGroup(loc_group01, function Func2191)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call Func0109(loc_unit01, loc_unit02, 1, real290)
 	endif
 	set loc_trigger01 = null
@@ -50015,25 +49996,25 @@ function Func2219 takes nothing returns nothing
 	local group loc_group01
 	local integer loc_integer01 = GetUnitAbilityLevel(GetTriggerUnit(), 'A14L')
 	if loc_integer01 > 0 then
-		set loc_group01 = Func0030()
-		set unit124 = GetTriggerUnit()
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = GetTriggerUnit()
 		set unit291 = GetTriggerUnit()
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func0314))
 		call ForGroup(loc_group01, function Func2218)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_group01 = null
 endfunction
 
 function Func2220 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local location loc_location01 = GetSpellTargetLoc()
-	set unit124 = GetTriggerUnit()
+	set tt_unit1 = GetTriggerUnit()
 	set unit291 = GetTriggerUnit()
 	call GroupEnumUnitsInRange(loc_group01, GetLocationX(loc_location01), GetLocationY(loc_location01), 375, Condition(function Func0314))
 	call ForGroup(loc_group01, function Func2218)
 	call Func0155("war3mapImported\\CotS.mdx", GetLocationX(loc_location01), GetLocationY(loc_location01), 5)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 	set loc_group01 = null
 	set loc_location01 = null
@@ -50128,18 +50109,18 @@ function Func2231 takes nothing returns boolean
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (5)))
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (6)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (7)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real03
 	local real loc_real04
 	local real loc_real05
 	local real loc_real06
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 400 + 25, Condition(function Func0296))
 	set unit292 = loc_unit01
 	set real291 = loc_integer02 * 12
 	set unit293 = loc_unit02
 	call ForGroup(loc_group01, function Func2230)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (309))))
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (175))))
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (176))))
@@ -50501,7 +50482,7 @@ endfunction
 function Func2254 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2IS')
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if loc_integer01 == 1 then
 		set integer454 = 'A1F6'
 	elseif loc_integer01 == 2 then
@@ -50513,7 +50494,7 @@ function Func2254 takes nothing returns nothing
 	endif
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 925, Condition(function Func0302))
 	call ForGroup(loc_group01, function Func2253)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\NightElf\\BattleRoar\\RoarCaster.mdl", loc_unit01,"overhead"))
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -50600,14 +50581,14 @@ endfunction
 function Func2262 takes player loc_player01, unit loc_unit01, integer loc_integer01 returns nothing
 	local unit loc_unit02 = CreateUnit(loc_player01, 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
 	local integer loc_integer02
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set integer455 = loc_integer01
-	set unit124 = PlayerHeroArray[GetPlayerId(loc_player01)]
+	set tt_unit1 = PlayerHeroArray[GetPlayerId(loc_player01)]
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 280, Condition(function Func0283))
 	call GroupAddUnit(loc_group01, loc_unit01)
 	set unit294 = loc_unit02
 	call ForGroup(loc_group01, function Func2261)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\StormBolt\\StormBoltMissile.mdl", loc_unit01,"origin"))
 	call DestroyEffect(AddSpecialEffectTarget("Abilities\\Spells\\Human\\StormBolt\\StormBoltMissile.mdl", loc_unit01,"origin"))
 	set loc_unit02 = null
@@ -50710,10 +50691,10 @@ function Func2268 takes nothing returns nothing
 	local unit loc_unit02
 	local unit loc_unit03 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, GetSpellAbilityId())
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(loc_unit01), Condition(function Func2267))
 	set loc_unit02 = FirstOfGroup(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if GetSpellAbilityId() == 'A1EF' then
 		call Func0183(loc_unit03, 'A0AA')
 		call SetUnitAbilityLevel(loc_unit03, 'A0AA', loc_integer01)
@@ -50801,7 +50782,7 @@ function Func2272 takes unit loc_unit01 returns nothing
 endfunction
 
 function Func2273 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitAbilityLevel(GetFilterUnit(), 'B0C1') > 0
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitAbilityLevel(GetFilterUnit(), 'B0C1') > 0
 endfunction
 
 function Func2274 takes nothing returns nothing
@@ -50812,12 +50793,12 @@ function Func2275 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (53)))
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit295 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 2000, Condition(function Func2273))
 	call ForGroup(loc_group01, function Func2274)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_group01 = null
 	set loc_unit01 = null
@@ -50874,7 +50855,7 @@ function Func2280 takes nothing returns nothing
 	local player loc_player01 = GetOwningPlayer(loc_unit01)
 	local location loc_location01 = GetUnitLoc(loc_unit01)
 	local boolexpr loc_boolexpr01 = Condition(function Func2278)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0A5')
 	local integer loc_integer02 = GetHandleId(loc_player01)
 	local integer loc_integer03
@@ -50909,7 +50890,7 @@ function Func2280 takes nothing returns nothing
 		call SaveUnitHandle(HY, (loc_integer02), (333), (bj_lastCreatedUnit))
 		call Func2279()
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2281 takes nothing returns nothing
@@ -50963,7 +50944,7 @@ function Func2287 takes nothing returns nothing
 	local player loc_player01 = GetOwningPlayer(loc_unit01)
 	local location loc_location01 = GetUnitLoc(loc_unit01)
 	local boolexpr loc_boolexpr01 = Condition(function Func2286)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0A5')
 	local integer loc_integer02 = GetHandleId(loc_player01)
 	local boolean loc_boolean01
@@ -51002,7 +50983,7 @@ function Func2287 takes nothing returns nothing
 		set loc_unit02 = null
 	endif
 	call SetUnitAbilityLevel(bj_lastCreatedUnit, 'A09Y', loc_integer01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 	set loc_unit01 = null
 	set loc_player01 = null
@@ -51015,7 +50996,7 @@ function Func2288 takes nothing returns nothing
 	local player loc_player01 = GetOwningPlayer(loc_unit01)
 	local location loc_location01 = GetUnitLoc(loc_unit01)
 	local boolexpr loc_boolexpr01 = Condition(function Func2286)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0A5')
 	local integer loc_integer02 = GetHandleId(loc_player01)
 	local boolean loc_boolean01
@@ -51028,7 +51009,7 @@ function Func2288 takes nothing returns nothing
 			call Func0114(loc_player01, GetObjectName('n0MN'))
 		endif
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 endfunction
 
@@ -51207,10 +51188,10 @@ function Func2308 takes nothing returns boolean
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (6)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (7)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 1000, Condition(function Func2307))
 	call ForGroup(loc_group01, function Func2306)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	set loc_trigger01 = null
@@ -51234,7 +51215,7 @@ function Func2310 takes nothing returns nothing
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'h07Z', loc_real01, loc_real02, 0)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit03
 	set integer457 = GetUnitAbilityLevel(loc_unit01, 'A1AA')
 	if((LoadInteger(HY, (GetHandleId((loc_unit01))), ((4270)))) == 1) == false then
@@ -51247,7 +51228,7 @@ function Func2310 takes nothing returns nothing
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 500, Condition(function Func0278))
 		set integer456 = 1
 		call ForGroup(loc_group01, function Func2309)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call TriggerRegisterTimerEvent(loc_trigger01, 0.65, false)
 		call TriggerAddCondition(loc_trigger01, Condition(function Func2308))
 		call SaveReal(HY, (loc_integer01), (6), ((loc_real01) * 1.0))
@@ -51282,7 +51263,7 @@ function Func2310 takes nothing returns nothing
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 500, Condition(function Func0278))
 		set integer456 = 3
 		call ForGroup(loc_group01, function Func2309)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call TriggerRegisterTimerEvent(loc_trigger01, 0.65, false)
 		call TriggerAddCondition(loc_trigger01, Condition(function Func2308))
 		call SaveReal(HY, (loc_integer01), (6), ((loc_real01) * 1.0))
@@ -51433,23 +51414,23 @@ function Func2317 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (340)))
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local group loc_group03
 	if loc_unit01 == null or GetUnitTypeId(loc_unit01) != 'O015' then
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
-		call Func0029(loc_group01)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group01)
+		call KillGroup(loc_group02)
 		return false
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set integer458 = GetUnitAbilityLevel(loc_unit01, 'A1CD')
 	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 300, Condition(function Func0283))
 	if((LoadInteger(HY, (GetHandleId((loc_unit01))), ((4270)))) == 1) == true then
-		set loc_group03 = Func0030()
+		set loc_group03 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group03, GetUnitX((units025[GetPlayerId(GetOwningPlayer((loc_unit01)))])), GetUnitY((units025[GetPlayerId(GetOwningPlayer((loc_unit01)))])), 300, Condition(function Func0283))
 		call GroupAddGroup(loc_group03, loc_group02)
-		call Func0029(loc_group03)
+		call KillGroup(loc_group03)
 		set loc_group03 = null
 	endif
 	call GroupRemoveGroup(loc_group02, loc_group01)
@@ -51458,7 +51439,7 @@ function Func2317 takes nothing returns boolean
 		call ForGroup(loc_group02, function Func2316)
 	endif
 	call SaveGroupHandle(HY, (loc_integer01), (340), (loc_group02))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -51475,7 +51456,7 @@ function Func2318 takes nothing returns nothing
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.3, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2317))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	call SaveGroupHandle(HY, (loc_integer01), (340), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (340), (GetAvailableGroup()))
 	call SaveTriggerHandle(HY, (GetHandleId(loc_unit01)), (338), (loc_trigger01))
 	call SaveBoolean(HY, (GetHandleId(loc_unit01)), (339), (true))
 	set loc_integer02 = 0
@@ -51543,13 +51524,13 @@ function Func2322 takes nothing returns boolean
 	local integer loc_integer02 = 0
 	local real loc_real04
 	local real loc_real05
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, 'A1A1')
 	local integer loc_integer04 = (LoadInteger(HY, (loc_integer01), (34)))
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit297 = loc_unit01
 	set unit296 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
 	call Func0183(unit296, 'A1CE')
@@ -51573,8 +51554,8 @@ function Func2322 takes nothing returns boolean
 	set real294 = loc_real04
 	set real295 = loc_real05
 	call ForGroup(loc_group02, function Func2321)
-	call Func0029(loc_group02)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group02)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	return false
@@ -51874,7 +51855,7 @@ function Func2334 takes nothing returns boolean
 	call SetUnitX(loc_unit03, GetUnitX(loc_unit02))
 	call SetUnitY(loc_unit03, GetUnitY(loc_unit02))
 	if GetTriggerEventId() == EVENT_UNIT_DEATH then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call ShowUnit(loc_unit02, false)
@@ -51898,7 +51879,7 @@ function Func2334 takes nothing returns boolean
 		endif
 	elseif Func0141(loc_real03, loc_real04, loc_real05, loc_real06) < 100 then
 		call Func2330(loc_unit01, loc_unit02, loc_unit03, (LoadInteger(HY, (loc_integer01), (344))), (LoadInteger(HY, (loc_integer01), (345))))
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		if(LoadInteger(HY, (GetHandleId(loc_unit01)), (704))) == 0 or(LoadInteger(HY, (GetHandleId(loc_unit01)), (704))) == 'A1A8' then
@@ -51911,17 +51892,17 @@ function Func2334 takes nothing returns boolean
 			call IssueImmediateOrder(loc_unit02,"stop")
 			call SetUnitAnimationByIndex(loc_unit02, 3)
 		endif
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		set integer459 = loc_integer02
 		set integer460 = (LoadInteger(HY, (loc_integer01), (344)))
 		set integer461 = (LoadInteger(HY, (loc_integer01), (345)))
 		set real296 = 80 + 40 * loc_integer02
 		set unit298 = loc_unit01
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set group013 = loc_group01
 		call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 300, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func2331)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		set loc_group02 = null
 		call SaveInteger(HY, (loc_integer01), (344), (integer460))
 		call SaveInteger(HY, (loc_integer01), (345), (integer461))
@@ -51938,17 +51919,17 @@ function Func2334 takes nothing returns boolean
 	else
 		call SetUnitMoveSpeed(loc_unit02, GetUnitMoveSpeed(loc_unit01))
 		call UnitRemoveAbility(loc_unit02, 'Aloc')
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		set integer459 = loc_integer02
 		set integer460 = (LoadInteger(HY, (loc_integer01), (344)))
 		set integer461 = (LoadInteger(HY, (loc_integer01), (345)))
 		set real296 = 80 + 40 * loc_integer02
 		set unit298 = loc_unit01
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set group013 = loc_group01
 		call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 300, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func2331)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		set loc_group02 = null
 		call SaveInteger(HY, (loc_integer01), (344), (integer460))
 		call SaveInteger(HY, (loc_integer01), (345), (integer461))
@@ -52027,7 +52008,7 @@ function Func2335 takes nothing returns nothing
 	call SaveUnitHandle(HY, (loc_integer01), (19), (loc_unit03))
 	call SaveReal(HY, (loc_integer01), (282), ((loc_real01) * 1.0))
 	call SaveReal(HY, (loc_integer01), (283), ((loc_real02) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call SaveInteger(HY, (loc_integer01), (343), (2))
 	call SaveReal(HY, (loc_integer01), (342), (((TimerGetElapsed(GlobalTimer)) - 5) * 1.0))
 	call SaveBoolean(HY, (loc_integer01), (249), (false))
@@ -52161,12 +52142,12 @@ function Func2353 takes nothing returns boolean
 endfunction
 
 function Func2354 takes player loc_player01, integer loc_integer01, real loc_real01, real loc_real02 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set player022 = loc_player01
 	set integer462 = loc_integer01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 716, Condition(function Func2353))
 	call ForGroup(loc_group01, function Func2348)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -52179,60 +52160,60 @@ function Func2355 takes nothing returns nothing
 	if(GetSpellAbilityId() == 'A0AM')then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
 		call Func0176(GetOwningPlayer(GetTriggerUnit()), 3, loc_real01, loc_real02, 500)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 425, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2349)
 		call RemoveUnit(GetTriggerUnit())
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if(GetSpellAbilityId() == 'A0A3')then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
 		call Func0176(GetOwningPlayer(GetTriggerUnit()), 3, loc_real01, loc_real02, 500)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 435, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2350)
 		call RemoveUnit(GetTriggerUnit())
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if(GetSpellAbilityId() == 'A0A4')then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
 		call Func0176(GetOwningPlayer(GetTriggerUnit()), 3, loc_real01, loc_real02, 500)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2351)
 		call RemoveUnit(GetTriggerUnit())
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if(GetSpellAbilityId() == 'A1FZ')then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
 		call Func0176(GetOwningPlayer(GetTriggerUnit()), 3, loc_real01, loc_real02, 500)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2352)
 		call RemoveUnit(GetTriggerUnit())
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if(GetSpellAbilityId() == 'A02T')then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set bj_groupEnumTypeId = 'o018'
 		call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(GetTriggerUnit()), filterGetUnitsOfPlayerAndTypeId)
 		call ForGroup(loc_group01, function Func2348)
-		call Func0029(loc_group01)
-		set loc_group01 = Func0030()
+		call KillGroup(loc_group01)
+		set loc_group01 = GetAvailableGroup()
 		set bj_groupEnumTypeId = 'o002'
 		call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(GetTriggerUnit()), filterGetUnitsOfPlayerAndTypeId)
 		call ForGroup(loc_group01, function Func2348)
-		call Func0029(loc_group01)
-		set loc_group01 = Func0030()
+		call KillGroup(loc_group01)
+		set loc_group01 = GetAvailableGroup()
 		set bj_groupEnumTypeId = 'o00B'
 		call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(GetTriggerUnit()), filterGetUnitsOfPlayerAndTypeId)
 		call ForGroup(loc_group01, function Func2348)
-		call Func0029(loc_group01)
-		set loc_group01 = Func0030()
+		call KillGroup(loc_group01)
+		set loc_group01 = GetAvailableGroup()
 		set bj_groupEnumTypeId = 'o01B'
 		call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(GetTriggerUnit()), filterGetUnitsOfPlayerAndTypeId)
 		call ForGroup(loc_group01, function Func2348)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if(GetSpellAbilityId() == 'A1WF')then
 		set loc_real01 = GetSpellTargetX()
@@ -52253,31 +52234,31 @@ function Func2356 takes nothing returns nothing
 	local group loc_group01
 	if loc_integer01 == 'o018' then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 425, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2349)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if loc_integer01 == 'o002' then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 435, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2350)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if loc_integer01 == 'o00B' then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2351)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if loc_integer01 == 'o01B' then
 		call Func0155("Abilities\\Spells\\Human\\FlameStrike\\FlameStrike1.mdl", loc_real01, loc_real02, 5)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450, Condition(function Func2347))
 		call ForGroup(loc_group01, function Func2352)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 endfunction
 
@@ -52308,13 +52289,13 @@ function Func2359 takes nothing returns boolean
 endfunction
 
 function Func2360 takes nothing returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set integer463 = 0
 	call GroupEnumUnitsOfPlayer(loc_group01, GetTriggerPlayer(), Condition(function Func2359))
 	if integer463 > 0 then
 		call DisplayTimedTextToPlayer(GetTriggerPlayer(), 0, real003, 10.00, GetObjectName('n0FC') + ": " + I2S(integer463))
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return false
 endfunction
@@ -52358,7 +52339,7 @@ function Func2362 takes nothing returns boolean
 endfunction
 
 function Func2363 takes nothing returns boolean
-	return(GetUnitTypeId(GetFilterUnit()) == 'H00E' or GetUnitTypeId(GetFilterUnit()) == 'H00G' or GetUnitTypeId(GetFilterUnit()) == 'H00F' or GetUnitTypeId(GetFilterUnit()) == 'E00P' or GetUnitTypeId(GetFilterUnit()) == 'N00B' or GetUnitTypeId(GetFilterUnit()) == 'UC60' or GetUnitTypeId(GetFilterUnit()) == 'EC77' or GetUnitTypeId(GetFilterUnit()) == 'U00P' or GetUnitTypeId(GetFilterUnit()) == 'E02N' or GetUnitTypeId(GetFilterUnit()) == 'E02O' or GetUnitTypeId(GetFilterUnit()) == 'O016' or GetUnitTypeId(GetFilterUnit()) == 'O017' or GetUnitTypeId(GetFilterUnit()) == 'E02F' or GetUnitTypeId(GetFilterUnit()) == 'H0DO' or GetUnitTypeId(GetFilterUnit()) == 'N0M7' or GetUnitTypeId(GetFilterUnit()) == 'N0MB' or GetUnitTypeId(GetFilterUnit()) == 'N0MC' or GetUnitTypeId(GetFilterUnit()) == 'N0MO' or GetUnitTypeId(GetFilterUnit()) == 'N0MA' or GetUnitTypeId(GetFilterUnit()) == 'N0MW')and IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit124))
+	return(GetUnitTypeId(GetFilterUnit()) == 'H00E' or GetUnitTypeId(GetFilterUnit()) == 'H00G' or GetUnitTypeId(GetFilterUnit()) == 'H00F' or GetUnitTypeId(GetFilterUnit()) == 'E00P' or GetUnitTypeId(GetFilterUnit()) == 'N00B' or GetUnitTypeId(GetFilterUnit()) == 'UC60' or GetUnitTypeId(GetFilterUnit()) == 'EC77' or GetUnitTypeId(GetFilterUnit()) == 'U00P' or GetUnitTypeId(GetFilterUnit()) == 'E02N' or GetUnitTypeId(GetFilterUnit()) == 'E02O' or GetUnitTypeId(GetFilterUnit()) == 'O016' or GetUnitTypeId(GetFilterUnit()) == 'O017' or GetUnitTypeId(GetFilterUnit()) == 'E02F' or GetUnitTypeId(GetFilterUnit()) == 'H0DO' or GetUnitTypeId(GetFilterUnit()) == 'N0M7' or GetUnitTypeId(GetFilterUnit()) == 'N0MB' or GetUnitTypeId(GetFilterUnit()) == 'N0MC' or GetUnitTypeId(GetFilterUnit()) == 'N0MO' or GetUnitTypeId(GetFilterUnit()) == 'N0MA' or GetUnitTypeId(GetFilterUnit()) == 'N0MW')and IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(tt_unit1))
 endfunction
 
 function Func2364 takes nothing returns boolean
@@ -52371,8 +52352,8 @@ function Func2364 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 200, Condition(function Func2363))
 		if FirstOfGroup(loc_group01) != null then
 			call FlushChildHashtable(HY, (loc_integer01))
@@ -52380,7 +52361,7 @@ function Func2364 takes nothing returns boolean
 			call SetUnitExploded(loc_unit01, true)
 			call KillUnit(loc_unit01)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -52390,7 +52371,7 @@ endfunction
 
 function Func2365 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetOwningPlayer(GetTriggerUnit()))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (346)))
 	local integer loc_integer03 = 0
 	local unit loc_unit01
@@ -52426,7 +52407,7 @@ function Func2365 takes nothing returns nothing
 		call ExplodeUnitBJ(loc_unit01)
 	endif
 	call SaveInteger(HY, (loc_integer01), (346), (loc_integer02))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2366 takes nothing returns nothing
@@ -52476,7 +52457,7 @@ function Func2368 takes nothing returns nothing
 	set loc_integers01[3] = 0
 	set loc_integers01[4] = 0
 	set loc_integers01[5] = 0
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	loop
 		exitwhen loc_integer01 > loc_integer02
 		set loc_integer03 = Func0372(UnitItemInSlot(GetTriggerUnit(), loc_integer01))
@@ -52500,7 +52481,7 @@ function Func2368 takes nothing returns nothing
 		endif
 		set loc_integer01 = loc_integer01 + 1
 	endloop
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	set loc_item01 = null
 endfunction
 
@@ -52574,13 +52555,13 @@ function Func2376 takes nothing returns nothing
 endfunction
 
 function Func2377 takes unit loc_unit01, real loc_real01, real loc_real02, real loc_real03, real loc_real04 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real03, Condition(function Func0296))
 	set unit299 = loc_unit01
 	set real297 = loc_real04
 	call ForGroup(loc_group01, function Func2376)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -52593,15 +52574,15 @@ endfunction
 
 function Func2379 takes unit loc_unit01 returns unit
 	local unit loc_unit02 = null
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 275, Condition(function Func2378))
 	call GroupRemoveUnit(loc_group01, loc_unit01)
 	set loc_unit02 = GroupPickRandomUnit(loc_group01)
-	call Func0029(loc_group01)
-	set unit124 = loc_unit02
+	call KillGroup(loc_group01)
+	set tt_unit1 = loc_unit02
 	set loc_unit02 = null
 	set loc_group01 = null
-	return unit124
+	return tt_unit1
 endfunction
 
 function Func2380 takes nothing returns boolean
@@ -52658,7 +52639,7 @@ function Func2380 takes nothing returns boolean
 		call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
 		if IsUnitAlly(loc_unit02, GetOwningPlayer(loc_unit01))then
 		else
-			if(Func0367((loc_unit01), integers084[integer355]) != null)then
+			if(Func0367((loc_unit01), Item_Real[integer355]) != null)then
 				call Func0109(loc_unit01, loc_unit02, 1, (0.2 + 0.15 * (GetUnitAbilityLevel(loc_unit01, 'A0CY') + 1)) * 75 * GetUnitAbilityLevel(loc_unit01, 'A0BZ'))
 			else
 				call Func0109(loc_unit01, loc_unit02, 1, (0.2 + 0.15 * GetUnitAbilityLevel(loc_unit01, 'A0CY')) * 75 * GetUnitAbilityLevel(loc_unit01, 'A0BZ'))
@@ -52816,7 +52797,7 @@ function Func2387 takes nothing returns boolean
 			call CleanTrigger(loc_trigger01)
 		endif
 		call UnitRemoveAbility(loc_unit01, 'A1VG')
-		if(Func0367((loc_unit01), integers084[integer355]) != null)then
+		if(Func0367((loc_unit01), Item_Real[integer355]) != null)then
 			call Func0183(loc_unit01, 'A1VH')
 		endif
 		call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), 'A1VH', true)
@@ -52878,7 +52859,7 @@ function Func2390 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	if(Func0367((loc_unit01), integers084[integer355]) != null)then
+	if(Func0367((loc_unit01), Item_Real[integer355]) != null)then
 		if((LoadInteger(HY, (GetHandleId((loc_unit01))), ((4296)))) == 1) == false then
 			if GetUnitAbilityLevel(loc_unit01, 'A1VH') == 0 and GetUnitAbilityLevel(loc_unit01, 'A1VG') == 0 then
 				call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), 'A1VH', true)
@@ -53046,7 +53027,7 @@ function Func2403 takes nothing returns boolean
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (7)))
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0LL')
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call Func0183(loc_unit02, 'A10J')
 	call SetUnitAbilityLevel(loc_unit02, 'A10J', loc_integer02)
 	set unit301 = loc_unit01
@@ -53060,7 +53041,7 @@ function Func2403 takes nothing returns boolean
 		set real298 = 75
 	endif
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 275 + 24, Condition(function Func2402))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if GetTriggerEvalCount(loc_trigger01) > 6 then
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
@@ -53119,12 +53100,12 @@ function Func2407 takes nothing returns nothing
 endfunction
 
 function Func2408 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set integer464 = GetUnitAbilityLevel(GetTriggerUnit(), 'A1EJ')
 	set real299 = 7
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func0311))
 	call ForGroup(loc_group01, function Func2407)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -53264,7 +53245,7 @@ function Func2423 takes nothing returns boolean
 	local real loc_real04 = (LoadReal(HY, (loc_integer01), (433)))
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (5)))
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (187)))
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	if GetTriggerEvalCount(loc_trigger01) <= 50 then
 		set loc_real03 = loc_real03 + 20
 		set loc_real04 = loc_real04 + 7
@@ -53281,22 +53262,22 @@ function Func2423 takes nothing returns boolean
 	set loc_real03 = loc_real03 + 180
 	call SetUnitX(loc_unit04, Func0120(loc_real01 + loc_real04 * Cos(loc_real03 * bj_DEGTORAD)))
 	call SetUnitY(loc_unit04, Func0122(loc_real02 + loc_real04 * Sin(loc_real03 * bj_DEGTORAD)))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit302 = loc_unit01
 	set unit303 = loc_unit02
 	set group014 = loc_group01
 	set integer465 = loc_integer02
 	call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit03), GetUnitY(loc_unit03), 125, Condition(function Func0283))
 	call ForGroup(loc_group02, function Func2422)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit04), GetUnitY(loc_unit04), 125, Condition(function Func0283))
 	call ForGroup(loc_group02, function Func2422)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if GetTriggerEvalCount(loc_trigger01) > 100 then
 		call KillUnit(loc_unit03)
 		call KillUnit(loc_unit04)
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -53325,7 +53306,7 @@ function Func2424 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (13), ((0) * 1.0))
 	call SaveReal(HY, (loc_integer01), (433), ((0) * 1.0))
 	call SaveInteger(HY, (loc_integer01), (5), (GetUnitAbilityLevel(loc_unit01, 'A21N')))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.03, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2423))
 	set loc_unit01 = null
@@ -53393,55 +53374,55 @@ function Func2427 takes nothing returns boolean
 		set loc_real01 = GetUnitX(loc_unit07)
 		set loc_real02 = GetUnitY(loc_unit07)
 		set unit304 = loc_unit07
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 125, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func2426)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit07 = loc_unit03
 	if loc_unit07 != null and IsDead(loc_unit07) == false then
 		set loc_real01 = GetUnitX(loc_unit07)
 		set loc_real02 = GetUnitY(loc_unit07)
 		set unit304 = loc_unit07
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 125, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func2426)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit07 = loc_unit04
 	if loc_unit07 != null and IsDead(loc_unit07) == false then
 		set loc_real01 = GetUnitX(loc_unit07)
 		set loc_real02 = GetUnitY(loc_unit07)
 		set unit304 = loc_unit07
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 125, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func2426)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit07 = loc_unit05
 	if loc_unit07 != null and IsDead(loc_unit07) == false then
 		set loc_real01 = GetUnitX(loc_unit07)
 		set loc_real02 = GetUnitY(loc_unit07)
 		set unit304 = loc_unit07
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 125, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func2426)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit07 = loc_unit06
 	if loc_unit07 != null and IsDead(loc_unit07) == false then
 		set loc_real01 = GetUnitX(loc_unit07)
 		set loc_real02 = GetUnitY(loc_unit07)
 		set unit304 = loc_unit07
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 125, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func2426)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	if GetTriggerEvalCount(loc_trigger01) > 20 then
 		call KillUnit(loc_unit02)
@@ -53450,7 +53431,7 @@ function Func2427 takes nothing returns boolean
 		call KillUnit(loc_unit05)
 		call KillUnit(loc_unit06)
 		call KillUnit(loc_unit08)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -53492,7 +53473,7 @@ function Func2428 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (7), ((loc_real02) * 1.0))
 	call SaveReal(HY, (loc_integer01), (433), ((0) * 1.0))
 	call SaveReal(HY, (loc_integer01), (13), ((loc_real05) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call SaveInteger(HY, (loc_integer01), (5), (GetUnitAbilityLevel(loc_unit01, 'A21M')))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.03, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2427))
@@ -53745,7 +53726,7 @@ function Func2443 takes unit loc_unit01, real loc_real01, real loc_real02, integ
 endfunction
 
 function Func2444 takes nothing returns boolean
-	if(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitInGroup(GetFilterUnit(), group015) == false then
+	if(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitInGroup(GetFilterUnit(), group015) == false then
 		call GroupAddUnit(group015, GetFilterUnit())
 		if GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) > real300 then
 			call SetUnitState(GetFilterUnit(), UNIT_STATE_LIFE, GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) - (real300))
@@ -53768,17 +53749,17 @@ function Func2445 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (133)))
 	local group loc_group02
 	if GetTriggerEvalCount(loc_trigger01) > 10 then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
 		set group015 = loc_group01
 		set unit305 = loc_unit01
 		set real300 = loc_integer02 * 20 + 10
-		set unit124 = loc_unit01
-		set loc_group02 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group02, loc_real02, loc_real03, 325, Condition(function Func2444))
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		set loc_group02 = null
 		call Func2443(loc_unit02, loc_real02, loc_real03, loc_integer02)
 		if ModuloInteger(GetTriggerEvalCount(loc_trigger01), 2) == 0 then
@@ -53817,7 +53798,7 @@ function Func2446 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (6), ((loc_real01) * 1.0))
 	call SaveReal(HY, (loc_integer01), (7), ((loc_real02) * 1.0))
 	call SaveReal(HY, (loc_integer01), (13), ((loc_real05) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (133), (GetAvailableGroup()))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.1, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2445))
 	set loc_trigger01 = null
@@ -54017,7 +53998,7 @@ function Func2463 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real03 = (LoadReal(HY, (GetHandleId(loc_unit01)), (786)))
 	local real loc_real04 = (TimerGetElapsed(GlobalTimer)) - loc_real03
 	local integer loc_integer01 = 1
@@ -54034,7 +54015,7 @@ function Func2463 takes nothing returns nothing
 	call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Items\\TomeOfRetraining\\TomeOfRetrainingCaster.mdl", loc_real01, loc_real02))
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 400, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func2462)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func2458(loc_unit01)
 	call RemoveUnit(loc_unit01)
 	set loc_group01 = null
@@ -54042,27 +54023,27 @@ function Func2463 takes nothing returns nothing
 endfunction
 
 function Func2464 takes nothing returns boolean
-	return GetOwningPlayer(GetFilterUnit()) == player005 and GetUnitTypeId(GetFilterUnit()) == 'e020'
+	return GetOwningPlayer(GetFilterUnit()) == tt_player1 and GetUnitTypeId(GetFilterUnit()) == 'e020'
 endfunction
 
 function Func2465 takes nothing returns nothing
 	local real loc_real01 = Func0170(GetUnitX(GetEnumUnit()), GetUnitY(GetEnumUnit()), real009, real010)
-	local real loc_real02 = Func0170(GetUnitX(unit124), GetUnitY(unit124), real009, real010)
+	local real loc_real02 = Func0170(GetUnitX(tt_unit1), GetUnitY(tt_unit1), real009, real010)
 	if loc_real01 < loc_real02 then
-		set unit124 = GetEnumUnit()
+		set tt_unit1 = GetEnumUnit()
 	endif
 endfunction
 
 function Func2466 takes nothing returns nothing
-	local group loc_group01 = Func0030()
-	set player005 = GetOwningPlayer(GetTriggerUnit())
+	local group loc_group01 = GetAvailableGroup()
+	set tt_player1 = GetOwningPlayer(GetTriggerUnit())
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()), 9000, Condition(function Func2464))
-	set unit124 = FirstOfGroup(loc_group01)
+	set tt_unit1 = FirstOfGroup(loc_group01)
 	set real009 = GetUnitX(GetTriggerUnit())
 	set real010 = GetUnitY(GetTriggerUnit())
 	call ForGroup(loc_group01, function Func2465)
-	call IssueImmediateOrder((unit124),"locustswarm")
-	call Func0029(loc_group01)
+	call IssueImmediateOrder((tt_unit1),"locustswarm")
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -54144,7 +54125,7 @@ function Func2475 takes unit loc_unit01, unit loc_unit02, real loc_real01, real 
 	local real loc_real08
 	local real loc_real09
 	local real loc_real10
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolean loc_boolean01
 	local boolean loc_boolean02
 	set loc_real06 = GetUnitX(loc_unit02) - GetUnitX(loc_unit01)
@@ -54152,7 +54133,7 @@ function Func2475 takes unit loc_unit01, unit loc_unit02, real loc_real01, real 
 	set loc_real08 = Pow(Pow(loc_real06, 2) + Pow(loc_real07, 2), 0.5)
 	set loc_real09 = GetUnitX(loc_unit02) + (loc_real04 / 2 - 25) * (loc_real06 / loc_real08)
 	set loc_real10 = GetUnitY(loc_unit02) + (loc_real04 / 2 - 25) * (loc_real07 / loc_real08)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set real009 = loc_real01
 	call GroupEnumUnitsInRange(loc_group01, loc_real09, loc_real10, Pow(Pow(loc_real04 / 2, 2) + Pow(loc_real05 / 2, 2), 0.5), Condition(function Func0283))
 	call GroupRemoveUnit(loc_group01, loc_unit02)
@@ -54168,7 +54149,7 @@ function Func2475 takes unit loc_unit01, unit loc_unit02, real loc_real01, real 
 		call GroupRemoveUnit(loc_group01, loc_unit03)
 		set loc_unit03 = FirstOfGroup(loc_group01)
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit03 = null
 	set loc_group01 = null
 endfunction
@@ -54558,7 +54539,7 @@ endfunction
 
 function Func2503 takes nothing returns nothing
 	local destructable loc_destructable01 = GetEnumDestructable()
-	local real loc_real01 = Atan2(GetDestructableY(loc_destructable01) - GetUnitY(unit124), GetDestructableX(loc_destructable01) - GetUnitX(unit124))
+	local real loc_real01 = Atan2(GetDestructableY(loc_destructable01) - GetUnitY(tt_unit1), GetDestructableX(loc_destructable01) - GetUnitX(tt_unit1))
 	local real loc_real02 = RAbsBJ((real009 - loc_real01) * bj_RADTODEG)
 	if(Func0094(loc_destructable01)or GetDestructableTypeId(loc_destructable01) == 'B005')and GetDestructableLife(loc_destructable01) > 1 and loc_real02 < real301 and loc_real02 < (real302 - 5)then
 		set real301 = loc_real02
@@ -54572,7 +54553,7 @@ function Func2504 takes unit loc_unit01, unit loc_unit02, real loc_real01 return
 	local real loc_real03 = GetUnitY(loc_unit01)
 	local rect loc_rect01 = Rect(loc_real02 - real304, loc_real03 - real304, loc_real02 + real304, loc_real03 + real304)
 	set real301 = 9999
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set destructable001 = null
 	call EnumDestructablesInRect(loc_rect01, Condition(function Func0011), function Func2503)
 	call RemoveRect(loc_rect01)
@@ -54582,7 +54563,7 @@ endfunction
 
 function Func2505 takes nothing returns nothing
 	local unit loc_unit01 = GetEnumUnit()
-	local real loc_real01 = Atan2(GetUnitY(loc_unit01) - GetUnitY(unit124), GetUnitX(loc_unit01) - GetUnitX(unit124))
+	local real loc_real01 = Atan2(GetUnitY(loc_unit01) - GetUnitY(tt_unit1), GetUnitX(loc_unit01) - GetUnitX(tt_unit1))
 	local real loc_real02 = RAbsBJ((real009 - loc_real01) * bj_RADTODEG)
 	if loc_real02 < real301 and loc_real02 < real302 and loc_unit01 != unit125 then
 		set real301 = loc_real02
@@ -54592,15 +54573,15 @@ function Func2505 takes nothing returns nothing
 endfunction
 
 function Func2506 takes unit loc_unit01, unit loc_unit02, real loc_real01 returns unit
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit306 = null
 	set real301 = 9999
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set real009 = Atan2(GetUnitY(loc_unit02) - real306, GetUnitX(loc_unit02) - real305)
 	set unit125 = loc_unit02
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), real303, Condition(function Func0290))
 	call ForGroup(loc_group01, function Func2505)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return unit306
 endfunction
@@ -54756,7 +54737,7 @@ function Func2513 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (187)))
 	local real loc_real05 = Func0120(GetUnitX(loc_unit01) + (60 * Pow(0.9, loc_integer03) * Pow(0.99, loc_integer02)) * Cos(loc_real03))
 	local real loc_real06 = Func0122(GetUnitY(loc_unit01) + (60 * Pow(0.9, loc_integer03) * Pow(0.99, loc_integer02)) * Sin(loc_real03))
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local real loc_real07
 	if GetTriggerEvalCount(loc_trigger01) > 2 then
 		set loc_real07 = 150
@@ -54771,16 +54752,16 @@ function Func2513 takes nothing returns boolean
 	set real307 = loc_real04
 	set integer467 = loc_integer02
 	set integer468 = loc_integer03
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group02, loc_real05, loc_real06, loc_real07, Condition(function Func0283))
 	call ForGroup(loc_group02, function Func2512)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	call SaveInteger(HY, (loc_integer01), (355), (integer468))
 	call SetUnitX(loc_unit01, loc_real05)
 	call SetUnitY(loc_unit01, loc_real06)
 	if GetTriggerEvalCount(loc_trigger01) > 29 then
 		call KillUnit(loc_unit01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -54814,7 +54795,7 @@ function Func2514 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (20), ((loc_real05) * 1.0))
 	call SaveInteger(HY, (loc_integer01), (354), (0))
 	call SaveInteger(HY, (loc_integer01), (355), (0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.02, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2513))
 	set loc_unit01 = null
@@ -55006,7 +54987,7 @@ function Func2524 takes nothing returns nothing
 endfunction
 
 function Func2525 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit308 = GetTriggerUnit()
 	if GetSpellAbilityId() == 'A29G' then
 		set integer469 = GetUnitAbilityLevel(GetTriggerUnit(), 'A29G') + 4
@@ -55015,7 +54996,7 @@ function Func2525 takes nothing returns nothing
 	endif
 	call GroupEnumUnitsInRect(loc_group01, bj_mapInitialPlayableArea, Condition(function Func2523))
 	call ForGroup(loc_group01, function Func2524)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -55071,14 +55052,14 @@ endfunction
 
 function Func2531 takes nothing returns nothing
 	local location loc_location01 = GetUnitLoc(GetTriggerUnit())
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
 	local boolexpr loc_boolexpr01 = Condition(function Func2530)
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 1025, loc_boolexpr01)
 	call ForGroup(loc_group01, function Func2529)
 	call RemoveLocation(loc_location01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2532 takes nothing returns nothing
@@ -55226,13 +55207,13 @@ function Func2544 takes nothing returns nothing
 endfunction
 
 function Func2545 takes unit loc_unit01, unit loc_unit02, integer loc_integer01 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set integer470 = loc_integer01
 	set unit309 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 700, Condition(function Func0282))
 	call ForGroup(loc_group01, function Func2544)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -55560,12 +55541,12 @@ function Func2564 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set integer471 = 0
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func2563)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if integer471 == 0 then
 		if GetUnitAbilityLevel(loc_unit01, 'B0EZ') > 0 then
 			call UnitRemoveAbility(loc_unit01, 'A2AR')
@@ -55719,7 +55700,7 @@ function Func2572 takes nothing returns boolean
 		call SaveInteger(HY, (loc_integer01), (34), (loc_integer04))
 		if loc_integer04 == (4 + 2 * loc_integer03)then
 			call UnitRemoveAbility(loc_unit01, 'A0I5')
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			call Func2570(loc_integer01, loc_integer02)
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
@@ -55752,10 +55733,10 @@ function Func2574 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0I6')
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call Func0183(loc_unit01, 'A0I5')
 	call SetUnitAbilityLevel(loc_unit01, 'A0I5', loc_integer02)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit310 = loc_unit01
 	set integer022 = 0
 	set integer025 = loc_integer01
@@ -55797,14 +55778,14 @@ function Func2577 takes nothing returns nothing
 endfunction
 
 function Func2578 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 300, Condition(function Func0281))
 	call ForGroup(loc_group01, function Func2577)
 	call SetUnitAnimation(loc_unit01,"spin")
 	call Func0207(loc_unit01, 0.6)
 	call Func0044(loc_unit01, 4267, 0.6 - 0.05 * GetUnitAbilityLevel(GetTriggerUnit(), 'A0C6'))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -55858,10 +55839,10 @@ function Func2583 takes nothing returns nothing
 		call UnitRemoveAbility(loc_unit02, 'Aetl')
 		call UnitDamageTarget(loc_unit03, loc_unit02, 100000000.00, true, false, ATTACK_TYPE_MELEE, DAMAGE_TYPE_NORMAL, WEAPON_TYPE_WHOKNOWS)
 		call DestroyEffect(AddSpecialEffectTarget("war3mapImported\\AxeUltiMSFX_01.mdx", loc_unit01,"origin"))
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 625, Condition(function Func0308))
 		call ForGroup(loc_group01, function Func2581)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 endfunction
@@ -56269,7 +56250,7 @@ function Func2604 takes nothing returns nothing
 endfunction
 
 function Func2605 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
@@ -56287,7 +56268,7 @@ function Func2605 takes nothing returns nothing
 	call DestroyEffect(AddSpecialEffect("Objects\\Spawnmodels\\Undead\\UndeadBlood\\UndeadBloodGargoyle.mdl", loc_real01 - 130, loc_real02 + 130))
 	call DestroyEffect(AddSpecialEffect("Objects\\Spawnmodels\\Undead\\UndeadBlood\\UndeadBloodGargoyle.mdl", loc_real01 - 130, loc_real02 - 130))
 	call RemoveLocation(loc_location01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_location01 = null
 	set loc_unit01 = null
@@ -56439,7 +56420,7 @@ function Func2610 takes nothing returns boolean
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (19)))
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (137)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit03
 	local real loc_real02 = GetUnitX(loc_unit01)
 	local real loc_real03 = GetUnitY(loc_unit01)
@@ -56449,10 +56430,10 @@ function Func2610 takes nothing returns boolean
 	set loc_real03 = Func0122(loc_real03 + 36 * Sin(loc_real01))
 	call SetUnitX(loc_unit01, loc_real02)
 	call SetUnitY(loc_unit01, loc_real03)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real02, loc_real03, 125, Condition(function Func0290))
 	set loc_unit03 = FirstOfGroup(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if Func0141(loc_real02, loc_real03, loc_real04, loc_real05) < 40 or GetTriggerEvalCount(loc_trigger01) > 100 then
 		set loc_unit03 = null
 		set loc_real02 = loc_real04
@@ -56467,7 +56448,7 @@ function Func2610 takes nothing returns boolean
 			set real308 = GetUnitX(loc_unit03)
 			set real309 = GetUnitY(loc_unit03)
 		endif
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real02, loc_real03, 400, Condition(function Func0290))
 		if loc_unit03 != null then
 			call GroupRemoveUnit(loc_group01, loc_unit03)
@@ -56476,7 +56457,7 @@ function Func2610 takes nothing returns boolean
 		endif
 		call ForGroup(loc_group01, function Func2609)
 		call KillUnit(loc_unit01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -56534,8 +56515,8 @@ function Func2614 takes nothing returns nothing
 	local unit loc_unit03
 	local group loc_group01
 	if GetUnitCurrentOrder(loc_unit02) == 0 then
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit02
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit02
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 825, Condition(function Func0283))
 		set loc_unit03 = FirstOfGroup(loc_group01)
 		if loc_unit03 != null then
@@ -56544,7 +56525,7 @@ function Func2614 takes nothing returns nothing
 		if FirstOfGroup(loc_group01) == null and loc_unit03 == loc_unit01 then
 			call IssueTargetOrder(loc_unit02,"attack", loc_unit03)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_unit03 = null
 		set loc_group01 = null
 	endif
@@ -56553,12 +56534,12 @@ function Func2614 takes nothing returns nothing
 endfunction
 
 function Func2615 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit313 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1000, Condition(function Func0336))
 	call ForGroup(loc_group01, function Func2614)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -56567,10 +56548,10 @@ function Func2616 takes nothing returns nothing
 endfunction
 
 function Func2617 takes unit loc_unit01, integer loc_integer01, integer loc_integer02 returns nothing
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer03 = 0
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	loop
 		exitwhen loc_integer03 > loc_integer02
 		call GroupEnumUnitsInRange(loc_group02, (LoadReal(HY, (loc_integer01), (2300 + loc_integer03))), (LoadReal(HY, (loc_integer01), (2500 + loc_integer03))), 225, Condition(function Func0283))
@@ -56578,7 +56559,7 @@ function Func2617 takes unit loc_unit01, integer loc_integer01, integer loc_inte
 		call GroupClear(loc_group02)
 		set loc_integer03 = loc_integer03 + 1
 	endloop
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if FirstOfGroup(loc_group01) != null then
 		set unit313 = loc_unit01
 		set integer473 = GetUnitAbilityLevel(loc_unit01, 'A19Z')
@@ -56587,7 +56568,7 @@ function Func2617 takes unit loc_unit01, integer loc_integer01, integer loc_inte
 		call SetUnitAbilityLevel(unit314, 'A19U', integer473)
 		call ForGroup(loc_group01, function Func2616)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_group02 = null
 endfunction
@@ -56845,10 +56826,10 @@ function Func2631 takes nothing returns boolean
 endfunction
 
 function Func2632 takes unit loc_unit01, unit loc_unit02, integer loc_integer01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit315 = loc_unit02
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 350, Condition(function Func2631))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set unit315 = null
 	set loc_group01 = null
 endfunction
@@ -57025,9 +57006,9 @@ function Func2642 takes nothing returns boolean
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (22)))
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0I8')
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit316 = loc_unit01
 	set group017 = loc_group01
 	set integer474 = loc_integer02
@@ -57077,7 +57058,7 @@ function Func2642 takes nothing returns boolean
 		call UnitMakeAbilityPermanent(loc_unit01, true, integers149[loc_integer02])
 		call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), integers149[loc_integer02], false)
 	endif
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group02 = null
@@ -57092,7 +57073,7 @@ function Func2643 takes nothing returns nothing
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.25, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2642))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	call SaveGroupHandle(HY, (loc_integer01), (22), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (22), (GetAvailableGroup()))
 	set loc_trigger01 = null
 	set loc_unit01 = null
 endfunction
@@ -57504,13 +57485,13 @@ function Func2674 takes nothing returns nothing
 		call SetUnitY(loc_unit02, loc_real09)
 		call SetUnitFacing(loc_unit02, loc_real05)
 		call IssueTargetOrder(loc_unit01,"attack", loc_unit02)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set real310 = loc_real08
 		set real311 = loc_real09
 		set unit317 = loc_unit01
 		set unit318 = loc_unit02
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 1400, Condition(function Func2673))
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_unit04 = CreateUnit(GetOwningPlayer(loc_unit01), integer475, loc_real08, loc_real09, 0)
 		call KillUnit(loc_unit04)
 	endif
@@ -57940,7 +57921,7 @@ function Func2709 takes nothing returns nothing
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0OK')
 	local real loc_real01 = GetLocationX(GetSpellTargetLoc())
 	local real loc_real02 = GetLocationY(GetSpellTargetLoc())
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = 0
 	local unit loc_unit02 = (LoadUnitHandle(HY, (GetHandleId(loc_unit01)), (748)))
 	if loc_integer01 == 0 then
@@ -57961,7 +57942,7 @@ function Func2709 takes nothing returns nothing
 	if loc_unit02 != null and IsDead(loc_unit02) == false then
 		call SetUnitInvulnerable(loc_unit02, true)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2710 takes nothing returns nothing
@@ -57989,14 +57970,14 @@ function Func2712 takes nothing returns boolean
 	else
 		set loc_integer02 = loc_integer02 + 1
 		call SaveInteger(HY, (loc_integer01), (34), (loc_integer02))
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit02
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit02
 		set unit319 = loc_unit02
 		set real312 = 1.0 + 2.0 * GetUnitAbilityLevel(loc_unit02, 'A0QG')
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 275, Condition(function Func0283))
 		call GroupRemoveUnit(loc_group01, loc_unit01)
 		call ForGroup(loc_group01, function Func2711)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_unit01 = null
 	endif
 	set loc_trigger01 = null
@@ -58107,13 +58088,13 @@ function Func2718 takes nothing returns nothing
 endfunction
 
 function Func2719 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
 	local integer loc_integer01 = GetUnitAbilityLevel(GetTriggerUnit(), 'A0QE')
 	local real loc_real03 = 150 + 100 * loc_integer01 + 25
-	set unit124 = GetTriggerUnit()
+	set tt_unit1 = GetTriggerUnit()
 	call Func0174(sound035, loc_real01, loc_real02)
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\Star Aura.mdx", loc_real01, loc_real02))
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real03, Condition(function Func0290))
@@ -58123,7 +58104,7 @@ function Func2719 takes nothing returns nothing
 	call ForGroup(loc_group01, function Func2718)
 	call Func0172(loc_real01, loc_real02, 200)
 	call RemoveLocation(loc_location01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_location01 = null
 	set loc_group01 = null
 endfunction
@@ -58332,8 +58313,8 @@ function Func2735 takes nothing returns boolean
 	call FlushChildHashtable(HY, (loc_integer02))
 	call FlushChildHashtable(HY, (loc_integer03))
 	call RemoveUnit(loc_unit01)
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
 	call CleanTrigger(loc_trigger02)
 	call CleanTrigger(loc_trigger03)
 	call CleanTrigger(loc_trigger01)
@@ -58360,9 +58341,9 @@ function Func2736 takes nothing returns nothing
 	local integer loc_integer01
 	local real loc_real06
 	local trigger loc_trigger01 = CreateTrigger()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = GetHandleId(loc_trigger01)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local trigger loc_trigger02 = loc_trigger01
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, 'A0QK')
 	local boolean loc_boolean01 = false
@@ -58491,19 +58472,19 @@ function Func2741 takes nothing returns nothing
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A15S')
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'h07J', loc_real01, loc_real02, 0)
 	call DestroyEffect(AddSpecialEffect("effects\\DecayGreen_Groundonly_1.mdx", loc_real01, loc_real02))
 	call RemoveLocation(loc_location01)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit321 = loc_unit01
 	set integer477 = loc_integer02
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 325 + 25, Condition(function Func0290))
 	call ForGroup(loc_group01, function Func2740)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call KillUnit(loc_unit02)
 	set loc_unit01 = null
 	set loc_location01 = null
@@ -58555,17 +58536,17 @@ endfunction
 
 function Func2748 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0R5') * 5
-	set group019 = Func0030()
+	set group019 = GetAvailableGroup()
 	set integer478 = 0
 	set integer479 = loc_integer01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1000, Condition(function Func0333))
 	call GroupRemoveUnit(loc_group01, loc_unit01)
 	call GroupRemoveUnit(loc_group01, GetSpellTargetUnit())
 	call ForGroup(loc_group01, function Func2744)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = group019
 	set unit323 = GetSpellTargetUnit()
 	set unit322 = loc_unit01
@@ -58574,7 +58555,7 @@ function Func2748 takes nothing returns nothing
 	else
 		call ForGroup(loc_group01, function Func2747)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -58676,9 +58657,9 @@ function Func2753 takes nothing returns boolean
 endfunction
 
 function Func2754 takes player loc_player01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function Func2753))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -58712,15 +58693,15 @@ function Func2755 takes nothing returns boolean
 		if IsUnitVisible(loc_unit01, loc_player01)then
 			call SaveBoolean(HY, (loc_integer01), (265), (true))
 		endif
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set player023 = GetOwningPlayer(loc_unit01)
 		set integer480 = loc_integer02
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 25 + 200 + 200 * loc_integer02, Condition(function Func0282))
 		if GameEnded == false then
 			call ForGroup(loc_group01, function Func2752)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -58878,7 +58859,7 @@ function Func2758 takes nothing returns nothing
 endfunction
 
 function Func2759 takes unit loc_unit01 returns boolean
-	if Func0367(loc_unit01, integers084[integer321]) != null then
+	if Func0367(loc_unit01, Item_Real[integer321]) != null then
 		return true
 	endif
 	return false
@@ -58905,7 +58886,7 @@ function Func2761 takes nothing returns boolean
 endfunction
 
 function Func2762 takes nothing returns nothing
-	if IsUnitType(unit124, UNIT_TYPE_HERO) == true then
+	if IsUnitType(tt_unit1, UNIT_TYPE_HERO) == true then
 		if Func2759(unit125)then
 			call SetUnitState(unit125, UNIT_STATE_LIFE, GetUnitState(unit125, UNIT_STATE_LIFE) + GetUnitState(unit125, UNIT_STATE_MAX_LIFE) * 0.10)
 		else
@@ -59050,7 +59031,7 @@ function Func2769 takes nothing returns boolean
 	local real loc_real06 = (LoadReal(HY, (loc_integer01), (23)))
 	local real loc_real07 = (LoadReal(HY, (loc_integer01), (24)))
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (19)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local group loc_group02 = (LoadGroupHandle(HY, (loc_integer01), (187)))
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, 'A0LK')
 	if Func0141(loc_real04, loc_real05, loc_real01, loc_real02) <= real317 then
@@ -59069,11 +59050,11 @@ function Func2769 takes nothing returns boolean
 	elseif loc_integer03 == 4 then
 		set integer483 = 'A298'
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set group020 = loc_group02
 	call GroupEnumUnitsInRange(loc_group01, loc_real04, loc_real05, 325, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func2768)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call SaveReal(HY, (loc_integer01), (23), ((loc_real04) * 1.0))
 	call SaveReal(HY, (loc_integer01), (24), ((loc_real05) * 1.0))
 	call SetUnitPosition(loc_unit01, loc_real04, loc_real05)
@@ -59081,7 +59062,7 @@ function Func2769 takes nothing returns boolean
 		call SetUnitX(loc_unit02, loc_real04)
 		call SetUnitY(loc_unit02, loc_real05)
 		call IssueImmediateOrder(loc_unit02,"thunderclap")
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call SetUnitAnimation(loc_unit01,"stand")
@@ -59132,7 +59113,7 @@ function Func2770 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (137), ((loc_real05) * 1.0))
 	call SaveUnitHandle(HY, (loc_integer01), (14), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer01), (19), (loc_unit02))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call Func0183(loc_unit02, 'A0LA')
 	call SetUnitAbilityLevel(loc_unit02, 'A0LA', GetUnitAbilityLevel(loc_unit01, 'A0LK'))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.025, true)
@@ -59248,7 +59229,7 @@ function Func2783 takes nothing returns nothing
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local boolexpr loc_boolexpr01 = Condition(function Func2780)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer04 = 35 + loc_integer02 * 5
 	if GetUnitAbilityLevel(loc_unit02, 'A1D7') > 0 then
 		set loc_integer04 = 30 + loc_integer02 * 10
@@ -59259,7 +59240,7 @@ function Func2783 takes nothing returns nothing
 	call GroupClear(loc_group01)
 	call GroupAddGroup(loc_group02, loc_group01)
 	call ForGroup(loc_group02, function Func2781)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	set loc_integer03 = loc_integer03 + 1
 	call SaveInteger(HY, (loc_integer01), (28), (loc_integer03))
 	if loc_integer03 > loc_integer04 then
@@ -59267,7 +59248,7 @@ function Func2783 takes nothing returns nothing
 			call ForGroup(loc_group01, function Func2782)
 		endif
 		call RemoveUnit(loc_unit01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call PauseTimer(loc_timer01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call DestroyTimer(loc_timer01)
@@ -59283,7 +59264,7 @@ function Func2784 takes nothing returns nothing
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), ('u00L'), loc_real01, loc_real02, 0)
 	local timer loc_timer01 = CreateTimer()
 	local integer loc_integer02 = GetHandleId(loc_timer01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if loc_integer01 == 0 then
 		set loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A1D7')
 	endif
@@ -59350,10 +59331,10 @@ function Func2789 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit324 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 450, Condition(function Func2788))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -59558,13 +59539,13 @@ function Func2803 takes nothing returns nothing
 endfunction
 
 function Func2804 takes unit loc_unit01, integer loc_integer01, integer loc_integer02 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit325 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set real322 = loc_integer01 * 50 + 50
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 700, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func2803)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -59645,7 +59626,7 @@ endfunction
 function Func2810 takes nothing returns nothing
 	if IsUnitInGroup(GetEnumUnit(), group002) == false then
 		call GroupAddUnit(group002, GetEnumUnit())
-		call Func2809(unit124, GetEnumUnit(), integer022, integer023)
+		call Func2809(tt_unit1, GetEnumUnit(), integer022, integer023)
 	endif
 endfunction
 
@@ -59661,7 +59642,7 @@ function Func2811 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (22)))
 	local real loc_real04 = GetUnitX(loc_unit01) + 25 * Cos(loc_real03)
 	local real loc_real05 = GetUnitY(loc_unit01) + 25 * Sin(loc_real03)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local real loc_real06 = Func0141(loc_real04, loc_real05, loc_real01, loc_real02)
 	if loc_real06 <= 30 then
 		set loc_real04 = loc_real01
@@ -59669,15 +59650,15 @@ function Func2811 takes nothing returns boolean
 	endif
 	call SetUnitX(loc_unit01, Func0120(loc_real04))
 	call SetUnitY(loc_unit01, Func0120(loc_real05))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set group002 = loc_group01
 	set integer022 = loc_integer02
 	set integer023 = loc_integer03
 	call GroupEnumUnitsInRange(loc_group02, loc_real04, loc_real05, 200, Condition(function Func0283))
 	call ForGroup(loc_group02, function Func2810)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if loc_real06 <= 30 or GetTriggerEvalCount(loc_trigger01) > 125 then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call KillUnit(loc_unit01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
@@ -59709,7 +59690,7 @@ function Func2812 takes nothing returns nothing
 	call SaveInteger(HY, (loc_integer01), (3000), ((LoadInteger(HY, (GetHandleId(loc_unit01)), (3000)))))
 	call SaveInteger(HY, (loc_integer01), (3001), ((LoadInteger(HY, (GetHandleId(loc_unit01)), (3001)))))
 	call SaveReal(HY, (loc_integer01), (137), ((loc_real03) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (22), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (22), (GetAvailableGroup()))
 	call RemoveLocation(loc_location01)
 	set loc_trigger01 = null
 	set loc_location01 = null
@@ -59931,7 +59912,7 @@ endfunction
 function Func2829 takes nothing returns nothing
 	if IsUnitInGroup(GetEnumUnit(), group002) == false and Func0095(GetEnumUnit()) == false then
 		call GroupAddUnit(group002, GetEnumUnit())
-		call Func2828(unit124, GetEnumUnit(), integer022, integer023, integer024)
+		call Func2828(tt_unit1, GetEnumUnit(), integer022, integer023, integer024)
 	endif
 endfunction
 
@@ -59958,29 +59939,29 @@ function Func2830 takes nothing returns boolean
 	endif
 	call SetUnitX(loc_unit01, Func0120(loc_real04))
 	call SetUnitY(loc_unit01, Func0122(loc_real05))
-	set loc_group02 = Func0030()
-	set unit124 = loc_unit01
+	set loc_group02 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set group002 = loc_group01
 	set integer022 = loc_integer02
 	set integer023 = loc_integer03
 	set integer024 = loc_integer04
 	call GroupEnumUnitsInRange(loc_group02, loc_real04, loc_real05, 200, Condition(function Func0283))
 	call ForGroup(loc_group02, function Func2829)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if(loc_real04 == loc_real02 and loc_real05 == loc_real03)or GetTriggerEvalCount(loc_trigger01) > 35 then
-		set loc_group02 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set group002 = loc_group01
 		set integer022 = loc_integer02
 		set integer023 = loc_integer03
 		set integer024 = loc_integer04
 		call GroupEnumUnitsInRange(loc_group02, loc_real04, loc_real05, 250, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func2829)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call KillUnit(loc_unit01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -60004,7 +59985,7 @@ function Func2831 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (137), ((loc_real03) * 1.0))
 	call SaveReal(HY, (loc_integer01), (66), ((GetUnitX(loc_unit01) + 1000 * Cos(loc_real03)) * 1.0))
 	call SaveReal(HY, (loc_integer01), (67), ((GetUnitY(loc_unit01) + 1000 * Sin(loc_real03)) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (22), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (22), (GetAvailableGroup()))
 	call SaveInteger(HY, (loc_integer01), (3000), ((LoadInteger(HY, (GetHandleId(loc_unit01)), (3000)))))
 	call SaveInteger(HY, (loc_integer01), (3001), ((LoadInteger(HY, (GetHandleId(loc_unit01)), (3001)))))
 	call SaveInteger(HY, (loc_integer01), (3002), ((LoadInteger(HY, (GetHandleId(loc_unit01)), (3002)))))
@@ -60077,8 +60058,8 @@ function Func2837 takes unit loc_unit01, unit loc_unit02, real loc_real01 return
 endfunction
 
 function Func2838 takes nothing returns nothing
-	call Func2837(unit124, GetEnumUnit(), real009 / 5)
-	call Func0109(unit124, GetEnumUnit(), 1, real009)
+	call Func2837(tt_unit1, GetEnumUnit(), real009 / 5)
+	call Func0109(tt_unit1, GetEnumUnit(), 1, real009)
 endfunction
 
 function Func2839 takes nothing returns boolean
@@ -60105,12 +60086,12 @@ function Func2839 takes nothing returns boolean
 		call SetUnitX(loc_unit02, loc_real04)
 		call SetUnitY(loc_unit02, loc_real05)
 		if(loc_integer02 > 1 and ModuloInteger(loc_integer02, 10) == 0)or loc_integer02 == 1 then
-			set loc_group01 = Func0030()
-			set unit124 = loc_unit01
+			set loc_group01 = GetAvailableGroup()
+			set tt_unit1 = loc_unit01
 			set real009 = Func2834(loc_unit01)
 			call GroupEnumUnitsInRange(loc_group01, loc_real04, loc_real05, 300, Condition(function Func0283))
 			call ForGroup(loc_group01, function Func2838)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			call DestroyEffect(AddSpecialEffect("Objects\\Spawnmodels\\Other\\NeutralBuildingExplosion\\NeutralBuildingExplosion.mdl", loc_real04, loc_real05))
 		endif
 		if loc_integer02 > Func2835(loc_unit01) / 16.6 then
@@ -60269,10 +60250,10 @@ function Func2850 takes nothing returns boolean
 endfunction
 
 function Func2851 takes player loc_player01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function Func2850))
 	call ForGroup(loc_group01, function Func2849)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -60371,7 +60352,7 @@ function Func2857 takes nothing returns boolean
 endfunction
 
 function Func2858 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = GetEnumUnit()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
@@ -60405,8 +60386,8 @@ function Func2859 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		loop
 			exitwhen loc_integer02 > 7
 			set loc_real05 = loc_real01 + 80 * loc_integer02 * Cos((loc_real03 + 90) * bj_DEGTORAD)
@@ -60419,7 +60400,7 @@ function Func2859 takes nothing returns boolean
 			call ForGroup(loc_group01, function Func2858)
 			set loc_integer02 = loc_integer02 + 1
 		endloop
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -60491,7 +60472,7 @@ endfunction
 
 function Func2863 takes nothing returns nothing
 	if Func0093(GetEnumUnit()) == false then
-		call Func0109(unit124, GetEnumUnit(), 3, real009)
+		call Func0109(tt_unit1, GetEnumUnit(), 3, real009)
 	endif
 endfunction
 
@@ -60502,9 +60483,9 @@ function Func2864 takes nothing returns boolean
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (20)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (6)))
 	local real loc_real03 = (LoadReal(HY, (loc_integer01), (7)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real02, loc_real03, 200, Condition(function Func0283))
 	set loc_integer02 = CountUnitsInGroup(loc_group01)
 	if loc_integer02 < 1 then
@@ -60513,7 +60494,7 @@ function Func2864 takes nothing returns boolean
 	set real009 = loc_real01 / loc_integer02
 	call ForGroup(loc_group01, function Func2863)
 	call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Other\\Doom\\DoomDeath.mdl", loc_real02, loc_real03))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
@@ -60922,7 +60903,7 @@ function Func2879 takes nothing returns nothing
 endfunction
 
 function Func2880 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local integer loc_integer01 = GetHandleId(loc_unit01)
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (3010)))
 	local integer loc_integer03 = (LoadInteger(HY, (loc_integer01), (3011)))
@@ -60984,7 +60965,7 @@ function Func2882 takes nothing returns boolean
 endfunction
 
 function Func2883 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local integer loc_integer01 = 1
 	local integer loc_integer02
 	if GetUnitTypeId(loc_unit01) != 'H00U' then
@@ -61002,13 +60983,13 @@ endfunction
 
 function Func2884 takes nothing returns boolean
 	if GetUnitTypeId(GetTriggerUnit()) == 'H00U' and IsUnitIllusion(GetTriggerUnit()) == false then
-		set unit124 = GetTriggerUnit()
+		set tt_unit1 = GetTriggerUnit()
 		call Func2883()
 	elseif(GetUnitTypeId(GetTriggerUnit()) == 'Ubal' or GetUnitTypeId(GetTriggerUnit()) == 'E02X')and IsUnitIllusion(GetTriggerUnit()) == false then
-		set unit124 = GetTriggerUnit()
+		set tt_unit1 = GetTriggerUnit()
 		call ExecuteFunc("Func3536")
 	elseif GetUnitTypeId(GetTriggerUnit()) == 'H00I' and IsUnitIllusion(GetTriggerUnit()) == false then
-		set unit124 = GetTriggerUnit()
+		set tt_unit1 = GetTriggerUnit()
 		call ExecuteFunc("Func2945")
 	endif
 	return false
@@ -61377,7 +61358,7 @@ function Func2908 takes nothing returns nothing
 		set loc_boolean01 = true
 	else
 		set loc_boolexpr01 = Condition(function Func2904)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 999999, loc_boolexpr01)
 		if loc_unit02 != null then
 			set loc_location01 = GetUnitLoc(loc_unit02)
@@ -61395,7 +61376,7 @@ function Func2908 takes nothing returns nothing
 			set loc_real01 = GetUnitX(loc_unit02)
 			set loc_real02 = GetUnitY(loc_unit02)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call RemoveLocation(loc_location01)
 	endif
 	if loc_boolean01 then
@@ -61405,14 +61386,14 @@ function Func2908 takes nothing returns nothing
 		call SetUnitY(loc_unit01, loc_real02)
 		set real002 = 60 + GetUnitAbilityLevel(GetTriggerUnit(), ('A0N8')) * 20
 		set loc_boolexpr01 = Condition(function Func2906)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real03, loc_real04, 400, loc_boolexpr01)
 		call ForGroup(loc_group01, function Func2907)
-		call Func0029(loc_group01)
-		set loc_group01 = Func0030()
+		call KillGroup(loc_group01)
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 400, loc_boolexpr01)
 		call ForGroup(loc_group01, function Func2907)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 endfunction
 
@@ -61485,13 +61466,13 @@ endfunction
 
 function Func2916 takes unit loc_unit01, real loc_real01, real loc_real02 returns nothing
 	local boolexpr loc_boolexpr01 = Condition(function Func2914)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit002 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, (245), loc_boolexpr01)
 	set real002 = loc_real01
 	set real004 = loc_real02
 	call ForGroup(loc_group01, function Func2915)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func2917 takes nothing returns nothing
@@ -61575,39 +61556,39 @@ return 'A0N7'
 endfunction
 
 constant function DoubleTrouble_Item9 takes nothing returns integer
-return integers084[integer133]
+return Item_Real[integer133]
 endfunction
 
 constant function DoubleTrouble_Item8 takes nothing returns integer
-return integers084[integer132]
+return Item_Real[integer132]
 endfunction
 
 constant function DoubleTrouble_Item7 takes nothing returns integer
-return integers084[integer248]
+return Item_Real[integer248]
 endfunction
 
 constant function DoubleTrouble_Item6 takes nothing returns integer
-return integers084[integer238]
+return Item_Real[integer238]
 endfunction
 
 constant function DoubleTrouble_Item5 takes nothing returns integer
-return integers084[integer157]
+return Item_Real[integer157]
 endfunction
 
 constant function DoubleTrouble_Item4 takes nothing returns integer
-return integers084[integer158]
+return Item_Real[integer158]
 endfunction
 
 constant function DoubleTrouble_Item3 takes nothing returns integer
-return integers084[integer159]
+return Item_Real[integer159]
 endfunction
 
 constant function DoubleTrouble_Item2 takes nothing returns integer
-return integers084[integer156]
+return Item_Real[integer156]
 endfunction
 
 constant function DoubleTrouble_Item1 takes nothing returns integer
-return integers084[integer067]
+return Item_Real[integer067]
 endfunction
 
 function Func2921 takes unit loc_unit01 returns boolean
@@ -61868,59 +61849,59 @@ function Func2930 takes unit loc_unit01, unit loc_unit02 returns nothing
 	local boolean loc_boolean08 = false
 	local boolean loc_boolean09 = false
 	call DisableTrigger(loc_trigger01)
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	loop
 		exitwhen loc_integer01 > 5
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer067])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer067])then
 			set loc_boolean01 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer156])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer156])then
 			set loc_boolean02 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer159])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer159])then
 			set loc_boolean03 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer158])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer158])then
 			set loc_boolean04 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer157])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer157])then
 			set loc_boolean05 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer238])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer238])then
 			set loc_boolean06 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer248])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer248])then
 			set loc_boolean07 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer132])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer132])then
 			set loc_boolean08 = true
 		endif
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (integers084[integer133])then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == (Item_Real[integer133])then
 			set loc_boolean09 = true
 		endif
 		set loc_integer01 = loc_integer01 + 1
 	endloop
 	if loc_boolean09 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer133]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer133]), 0, 0))
 	elseif loc_boolean08 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer132]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer132]), 0, 0))
 	elseif loc_boolean07 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer248]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer248]), 0, 0))
 	elseif loc_boolean06 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer238]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer238]), 0, 0))
 	elseif loc_boolean05 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer157]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer157]), 0, 0))
 	elseif loc_boolean04 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer158]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer158]), 0, 0))
 	elseif loc_boolean03 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer159]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer159]), 0, 0))
 	elseif loc_boolean02 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer156]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer156]), 0, 0))
 	elseif loc_boolean01 then
-		call UnitAddItem(loc_unit01, CreateItem((integers084[integer067]), 0, 0))
+		call UnitAddItem(loc_unit01, CreateItem((Item_Real[integer067]), 0, 0))
 	endif
 	call EnableTrigger(loc_trigger01)
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 endfunction
 
 function Func2931 takes nothing returns nothing
@@ -61958,66 +61939,66 @@ function Func2931 takes nothing returns nothing
 		call EnableTrigger(GetTriggeringTrigger())
 		return
 	endif
-	if not(GetItemTypeId(GetManipulatedItem()) == (integers084[integer067])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer156])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer159])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer158])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer157])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer238])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer248])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer132])or GetItemTypeId(GetManipulatedItem()) == (integers084[integer133]))then
+	if not(GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer067])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer156])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer159])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer158])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer157])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer238])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer248])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer132])or GetItemTypeId(GetManipulatedItem()) == (Item_Real[integer133]))then
 		call EnableTrigger(GetTriggeringTrigger())
 		return
 	endif
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	if GetTriggerEventId() == EVENT_PLAYER_UNIT_DROP_ITEM then
 		set loc_boolean10 = true
 	endif
 	loop
 		exitwhen loc_integer01 > 5
 		set loc_integer03 = GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer01))
-		if loc_integer03 == (integers084[integer067])then
+		if loc_integer03 == (Item_Real[integer067])then
 			set loc_integer04 = loc_integer04 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer04 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean01 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer156])then
+		if loc_integer03 == (Item_Real[integer156])then
 			set loc_integer05 = loc_integer05 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer05 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean02 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer159])then
+		if loc_integer03 == (Item_Real[integer159])then
 			set loc_integer06 = loc_integer06 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer06 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean03 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer158])then
+		if loc_integer03 == (Item_Real[integer158])then
 			set loc_integer07 = loc_integer07 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer07 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean04 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer157])then
+		if loc_integer03 == (Item_Real[integer157])then
 			set loc_integer08 = loc_integer08 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer08 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean05 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer238])then
+		if loc_integer03 == (Item_Real[integer238])then
 			set loc_integer09 = loc_integer09 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer09 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean06 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer248])then
+		if loc_integer03 == (Item_Real[integer248])then
 			set loc_integer10 = loc_integer10 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer10 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean07 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer132])then
+		if loc_integer03 == (Item_Real[integer132])then
 			set loc_integer11 = loc_integer11 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer11 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean08 = true
 			endif
 		endif
-		if loc_integer03 == (integers084[integer133])then
+		if loc_integer03 == (Item_Real[integer133])then
 			set loc_integer12 = loc_integer12 + 1
 			if(not(loc_boolean10 and loc_integer03 == GetItemTypeId(GetManipulatedItem())))or(loc_integer11 > 1 and loc_integer03 == GetItemTypeId(GetManipulatedItem()))then
 				set loc_boolean09 = true
@@ -62036,107 +62017,107 @@ function Func2931 takes nothing returns nothing
 		call RemoveItem(UnitRemoveItemFromSlot(loc_unit06, 0))
 	endif
 	if loc_boolean09 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer133]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer133]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer133]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer133]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer133]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer133]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer133]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer133]), 0, 0))
 		endif
 	elseif loc_boolean08 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer132]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer132]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer132]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer132]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer132]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer132]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer132]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer132]), 0, 0))
 		endif
 	elseif loc_boolean07 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer248]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer248]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer248]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer248]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer248]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer248]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer248]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer248]), 0, 0))
 		endif
 	elseif loc_boolean06 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer238]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer238]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer238]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer238]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer238]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer238]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer238]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer238]), 0, 0))
 		endif
 	elseif loc_boolean05 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer157]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer157]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer157]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer157]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer157]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer157]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer157]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer157]), 0, 0))
 		endif
 	elseif loc_boolean04 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer158]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer158]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer158]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer158]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer158]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer158]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer158]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer158]), 0, 0))
 		endif
 	elseif loc_boolean03 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer159]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer159]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer159]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer159]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer159]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer159]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer159]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer159]), 0, 0))
 		endif
 	elseif loc_boolean02 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer156]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer156]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer156]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer156]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer156]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer156]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer156]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer156]), 0, 0))
 		endif
 	elseif loc_boolean01 then
-		call UnitAddItem(loc_unit03, CreateItem((integers084[integer067]), 0, 0))
+		call UnitAddItem(loc_unit03, CreateItem((Item_Real[integer067]), 0, 0))
 		if loc_unit04 != null then
-			call UnitAddItem(loc_unit04, CreateItem((integers084[integer067]), 0, 0))
+			call UnitAddItem(loc_unit04, CreateItem((Item_Real[integer067]), 0, 0))
 		endif
 		if loc_unit05 != null then
-			call UnitAddItem(loc_unit05, CreateItem((integers084[integer067]), 0, 0))
+			call UnitAddItem(loc_unit05, CreateItem((Item_Real[integer067]), 0, 0))
 		endif
 		if loc_unit06 != null then
-			call UnitAddItem(loc_unit06, CreateItem((integers084[integer067]), 0, 0))
+			call UnitAddItem(loc_unit06, CreateItem((Item_Real[integer067]), 0, 0))
 		endif
 	endif
 	call EnableTrigger(GetTriggeringTrigger())
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 endfunction
 
 function Func2932 takes unit loc_unit01, integer loc_integer01 returns nothing
@@ -62324,7 +62305,7 @@ function Func2943 takes nothing returns nothing
 	if boolean137 == false then
 		set boolean137 = true
 		call DisableTrigger(trigger069)
-		call Func2942(unit124, true)
+		call Func2942(tt_unit1, true)
 		call EnableTrigger(trigger069)
 	endif
 endfunction
@@ -62350,7 +62331,7 @@ function Func2944 takes nothing returns boolean
 endfunction
 
 function Func2945 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local integer loc_integer01
 	set trigger068 = CreateTrigger()
 	set trigger069 = trigger068
@@ -62387,7 +62368,7 @@ function Func2949 takes nothing returns boolean
 endfunction
 
 function Func2950 takes nothing returns boolean
-	return IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false and IsUnitInvulnerable(GetFilterUnit()) == false)
+	return IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false and IsUnitInvulnerable(GetFilterUnit()) == false)
 endfunction
 
 function Func2951 takes nothing returns boolean
@@ -62406,8 +62387,8 @@ function Func2951 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 500, Condition(function Func2950))
 		set loc_unit02 = GroupPickRandomUnit(loc_group01)
 		if loc_unit02 == null then
@@ -62420,7 +62401,7 @@ function Func2951 takes nothing returns boolean
 			call DestroyEffect(AddSpecialEffectTarget("Abilities\\Weapons\\SteamTank\\SteamTankImpact.mdl", loc_unit02,"origin"))
 			call Func0109(loc_unit03, loc_unit02, 5, 12.5 * loc_integer02)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit02 = null
 	set loc_group01 = null
@@ -62502,12 +62483,12 @@ function Func2956 takes nothing returns boolean
 		call CleanTrigger(loc_trigger01)
 	elseif GetTriggerEventId() != EVENT_UNIT_SPELL_EFFECT then
 		call SetUnitState(loc_unit01, UNIT_STATE_MANA, GetUnitState(loc_unit01, UNIT_STATE_MANA) - 20 * loc_integer02)
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit326 = loc_unit01
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 475, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func2955)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -62586,12 +62567,12 @@ function Func2960 takes nothing returns boolean
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
 		else
-			set loc_group01 = Func0030()
-			set unit124 = loc_unit01
+			set loc_group01 = GetAvailableGroup()
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 600, Condition(function Func0282))
 			call GroupRemoveUnit(loc_group01, loc_unit02)
 			set loc_unit02 = GroupPickRandomUnit(loc_group01)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			if loc_unit02 == null then
 				call RemoveUnit(loc_unit03)
 				call FlushChildHashtable(HY, (loc_integer01))
@@ -63327,13 +63308,13 @@ function Func3005 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A29L')
 	set real324 = GetUnitX(loc_unit01) + 100 * Cos(GetUnitFacing(loc_unit01) * bj_DEGTORAD)
 	set real325 = GetUnitY(loc_unit01) + 100 * Sin(GetUnitFacing(loc_unit01) * bj_DEGTORAD)
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 410 + 24, Condition(function Func3004))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func0183(loc_unit02, 'A06F')
 	call SetUnitAbilityLevel(loc_unit02, 'A06F', loc_integer01)
 	call IssueImmediateOrder(loc_unit02,"stomp")
@@ -63472,8 +63453,8 @@ function Func3014 takes nothing returns boolean
 		call SetUnitAnimationByIndex(loc_unit01, 3)
 	endif
 	if loc_unit02 == null or loc_unit03 == null or loc_unit04 == null or loc_unit05 == null then
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real06, loc_real07, 125 + 25, Condition(function Func0318))
 		if FirstOfGroup(loc_group01) != null then
 			if loc_unit02 != null then
@@ -63505,7 +63486,7 @@ function Func3014 takes nothing returns boolean
 				endif
 			endif
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	call SaveUnitHandle(HY, (loc_integer01), (393), (loc_unit02))
@@ -63711,7 +63692,7 @@ function Func3021 takes nothing returns boolean
 		if loc_unit01 == loc_unit03 then
 			call SetUnitState(loc_unit01, UNIT_STATE_MANA, GetUnitState(loc_unit01, UNIT_STATE_MANA) + loc_real01)
 			call KillUnit(loc_unit02)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
 		else
@@ -63729,14 +63710,14 @@ function Func3021 takes nothing returns boolean
 			call SaveReal(HY, (loc_integer01), (222), ((loc_real01) * 1.0))
 			call SaveReal(HY, (loc_integer01), (224), ((loc_real03) * 1.0))
 			call SaveReal(HY, (loc_integer01), (223), ((loc_real02) * 1.0))
-			set loc_group02 = Func0030()
+			set loc_group02 = GetAvailableGroup()
 			set unit327 = null
 			set unit328 = loc_unit03
 			set group021 = loc_group01
 			set real326 = 99999
 			set unit329 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit03), GetUnitY(loc_unit03), 500, Condition(function Func3020))
-			call Func0029(loc_group02)
+			call KillGroup(loc_group02)
 			if unit327 == null or loc_real03 == (2 + loc_integer02)then
 				call SaveInteger(HY, (loc_integer01), (30), (Func0024(loc_unit01)))
 			else
@@ -63759,7 +63740,7 @@ function Func3022 takes nothing returns nothing
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0G2')
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer02 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = 0
 	local real loc_real02 = 0
 	local real loc_real03 = 0
@@ -63918,7 +63899,7 @@ function Func3030 takes unit loc_unit01, unit loc_unit02 returns boolean
 endfunction
 
 function Func3031 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and Func3030(unit124, GetFilterUnit())
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and Func3030(tt_unit1, GetFilterUnit())
 endfunction
 
 function Func3032 takes nothing returns boolean
@@ -63926,26 +63907,26 @@ function Func3032 takes nothing returns boolean
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A1AT')
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	local group loc_group03 = (LoadGroupHandle(HY, (loc_integer01), (187)))
 	set group022 = loc_group03
 	set unit330 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1025, Condition(function Func3031))
 	call ForGroup(loc_group01, function Func3029)
 	call GroupAddGroup(loc_group01, loc_group03)
 	call GroupAddGroup(loc_group03, loc_group02)
 	call GroupRemoveGroup(loc_group01, loc_group02)
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
 	call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 	if GetTriggerEvalCount(loc_trigger01) > R2I(real327 / 0.02)then
 		call CleanTrigger(loc_trigger01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call ForGroup(loc_group03, function Func3026)
 		call ForGroup(loc_group03, function Func3025)
-		call Func0029(loc_group03)
+		call KillGroup(loc_group03)
 	else
 		call SaveEffectHandle(HY, (loc_integer01), (32), (AddSpecialEffectTarget("Abilities\\Spells\\Orc\\EtherealForm\\SpiritWalkerChange.mdl", loc_unit01,"chest")))
 	endif
@@ -63964,7 +63945,7 @@ function Func3033 takes nothing returns nothing
 	call TriggerAddCondition(loc_trigger01, Condition(function Func3032))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (GetTriggerUnit()))
 	call SaveEffectHandle(HY, (loc_integer01), (32), (AddSpecialEffectTarget("Abilities\\Spells\\Orc\\EtherealForm\\SpiritWalkerChange.mdl", GetTriggerUnit(),"chest")))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call TriggerEvaluate(loc_trigger01)
 	set loc_trigger01 = null
 endfunction
@@ -64107,7 +64088,7 @@ endfunction
 
 function Func3044 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (20)))
 	call Func0109(loc_unit01, loc_unit02, 1, loc_real01)
@@ -64128,13 +64109,13 @@ function Func3045 takes nothing returns nothing
 endfunction
 
 function Func3046 takes unit loc_unit01, unit loc_unit02, integer loc_integer01 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit331 = loc_unit01
 	set integer485 = loc_integer01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 700 + 25, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func3045)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -64448,7 +64429,7 @@ function Func3064 takes nothing returns nothing
 endfunction
 
 function Func3065 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitAbilityLevel(GetFilterUnit(), 'B084') > 0
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and GetUnitAbilityLevel(GetFilterUnit(), 'B084') > 0
 endfunction
 
 function Func3066 takes nothing returns boolean
@@ -64456,13 +64437,13 @@ function Func3066 takes nothing returns boolean
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local group loc_group01
 	if IsDead(loc_unit01) == false then
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit332 = loc_unit01
 		set integer486 = GetUnitAbilityLevel(loc_unit01, 'A01N')
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1025, Condition(function Func3065))
 		call ForGroup(loc_group01, function Func3064)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_group01 = null
 	set loc_unit01 = null
@@ -64550,7 +64531,7 @@ endfunction
 
 function Func3074 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (20)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (21)))
@@ -64564,7 +64545,7 @@ function Func3074 takes nothing returns nothing
 endfunction
 
 function Func3075 takes nothing returns nothing
-	local trigger loc_trigger01 = Func0186(unit124, GetEnumUnit(), 'h00W',"Func3074", 400)
+	local trigger loc_trigger01 = Func0186(tt_unit1, GetEnumUnit(), 'h00W',"Func3074", 400)
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	call SaveReal(HY, (loc_integer01), (20), ((real009) * 1.0))
 	call SaveReal(HY, (loc_integer01), (21), ((real010) * 1.0))
@@ -64572,14 +64553,14 @@ function Func3075 takes nothing returns nothing
 endfunction
 
 function Func3076 takes nothing returns nothing
-	if IsUnitVisible(GetEnumUnit(), GetOwningPlayer(unit124))then
+	if IsUnitVisible(GetEnumUnit(), GetOwningPlayer(tt_unit1))then
 		call Func3075()
 	endif
 endfunction
 
 function Func3077 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, integer487)
 	local real loc_real01
 	local real loc_real02
@@ -64601,13 +64582,13 @@ function Func3077 takes nothing returns nothing
 		set loc_real03 = 130
 		set loc_real01 = 500
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set real009 = loc_real02
 	set real010 = loc_real03
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), loc_real01, Condition(function Func0322))
 	call GroupRemoveUnit(loc_group01, loc_unit01)
 	call ForGroup(loc_group01, function Func3076)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call SetUnitState(loc_unit01, UNIT_STATE_LIFE, GetUnitState(loc_unit01, UNIT_STATE_LIFE) + loc_real03)
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -64793,12 +64774,12 @@ function Func3091 takes nothing returns nothing
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit334 = loc_unit02
 	call Func0183(loc_unit02, 'A1GG')
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 325, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func3090)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call KillUnit(loc_unit01)
 	call SetUnitAnimation(loc_unit01,"death")
 	call DestroyEffect(AddSpecialEffect("Objects\\Spawnmodels\\Undead\\UndeadLargeDeathExplode\\UndeadLargeDeathExplode.mdl", loc_real01, loc_real02))
@@ -64845,7 +64826,7 @@ function Func3094 takes nothing returns boolean
 		endif
 	else
 		call UnitRemoveAbility(loc_unit01, 'A2KP')
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -64862,7 +64843,7 @@ function Func3095 takes nothing returns nothing
 	call TriggerRegisterUnitEvent(loc_trigger01, loc_unit01, EVENT_UNIT_DAMAGED)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func3094))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	call SaveGroupHandle(HY, (loc_integer01), (22), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (22), (GetAvailableGroup()))
 	call Func0183(loc_unit01, 'A2KP')
 	set loc_unit01 = null
 	set loc_trigger01 = null
@@ -64913,7 +64894,7 @@ endfunction
 function Func3101 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local unit loc_unit02
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3099)
 	local real loc_real01 = GetUnitFacing(loc_unit01)
 	local real loc_real02
@@ -64945,7 +64926,7 @@ function Func3101 takes nothing returns nothing
 		call ForGroup(loc_group01, function Func3100)
 		call GroupClear(loc_group01)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3102 takes nothing returns nothing
@@ -65113,18 +65094,18 @@ function Func3114 takes nothing returns nothing
 	local location loc_location01 = GetUnitLoc(GetTriggerUnit())
 	local unit loc_unit01 = GetTriggerUnit()
 	local group loc_group01
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRangeOfLoc(loc_group01, loc_location01, 700, Condition(function Func3110))
 	call ForGroup(loc_group01, function Func3111)
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRangeOfLoc(loc_group01, loc_location01, 400, Condition(function Func3110))
 	call ForGroup(loc_group01, function Func3112)
-	call Func0029(loc_group01)
-	set loc_group01 = Func0030()
+	call KillGroup(loc_group01)
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRangeOfLoc(loc_group01, loc_location01, 200, Condition(function Func3110))
 	call ForGroup(loc_group01, function Func3113)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 endfunction
 
@@ -65138,7 +65119,7 @@ endfunction
 function Func3116 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
 	local unit loc_unit01 = unit125
-	local unit loc_unit02 = unit124
+	local unit loc_unit02 = tt_unit1
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0CQ')
 	local integer loc_integer03
 	local integer loc_integer04 = GetUnitAbilityLevel(loc_unit01, 'A0BR')
@@ -65338,7 +65319,7 @@ function Func3130 takes nothing returns boolean
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (304)))
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (305)))
-	if loc_unit01 == null or IsDead(loc_unit01)or Func0118()or Func0367(loc_unit01, integers084[integer335]) == null then
+	if loc_unit01 == null or IsDead(loc_unit01)or Func0118()or Func0367(loc_unit01, Item_Real[integer335]) == null then
 		call ShowUnit(loc_unit02, false)
 	else
 		call ShowUnit(loc_unit02, true)
@@ -65412,7 +65393,7 @@ endfunction
 
 function Func3134 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (5)))
 	local real loc_real01 = loc_integer02 * 50
@@ -65550,8 +65531,8 @@ function Func3143 takes nothing returns boolean
 	set loc_integer02 = loc_integer02 + 1
 	call SaveInteger(HY, (loc_integer01), (34), (loc_integer02))
 	if loc_unit01 != null and IsDead(loc_unit01) == false and GetUnitAbilityLevel(loc_unit01, 'A03P') > 0 then
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1625, Condition(function Func0287))
 		if FirstOfGroup(loc_group01) == null then
 			if loc_boolean01 == true and loc_integer02 > 15 then
@@ -65590,7 +65571,7 @@ function Func3143 takes nothing returns boolean
 				endif
 			endif
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -65645,14 +65626,14 @@ function Func3148 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (22)))
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (6)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (7)))
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (221)))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit335 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 300, Condition(function Func0283))
 	set group002 = loc_group01
 	call ForGroup(loc_group02, function Func3147)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if GetTriggerEvalCount(loc_trigger01) > real328 * 10 then
 		set loc_integer02 = 1
 		loop
@@ -65660,7 +65641,7 @@ function Func3148 takes nothing returns boolean
 			call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (2700 + loc_integer02))))
 			set loc_integer02 = loc_integer02 + 1
 		endloop
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -65682,7 +65663,7 @@ function Func3149 takes nothing returns nothing
 	local string loc_string01 = "Abilities\\Spells\\Undead\\Graveyard\\GraveMarker.mdl"
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer03 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call Func0174(sound004, loc_real01, loc_real02)
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.1, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func3148))
@@ -65766,15 +65747,15 @@ function Func3153 takes nothing returns nothing
 endfunction
 
 function Func3154 takes unit loc_unit01, unit loc_unit02 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call DestroyEffect(AddSpecialEffect("Doodads\\Cinematic\\ShimmeringPortal\\ShimmeringPortal.mdl", GetUnitX(loc_unit01), GetUnitY(loc_unit01)))
 	call DestroyEffect(AddSpecialEffect("Doodads\\Cinematic\\ShimmeringPortal\\ShimmeringPortal.mdl", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
 	set real009 = GetUnitX(loc_unit02)
 	set real010 = GetUnitY(loc_unit02)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 475, Condition(function Func0312))
 	call ForGroup(loc_group01, function Func3153)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -65829,7 +65810,7 @@ function Func3156 takes nothing returns boolean
 		set loc_real01 = Func0141(real010, real011, GetUnitX(GetFilterUnit()), GetUnitY(GetFilterUnit()))
 		if loc_real01 < real009 then
 			set real009 = loc_real01
-			set unit124 = GetFilterUnit()
+			set tt_unit1 = GetFilterUnit()
 		endif
 	endif
 	return false
@@ -65843,18 +65824,18 @@ function Func3157 takes unit loc_unit01 returns unit
 	set loc_location01 = GetSpellTargetLoc()
 	set loc_real01 = GetLocationX(loc_location01)
 	set loc_real02 = GetLocationY(loc_location01)
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	set integer022 = GetUnitAbilityLevel(loc_unit01, 'A0R0')
-	set unit124 = null
+	set tt_unit1 = null
 	set real009 = 9999
 	set real010 = loc_real01
 	set real011 = loc_real02
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 4000, Condition(function Func3156))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 	set loc_location01 = null
 	set loc_group01 = null
-	return unit124
+	return tt_unit1
 endfunction
 
 function Func3158 takes unit loc_unit01 returns nothing
@@ -65960,7 +65941,7 @@ function Func3165 takes nothing returns boolean
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (14)))
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (6)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (7)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real03 = 600
 	local real loc_real04 = 600
 	local unit loc_unit02
@@ -65968,7 +65949,7 @@ function Func3165 takes nothing returns boolean
 	set loc_real02 = GetUnitY(loc_unit01)
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real03, Condition(function Func0334))
 	set loc_unit02 = FirstOfGroup(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_unit02 == null then
 		if(LoadBoolean(HY, (loc_integer01), (307))) == true and(LoadBoolean(HY, (loc_integer01), (308))) == true then
 			call UnitRemoveAbility(loc_unit01, 'A283')
@@ -65989,16 +65970,16 @@ function Func3165 takes nothing returns boolean
 		call FlushChildHashtable(HY, (GetHandleId(loc_unit02)))
 		call DestroyEffect(AddSpecialEffect("war3mapImported\\CorpseExplosion.mdx", loc_real01, loc_real02))
 		call RemoveUnit(loc_unit02)
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit336 = loc_unit01
 		set real330 = 20 * GetUnitAbilityLevel(loc_unit01, 'A288')
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real04, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3163)
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real04, Condition(function Func0307))
 		call ForGroup(loc_group01, function Func3164)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_group01 = null
 	set loc_unit01 = null
@@ -66046,12 +66027,12 @@ function Func3170 takes nothing returns boolean
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (19)))
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set real331 = GetUnitAbilityLevel(loc_unit01, 'A01I') * 10 + 10
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 475, Condition(function Func0307))
 	call ForGroup(loc_group01, function Func3169)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if GetTriggerEvalCount(loc_trigger01) == 5 then
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
@@ -66298,10 +66279,10 @@ function Func3179 takes nothing returns boolean
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, 'A261')
 	local integer loc_integer04 = 2 + 2 * loc_integer03
 	if loc_integer02 < loc_integer04 and IsDead(loc_unit01) == false then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 925, Condition(function Func0334))
 		set loc_unit02 = FirstOfGroup(loc_group01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		if loc_unit02 != null then
 			set loc_integer02 = loc_integer02 + 1
 			call Func3178(loc_unit01, loc_integer02)
@@ -66331,16 +66312,16 @@ function Func3181 takes nothing returns nothing
 endfunction
 
 function Func3182 takes unit loc_unit01, integer loc_integer01, real loc_real01, real loc_real02, integer loc_integer02, boolean loc_boolean01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit337 = loc_unit01
 	set real332 = 30 * loc_integer02
 	if loc_boolean01 then
 		set real332 = real332 + 10 * loc_integer02
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 350, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func3181)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3183 takes unit loc_unit01, real loc_real01, real loc_real02 returns boolean
@@ -66541,7 +66522,7 @@ function Func3191 takes nothing returns nothing
 	call SetUnitAbilityLevel(loc_unit02, 'A2L5', GetUnitAbilityLevel(loc_unit01, 'A2L6'))
 	call SaveReal(HY, (GetHandleId(loc_unit02)), (34), (((TimerGetElapsed(GlobalTimer))) * 1.0))
 	set unit338 = loc_unit01
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 99999, Condition(function Func3190))
 	if CountUnitsInGroup(loc_group01) > loc_integer02 + 1 then
 		set loc_unit04 = FirstOfGroup(loc_group01)
@@ -66559,7 +66540,7 @@ function Func3191 takes nothing returns nothing
 		endloop
 		call KillUnit(loc_unit03)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit02 = null
 	set loc_unit01 = null
@@ -66702,13 +66683,13 @@ endfunction
 function Func3205 takes nothing returns boolean
 	local group loc_group01
 	if IsUnitType(GetTriggerUnit(), UNIT_TYPE_HERO) == true and Func0431(GetUnitTypeId(GetTriggerUnit())) == false and IsUnitIllusion(GetTriggerUnit()) == false then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()), 475, Condition(function Func3204))
 		if GetUnitTypeId(GetKillingUnit()) == 'U00F' then
 			call GroupAddUnit(loc_group01, GetKillingUnit())
 		endif
 		call ForGroup(loc_group01, function Func3203)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	return false
@@ -66896,11 +66877,11 @@ function Func3215 takes nothing returns boolean
 		set loc_real02 = GetUnitX(loc_unit01) + loc_integer02 * 40 * Cos(loc_real01 * bj_DEGTORAD)
 		set loc_real03 = GetUnitY(loc_unit01) + loc_integer02 * 40 * Sin(loc_real01 * bj_DEGTORAD)
 		call SaveUnitHandle(HY, (loc_integer04), (2100 + loc_integer02), (CreateUnit(GetOwningPlayer(loc_unit01), 'u00H', loc_real02, loc_real03, loc_real01)))
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real02, loc_real03, 125, Condition(function Func0320))
 		call GroupRemoveUnit(loc_group01, loc_unit01)
 		set loc_unit02 = GroupPickRandomUnit(loc_group01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		if loc_unit02 != null then
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
@@ -67100,11 +67081,11 @@ function Func3226 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 400 + 300 * 4 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3225)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -67230,7 +67211,7 @@ function Func3235 takes nothing returns boolean
 	local real loc_real04 = GetUnitY(loc_unit01)
 	local integer loc_integer03
 	local integer loc_integer04
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	call SetUnitX(loc_unit02, GetUnitX(loc_unit01))
 	call SetUnitY(loc_unit02, GetUnitY(loc_unit01))
 	set group023 = loc_group01
@@ -67244,7 +67225,7 @@ function Func3235 takes nothing returns boolean
 			exitwhen loc_integer03 > 36
 			set loc_real01 = loc_real02 + loc_integer04 * Cos(360 * loc_integer03 / 36 * bj_DEGTORAD)
 			set loc_real03 = loc_real04 + loc_integer04 * Sin(360 * loc_integer03 / 36 * bj_DEGTORAD)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real03, 100, Condition(function Func0294))
 			call ForGroup(loc_group02, function Func3234)
 			set loc_integer03 = loc_integer03 + 1
@@ -67257,16 +67238,16 @@ function Func3235 takes nothing returns boolean
 			exitwhen loc_integer03 > 36
 			set loc_real01 = loc_real02 + loc_integer04 * Cos(360 * loc_integer03 / 36 * bj_DEGTORAD)
 			set loc_real03 = loc_real04 + loc_integer04 * Sin(360 * loc_integer03 / 36 * bj_DEGTORAD)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real03, 100, Condition(function Func0294))
 			call ForGroup(loc_group02, function Func3234)
 			set loc_integer03 = loc_integer03 + 1
 		endloop
 	endif
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if loc_integer02 == 40 then
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
@@ -67289,7 +67270,7 @@ function Func3236 takes nothing returns nothing
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'h092', loc_real01, loc_real02, 0)
 	local integer loc_integer01 = 0
 	local integer loc_integer02 = 36
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer03 = GetHandleId(loc_trigger01)
 	call SaveEffectHandle(HY, (loc_integer03), (32), (AddSpecialEffectTarget("effects\\Lightning_Ball_Tail_FX.mdx", loc_unit01,"origin")))
@@ -67565,7 +67546,7 @@ function Func3251 takes nothing returns boolean
 	local real loc_real04 = (LoadReal(HY, (loc_integer01), (65)))
 	local real loc_real05 = (LoadReal(HY, (loc_integer01), (137)))
 	local unit loc_unit03 = null
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set loc_real03 = Func0120(loc_real03 + 25 * Cos(loc_real05))
 	set loc_real04 = Func0122(loc_real04 + 25 * Sin(loc_real05))
 	call SaveReal(HY, (loc_integer01), (64), ((loc_real03) * 1.0))
@@ -67573,10 +67554,10 @@ function Func3251 takes nothing returns boolean
 	call MoveLightning(loc_lightning01, true, loc_real01, loc_real02, loc_real03, loc_real04)
 	call SetUnitX(loc_unit02, loc_real03)
 	call SetUnitY(loc_unit02, loc_real04)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real03, loc_real04, 225, Condition(function Func0316))
 	set loc_unit03 = FirstOfGroup(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_unit03 != null then
 		call Func3250(loc_unit01, loc_unit03, loc_lightning01, loc_unit02)
 		call FlushChildHashtable(HY, (loc_integer01))
@@ -67742,7 +67723,7 @@ function Func3260 takes unit loc_unit01, unit loc_unit02, unit loc_unit03, integ
 endfunction
 
 function Func3261 takes nothing returns boolean
-	if(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false))and GetUnitTypeId(GetFilterUnit()) != 'n00L' then
+	if(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false))and GetUnitTypeId(GetFilterUnit()) != 'n00L' then
 		if GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) < real335 then
 			set real335 = GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE)
 			set unit341 = GetFilterUnit()
@@ -67752,7 +67733,7 @@ function Func3261 takes nothing returns boolean
 endfunction
 
 function Func3262 takes nothing returns boolean
-	if(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124))and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false))and GetUnitTypeId(GetFilterUnit()) != 'emow' and GetUnitTypeId(GetFilterUnit()) != 'uzig' and GetUnitTypeId(GetFilterUnit()) != 'n00L' then
+	if(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1))and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false))and GetUnitTypeId(GetFilterUnit()) != 'emow' and GetUnitTypeId(GetFilterUnit()) != 'uzig' and GetUnitTypeId(GetFilterUnit()) != 'n00L' then
 		if GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) < real335 then
 			set real335 = GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE)
 			set unit341 = GetFilterUnit()
@@ -67762,18 +67743,18 @@ function Func3262 takes nothing returns boolean
 endfunction
 
 function Func3263 takes unit loc_unit01, unit loc_unit02, integer loc_integer01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit341 = null
 	set real335 = 999999
 	set real334 = 30 + 30 * loc_integer01
 	set unit340 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	if GetUnitAbilityLevel(loc_unit01, 'A1UV') > 0 then
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 525, Condition(function Func3262))
 	else
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 525, Condition(function Func3261))
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if unit341 != null then
 		call Func3260(loc_unit01, loc_unit02, unit341, loc_integer01)
 	endif
@@ -67960,7 +67941,7 @@ function Func3272 takes nothing returns nothing
 endfunction
 
 function Func3273 takes unit loc_unit01, real loc_real01, real loc_real02, integer loc_integer01, integer loc_integer02 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real03
 	local string loc_string01
 	if loc_integer02 == 8 then
@@ -67980,12 +67961,12 @@ function Func3273 takes unit loc_unit01, real loc_real01, real loc_real02, integ
 		set loc_string01 = "war3mapImported\\EpiPulse_9_12.mdx"
 	endif
 	call DestroyEffect(AddSpecialEffect(loc_string01, loc_real01, loc_real02))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit342 = loc_unit01
 	set unit343 = units027[GetPlayerId(GetOwningPlayer(loc_unit01))]
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real03, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func3272)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func0208(0.03, false, loc_real01, loc_real02, 150 + 100 * loc_integer02, 150 + 100 * loc_integer02, 72, 0.03, 512)
 	set loc_group01 = null
 endfunction
@@ -68106,7 +68087,7 @@ function Func3279 takes unit loc_unit01, integer loc_integer01, unit loc_unit02,
 endfunction
 
 function Func3280 takes nothing returns boolean
-	if(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
+	if(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
 		call Func0109(unit344, GetFilterUnit(), 1, real336)
 	endif
 	return false
@@ -68132,12 +68113,12 @@ function Func3281 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit344 = loc_unit01
 		set real336 = loc_integer02 * 20 * 0.5
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), loc_integer04, Condition(function Func3280))
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -68207,7 +68188,7 @@ function Func3286 takes nothing returns nothing
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A29K')
 	call Func0183(loc_unit02, 'A0M9')
 	call SetUnitAbilityLevel(loc_unit02, 'A0M9', loc_integer01)
@@ -68219,7 +68200,7 @@ function Func3286 takes nothing returns nothing
 	set integer490 = loc_integer01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 350 + 25, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func3285)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_unit02 = null
 	set loc_group01 = null
@@ -68407,7 +68388,7 @@ function Func3306 takes nothing returns nothing
 	local timer loc_timer01 = GetExpiredTimer()
 	local integer loc_integer01 = GetHandleId(loc_timer01)
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (133)))
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3305)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (14)))
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (45)))
@@ -68439,13 +68420,13 @@ function Func3306 takes nothing returns nothing
 	set real002 = 50 * GetUnitAbilityLevel(loc_unit01, ('A0HW'))
 	call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 150, loc_boolexpr01)
 	call ForGroup(loc_group02, function Func3304)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if(loc_real06 - loc_real01) * (loc_real06 - loc_real01) + (loc_real07 - loc_real02) * (loc_real07 - loc_real02) < 1600 then
 		call PauseTimer(loc_timer01)
 		call Func0021(loc_integer02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 endfunction
 
@@ -68453,7 +68434,7 @@ function Func3307 takes nothing returns nothing
 	local timer loc_timer01 = GetExpiredTimer()
 	local integer loc_integer01 = GetHandleId(loc_timer01)
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (133)))
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3305)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (14)))
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (45)))
@@ -68482,12 +68463,12 @@ function Func3307 takes nothing returns nothing
 	set real002 = 50 * GetUnitAbilityLevel(loc_unit01, ('A0HW'))
 	call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 150, loc_boolexpr01)
 	call ForGroup(loc_group02, function Func3304)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if(loc_real06 - loc_real01) * (loc_real06 - loc_real01) + (loc_real07 - loc_real02) * (loc_real07 - loc_real02) < 1600 then
 		call PauseTimer(loc_timer01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 endfunction
 
@@ -68561,7 +68542,7 @@ function Func3311 takes nothing returns nothing
 	local unit loc_unit03 = CreateUnit(GetOwningPlayer(loc_unit01), ('h003'), loc_real01, loc_real02, 0)
 	local timer loc_timer01 = CreateTimer()
 	local integer loc_integer01 = GetHandleId(loc_timer01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local location loc_location01
 	local real loc_real03
 	local real loc_real04
@@ -68618,7 +68599,7 @@ endfunction
 function Func3315 takes nothing returns nothing
 	local unit loc_unit01 = GetAttacker()
 	local unit loc_unit02 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3314)
 	local integer loc_integer01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 325 + 25, loc_boolexpr01)
@@ -68631,7 +68612,7 @@ function Func3315 takes nothing returns nothing
 			call Func0044(loc_unit01, 4275, 0.3)
 		endif
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3316 takes nothing returns nothing
@@ -68663,12 +68644,12 @@ function Func3318 takes nothing returns boolean
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0NA')
 	local group loc_group01
 	if Func0098(loc_real01)and GetUnitAbilityLevel(loc_unit01, 'BNdo') == 0 then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set real337 = loc_real01 * (0.06 + 0.04 * loc_integer01)
 		call Func0137(loc_unit01, real337)
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1025, Condition(function Func0278))
 		call ForGroup(loc_group01, function Func3317)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -68795,7 +68776,7 @@ endfunction
 
 function Func3328 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3324)
 	local sound loc_sound01
 	call Func0183(GetTriggerUnit(), ('A0HA'))
@@ -68808,7 +68789,7 @@ function Func3328 takes nothing returns nothing
 		call StartSound(loc_sound01)
 		call KillSoundWhenDone(loc_sound01)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3329 takes nothing returns boolean
@@ -68862,7 +68843,7 @@ function Func3334 takes nothing returns nothing
 endfunction
 
 function Func3335 takes nothing returns unit
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3333)
 	set unit002 = null
 	set real002 = 9999999
@@ -68889,7 +68870,7 @@ function Func3337 takes nothing returns nothing
 		set loc_real01 = GetUnitX(loc_unit02)
 		set loc_real02 = GetUnitY(loc_unit02)
 		call KillUnit(loc_unit02)
-		call Func0029(group024)
+		call KillGroup(group024)
 		set group024 = null
 		call SetUnitX(loc_unit01, loc_real01)
 		call SetUnitY(loc_unit01, loc_real02)
@@ -69097,7 +69078,7 @@ function Func3351 takes integer loc_integer01 returns boolean
 endfunction
 
 function Func3352 takes nothing returns boolean
-	if(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit347)) == true then
+	if(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit347)) == true then
 		if Func0139(unit348, GetFilterUnit()) < real339 then
 			set real339 = Func0139(unit348, GetFilterUnit())
 			set unit346 = GetFilterUnit()
@@ -69107,14 +69088,14 @@ function Func3352 takes nothing returns boolean
 endfunction
 
 function Func3353 takes unit loc_unit01, unit loc_unit02 returns unit
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit347 = loc_unit01
 	set unit346 = null
 	set real339 = 999999
 	set unit348 = loc_unit02
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 4000, Condition(function Func3352))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return unit346
 endfunction
@@ -69142,7 +69123,7 @@ function Func3354 takes nothing returns boolean
 			call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (177))))
 			call UnitRemoveAbility(loc_unit02, 'A24L')
 			call UnitRemoveAbility(loc_unit02, 'B0ED')
-			call Func0029((LoadGroupHandle(HY, (loc_integer01), (187))))
+			call KillGroup((LoadGroupHandle(HY, (loc_integer01), (187))))
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
 			call SetUnitTimeScale(loc_unit01, 1)
@@ -69177,7 +69158,7 @@ function Func3354 takes nothing returns boolean
 			call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (177))))
 			call UnitRemoveAbility(loc_unit02, 'A24L')
 			call UnitRemoveAbility(loc_unit02, 'B0ED')
-			call Func0029((LoadGroupHandle(HY, (loc_integer01), (187))))
+			call KillGroup((LoadGroupHandle(HY, (loc_integer01), (187))))
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
 			call SetUnitTimeScale(loc_unit01, 1)
@@ -69197,7 +69178,7 @@ function Func3354 takes nothing returns boolean
 			call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (177))))
 			call UnitRemoveAbility(loc_unit02, 'A24L')
 			call UnitRemoveAbility(loc_unit02, 'B0ED')
-			call Func0029((LoadGroupHandle(HY, (loc_integer01), (187))))
+			call KillGroup((LoadGroupHandle(HY, (loc_integer01), (187))))
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
 			call SetUnitTimeScale(loc_unit01, 1)
@@ -69237,13 +69218,13 @@ function Func3354 takes nothing returns boolean
 			call SaveReal(HY, (loc_integer01), (23), ((loc_real04) * 1.0))
 			call SaveReal(HY, (loc_integer01), (24), ((loc_real05) * 1.0))
 			set group025 = (LoadGroupHandle(HY, (loc_integer01), (187)))
-			set loc_group01 = Func0030()
-			set unit124 = loc_unit01
+			set loc_group01 = GetAvailableGroup()
+			set tt_unit1 = loc_unit01
 			set unit347 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real04, loc_real05, 325, Condition(function Func0283))
 			set integer491 = loc_integer02
 			call ForGroup(loc_group01, function Func3350)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			set loc_group01 = null
 			if loc_real07 < 3000 and GetUnitAbilityLevel(loc_unit02, 'A24L') == 0 then
 			endif
@@ -69288,7 +69269,7 @@ function Func3355 takes nothing returns nothing
 	call SaveEffectHandle(HY, (loc_integer01), (175), (AddSpecialEffectTarget(loc_string01, loc_unit02,"overhead")))
 	call SaveEffectHandle(HY, (loc_integer01), (176), (AddSpecialEffectTarget(loc_string01, loc_unit02,"overhead")))
 	call SaveEffectHandle(HY, (loc_integer01), (177), (AddSpecialEffectTarget("war3mapImported\\ShockwaveMissilePurple.mdx", loc_unit01,"origin")))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.02, true)
 	call TriggerRegisterDeathEvent(loc_trigger01, loc_unit01)
 	call TriggerRegisterDeathEvent(loc_trigger01, loc_unit02)
@@ -69331,12 +69312,12 @@ function Func3359 takes nothing returns nothing
 endfunction
 
 function Func3360 takes unit loc_unit01, unit loc_unit02 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit349 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 275, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func3359)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -69934,7 +69915,7 @@ function Func3399 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (22)))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
 	set loc_trigger01 = null
@@ -69962,7 +69943,7 @@ function Func3401 takes nothing returns nothing
 	local real loc_real05
 	local real loc_real06
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A29I')
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real07 = 500
 	if loc_integer02 == 1 then
 		set loc_real06 = 1.5
@@ -70040,15 +70021,15 @@ function Func3406 takes nothing returns nothing
 endfunction
 
 function Func3407 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A226')
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set integer492 = loc_integer01
 	set unit350 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 425, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func3406)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -70114,13 +70095,13 @@ function Func3414 takes nothing returns nothing
 endfunction
 
 function Func3415 takes unit loc_unit01, unit loc_unit02, real loc_real01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3413)
 	set unit002 = loc_unit01
 	set real002 = loc_real01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 185 + 25, loc_boolexpr01)
 	call ForGroup(loc_group01, function Func3414)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3416 takes nothing returns boolean
@@ -70128,7 +70109,7 @@ function Func3416 takes nothing returns boolean
 endfunction
 
 function Func3417 takes group loc_group01, unit loc_unit01, unit loc_unit02, unit loc_unit03 returns unit
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3416)
 	local unit loc_unit04 = null
 	local unit loc_unit05
@@ -70153,7 +70134,7 @@ function Func3417 takes group loc_group01, unit loc_unit01, unit loc_unit02, uni
 		call GroupRemoveUnit(loc_group02, loc_unit05)
 		set loc_unit05 = FirstOfGroup(loc_group02)
 	endloop
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	return loc_unit04
 endfunction
 
@@ -70167,7 +70148,7 @@ function Func3418 takes nothing returns nothing
 	local integer loc_integer02 = 1
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, ('A0OR'))
 	local real loc_real01 = 60 + loc_integer03 * 20
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer04
 	local boolean loc_boolean01 = false
 	set unit351 = loc_unit01
@@ -70190,7 +70171,7 @@ function Func3418 takes nothing returns nothing
 		set loc_units01[loc_integer02] = loc_unit02
 	endif
 	if loc_units01[loc_integer02] == null then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		return
 	endif
 	call SetUnitState(loc_units01[loc_integer02], UNIT_STATE_LIFE, GetUnitState(loc_units01[loc_integer02], UNIT_STATE_LIFE) + loc_real01)
@@ -70213,7 +70194,7 @@ function Func3418 takes nothing returns nothing
 			set loc_integer02 = loc_integer02 + 1
 		endif
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3419 takes nothing returns nothing
@@ -70362,7 +70343,7 @@ endfunction
 function Func3427 takes nothing returns nothing
 	local unit loc_unit01 = GetEnumUnit()
 	if IsDead(loc_unit01) == false then
-		if IsUnitAlly(loc_unit01, player005) == false then
+		if IsUnitAlly(loc_unit01, tt_player1) == false then
 			if integer022 == 0 then
 				call Func0183(loc_unit01, 'A0NU')
 			else
@@ -70386,11 +70367,11 @@ function Func3428 takes nothing returns boolean
 	local player loc_player01 = (LoadPlayerHandle(HY, (loc_integer01), (54)))
 	local integer loc_integer02 = GetTriggerEvalCount(loc_trigger01)
 	local integer loc_integer03 = (LoadInteger(HY, (loc_integer01), (188)))
-	set player005 = loc_player01
+	set tt_player1 = loc_player01
 	set integer022 = loc_integer02
 	if loc_integer02 >= loc_integer03 / 1.0 then
 		call ForGroup(loc_group01, function Func3426)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
@@ -70412,7 +70393,7 @@ endfunction
 function Func3430 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local location loc_location01 = GetSpellTargetLoc()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A10Q')
@@ -70639,7 +70620,7 @@ endfunction
 
 function Func3442 takes nothing returns nothing
 	if IsUnitInGroup(GetEnumUnit(), group002) == false then
-		set unit352 = CreateUnit(GetOwningPlayer(unit124), 'e00E', GetUnitX(GetEnumUnit()), GetUnitY(GetEnumUnit()), 0)
+		set unit352 = CreateUnit(GetOwningPlayer(tt_unit1), 'e00E', GetUnitX(GetEnumUnit()), GetUnitY(GetEnumUnit()), 0)
 		call Func0183(unit352, 'A17N')
 		call SetUnitAbilityLevel(unit352, 'A17N', integer493)
 		call IssueTargetOrder(unit352,"shadowstrike", GetEnumUnit())
@@ -70663,7 +70644,7 @@ function Func3443 takes nothing returns boolean
 	local unit loc_unit02
 	set integer493 = loc_integer02
 	if GetTriggerEvalCount(loc_trigger01) > 28 then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call ShowUnit(loc_unit01, false)
@@ -70671,13 +70652,13 @@ function Func3443 takes nothing returns boolean
 	else
 		set loc_real02 = GetUnitX(loc_unit01)
 		set loc_real03 = GetUnitY(loc_unit01)
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		set group002 = loc_group01
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set real009 = loc_integer02 * 70
 		call GroupEnumUnitsInRange(loc_group02, loc_real02, loc_real03, 150, Condition(function Func0294))
 		call ForGroup(loc_group02, function Func3442)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		set loc_real04 = Func0120(loc_real02 + loc_real06 * Cos(loc_real01 * bj_DEGTORAD))
 		set loc_real05 = Func0122(loc_real03 + loc_real06 * Sin(loc_real01 * bj_DEGTORAD))
 		call SetUnitX(loc_unit01, loc_real04)
@@ -70697,7 +70678,7 @@ endfunction
 function Func3444 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetUnitX(loc_unit01)
@@ -71284,7 +71265,7 @@ function Func3478 takes nothing returns boolean
 endfunction
 
 function Func3479 takes nothing returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
@@ -71296,7 +71277,7 @@ function Func3479 takes nothing returns nothing
 	local integer loc_integer02
 	local boolean loc_boolean01 = false
 	call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(loc_unit01), Condition(function Func3478))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_integer01 == 0 then
 		set loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2IG')
 		set loc_boolean01 = true
@@ -71643,7 +71624,7 @@ endfunction
 
 function Func3486 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (20)))
 	if IsUnitAlly(loc_unit02, GetOwningPlayer(loc_unit01)) == false then
@@ -71822,12 +71803,12 @@ function Func3498 takes nothing returns nothing
 endfunction
 
 function Func3499 takes unit loc_unit01, unit loc_unit02 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local boolexpr loc_boolexpr01 = Condition(function Func3497)
 	set unit002 = loc_unit02
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 675, loc_boolexpr01)
 	call ForGroup(loc_group01, function Func3498)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3500 takes nothing returns nothing
@@ -71929,7 +71910,7 @@ function Func3508 takes nothing returns nothing
 	if GetTriggerEventId() != EVENT_UNIT_DAMAGED then
 		call ForGroup(loc_group01, function Func3505)
 		call FlushChildHashtable(HY, (loc_integer01))
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call CleanTrigger((loc_trigger01))
 	elseif GetEventDamage() > 10 and GetEventDamage() < 6000 then
 		call DisableTrigger(loc_trigger01)
@@ -71945,13 +71926,13 @@ endfunction
 function Func3510 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local unit loc_unit02 = GetSpellTargetUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, ('A0J5'))
 	local boolexpr loc_boolexpr01 = Condition(function Func3509)
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer02 = GetHandleId(loc_trigger01)
 	local integer loc_integer03 = 2
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local unit array loc_units01
 	local string loc_string01 = "Abilities\\Spells\\Undead\\Curse\\CurseTarget.mdl"
 	call SaveUnitHandle(HY, (loc_integer02), (14), (loc_unit01))
@@ -71979,7 +71960,7 @@ function Func3510 takes nothing returns nothing
 	call ForGroup(loc_group02, function Func3504)
 	call TriggerRegisterTimerEvent(loc_trigger01, 25, false)
 	call TriggerAddAction(loc_trigger01, function Func3508)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 endfunction
 
 function Func3511 takes nothing returns nothing
@@ -72094,13 +72075,13 @@ function Func3518 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit353 = loc_unit01
 		set integer494 = loc_integer02
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 275, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3517)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -72294,7 +72275,7 @@ function Func3535 takes nothing returns boolean
 endfunction
 
 function Func3536 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0CT')
 	local trigger loc_trigger01
 	set loc_trigger01 = CreateTrigger()
@@ -72440,7 +72421,7 @@ function Func3545 takes unit loc_unit01, unit loc_unit02, integer loc_integer01 
 endfunction
 
 function Func3546 takes nothing returns boolean
-	return(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and((LoadInteger(HY, (GetHandleId((GetFilterUnit()))), ((4290)))) == 1) == false and(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124)) == true or Func0265(GetFilterUnit()) == false)
+	return(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and((LoadInteger(HY, (GetHandleId((GetFilterUnit()))), ((4290)))) == 1) == false and(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == true or Func0265(GetFilterUnit()) == false)
 endfunction
 
 function Func3547 takes nothing returns boolean
@@ -72471,8 +72452,8 @@ function Func3547 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 400, Condition(function Func3546))
 		loop
 			exitwhen loc_integer02 > 12
@@ -72496,7 +72477,7 @@ function Func3547 takes nothing returns boolean
 			endif
 			set loc_integer02 = loc_integer02 + 1
 		endloop
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 		set loc_unit02 = null
 		set loc_unit03 = null
@@ -72595,14 +72576,14 @@ function Func3551 takes unit loc_unit01, unit loc_unit02, unit loc_unit03, integ
 endfunction
 
 function Func3552 takes unit loc_unit01, unit loc_unit02 returns unit
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 600, Condition(function Func0282))
 	call GroupRemoveUnit(loc_group01, loc_unit02)
-	set unit124 = GroupPickRandomUnit(loc_group01)
-	call Func0029(loc_group01)
+	set tt_unit1 = GroupPickRandomUnit(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
-	return unit124
+	return tt_unit1
 endfunction
 
 function Func3553 takes nothing returns boolean
@@ -72692,7 +72673,7 @@ function Func3558 takes unit loc_unit01, integer loc_integer01 returns nothing
 endfunction
 
 function Func3559 takes nothing returns boolean
-	if(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
+	if(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit())) == false and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
 		call Func3558(GetFilterUnit(), integer022)
 	endif
 	return false
@@ -72700,11 +72681,11 @@ endfunction
 
 function Func3560 takes unit loc_unit01 returns nothing
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0NE')
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set integer022 = loc_integer01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 375, Condition(function Func3559))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -72825,11 +72806,11 @@ function Func3568 takes nothing returns nothing
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A0NO')
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 175, Condition(function Func0313))
 	call ForGroup(loc_group01, function Func3567)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call RemoveLocation(loc_location01)
 	set loc_location01 = null
 	set loc_group01 = null
@@ -73012,7 +72993,7 @@ function Func3578 takes unit loc_unit01, unit loc_unit02 returns nothing
 endfunction
 
 function Func3579 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = GetEnumUnit()
 	local integer loc_integer01 = GetPlayerId(GetOwningPlayer(loc_unit02))
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A1MI')
@@ -73049,11 +73030,11 @@ function Func3580 takes nothing returns boolean
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (282)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (283)))
 	local integer loc_integer02 = (LoadInteger(HY, (loc_integer01), (5)))
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 825, Condition(function Func0316))
 	call ForGroup(loc_group01, function Func3579)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if GetTriggerEvalCount(loc_trigger01) > 120 then
 		call KillUnit((LoadUnitHandle(HY, (loc_integer01), (434))))
 		call FlushChildHashtable(HY, (loc_integer01))
@@ -73195,12 +73176,12 @@ function Func3586 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (340)))
 	local real loc_real01 = GetUnitX(loc_unit02)
 	local real loc_real02 = GetUnitY(loc_unit02)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local group loc_group03
 	if GetTriggerEventId() == EVENT_UNIT_DEATH then
 		call ForGroup(loc_group01, function Func3584)
-		call Func0029(loc_group02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group02)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call ShowUnit(loc_unit02, false)
@@ -73212,13 +73193,13 @@ function Func3586 takes nothing returns boolean
 	endif
 	set unit354 = loc_unit01
 	set integer495 = GetUnitAbilityLevel(loc_unit01, 'A1HS')
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 300, Condition(function Func0283))
 	call GroupRemoveGroup(loc_group02, loc_group01)
 	call ForGroup(loc_group01, function Func3584)
 	call ForGroup(loc_group02, function Func3585)
 	call SaveGroupHandle(HY, (loc_integer01), (340), (loc_group02))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_unit02 = null
@@ -73241,7 +73222,7 @@ function Func3587 takes nothing returns nothing
 	call TriggerAddCondition(loc_trigger01, Condition(function Func3586))
 	call SaveUnitHandle(HY, (loc_integer02), (2), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer02), (19), (loc_unit02))
-	call SaveGroupHandle(HY, (loc_integer02), (340), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer02), (340), (GetAvailableGroup()))
 	call RemoveLocation(loc_location01)
 	set loc_unit01 = null
 	set loc_location01 = null
@@ -73413,24 +73394,24 @@ function Func3596 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call KillUnit(loc_unit01)
-		set unit124 = loc_unit02
+		set tt_unit1 = loc_unit02
 		set unit355 = loc_unit02
 		set integer496 = loc_integer02
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real05, loc_real06, loc_real04 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3594)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	else
 		call SetUnitX(loc_unit01, loc_real05)
 		call SetUnitY(loc_unit01, loc_real06)
-		set unit124 = loc_unit02
+		set tt_unit1 = loc_unit02
 		set unit355 = loc_unit02
 		set integer496 = loc_integer02
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real05, loc_real06, 300, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3595)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -73659,7 +73640,7 @@ endfunction
 
 function Func3606 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local location loc_location01 = GetSpellTargetLoc()
 	local real loc_real01 = GetLocationX(loc_location01)
 	local real loc_real02 = GetLocationY(loc_location01)
@@ -73667,7 +73648,7 @@ function Func3606 takes nothing returns nothing
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\IcyWind.mdl", loc_real01, loc_real02))
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 525 + 25, Condition(function Func0308))
 	call ForGroup(loc_group01, function Func3605)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 	set loc_location01 = null
@@ -73721,25 +73702,25 @@ function Func3611 takes nothing returns boolean
 			call UnitApplyTimedLife(loc_unit02, 'BTLF', 1)
 			set loc_unit02 = null
 			call TriggerRegisterTimerEvent(loc_trigger01, 0.1, true)
-			set loc_group01 = Func0030()
+			set loc_group01 = GetAvailableGroup()
 			set unit356 = loc_unit01
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 350, Condition(function Func0283))
 			call ForGroup(loc_group01, function Func3609)
 			call Func3610(loc_unit01)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 		else
 			if loc_integer03 == 10 then
 				call FlushChildHashtable(HY, (loc_integer01))
 				call CleanTrigger(loc_trigger01)
 			endif
-			set loc_group01 = Func0030()
+			set loc_group01 = GetAvailableGroup()
 			set unit356 = loc_unit01
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 350, Condition(function Func0283))
 			call ForGroup(loc_group01, function Func3609)
 			call Func3610(loc_unit01)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			call Func0346(loc_unit01)
 			call Func0344(loc_unit01, 0, 0)
 		endif
@@ -74252,7 +74233,7 @@ function Func3636 takes nothing returns boolean
 	local real loc_real09 = 700
 	local real loc_real10 = 175
 	local real loc_real11 = (1 - loc_real08 / loc_real09) * loc_real10 * 2
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02
 	if loc_integer02 == 1 then
 		call SetUnitAnimationByIndex(loc_unit01, 5)
@@ -74266,10 +74247,10 @@ function Func3636 takes nothing returns boolean
 	call SetUnitX(loc_unit01, Func0120(loc_real06))
 	call SetUnitY(loc_unit01, Func0122(loc_real07))
 	call SetUnitFacing(loc_unit01, loc_real01)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real06, loc_real07, 120, Condition(function Func0318))
 	set loc_unit02 = FirstOfGroup(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_real08 < 30 or loc_unit02 != null or GetTriggerEvalCount(loc_trigger01) > 75 then
 		call SetUnitFlyHeight(loc_unit01, 0, 0)
 		call SetUnitFacing(loc_unit01, loc_real01)
@@ -74335,7 +74316,7 @@ endfunction
 
 function Func3640 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (20)))
 	call Func0109(loc_unit01, loc_unit02, 1, loc_real01)
@@ -74367,11 +74348,11 @@ endfunction
 
 function Func3642 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A04A')
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 500, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func3641)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call PlaySoundOnUnitBJ(sound055, 100, loc_unit01)
 	set loc_unit01 = null
 endfunction
@@ -74505,7 +74486,7 @@ function Func3652 takes nothing returns boolean
 		endif
 		call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), 'A20N', false)
 		call SetUnitPathing(loc_unit01, true)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
@@ -74516,14 +74497,14 @@ function Func3652 takes nothing returns boolean
 		call SetUnitX(loc_unit01, loc_real09)
 		call SetUnitY(loc_unit01, loc_real10)
 		call SetUnitFacing(loc_unit01, (loc_real05 + loc_real06 - bj_PI / 2) * bj_RADTODEG)
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		set group026 = loc_group01
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit357 = loc_unit01
 		set integer497 = GetUnitAbilityLevel(loc_unit01, 'A1RJ')
 		call GroupEnumUnitsInRange(loc_group02, loc_real09, loc_real10, 200 + 25, Condition(function Func0290))
 		call ForGroup(loc_group02, function Func3651)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -74554,7 +74535,7 @@ function Func3653 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (47), ((loc_real04) * 1.0))
 	call SaveReal(HY, (loc_integer01), (48), ((loc_real05) * 1.0))
 	call SaveReal(HY, (loc_integer01), (13), ((loc_real03) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (133), (GetAvailableGroup()))
 	call SetUnitPathing(loc_unit01, false)
 	call SetUnitVertexColor(loc_unit01, 255, 255, 255, 50)
 	call Func0183(loc_unit01, 'A20N')
@@ -74597,13 +74578,13 @@ function Func3657 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit358 = loc_unit01
 		set integer498 = loc_integer02
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1000 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3656)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -74845,12 +74826,12 @@ function Func3664 takes nothing returns boolean
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\Firaga_2.mdx", loc_real01, loc_real02))
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	set real344 = 50 + 75 * loc_integer02
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 425, Condition(function Func0307))
 	call ForGroup(loc_group01, function Func3663)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -75002,7 +74983,7 @@ function Func3672 takes nothing returns boolean
 	local group loc_group02
 	if GetTriggerEvalCount(loc_trigger01) > 125 then
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
@@ -75012,17 +74993,17 @@ function Func3672 takes nothing returns boolean
 		call SetUnitY(loc_unit02, loc_real03)
 		call SaveReal(HY, (loc_integer01), (6), ((loc_real02) * 1.0))
 		call SaveReal(HY, (loc_integer01), (7), ((loc_real03) * 1.0))
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set real345 = loc_real02
 		set real346 = loc_real03
 		set real347 = loc_real01 * bj_RADTODEG
 		set group027 = loc_group01
 		set unit359 = loc_unit01
 		set unit360 = loc_unit02
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group02, loc_real02, loc_real03, 225, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func3671)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -75046,7 +75027,7 @@ function Func3673 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (6), ((GetUnitX(loc_unit01)) * 1.0))
 	call SaveReal(HY, (loc_integer01), (7), ((GetUnitY(loc_unit01)) * 1.0))
 	call SaveInteger(HY, (loc_integer01), (5), (loc_integer02))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	set loc_trigger01 = null
 	set loc_unit01 = null
 endfunction
@@ -75326,19 +75307,19 @@ function Func3679 takes nothing returns boolean
 		call SetUnitState(loc_unit01, UNIT_STATE_LIFE, GetUnitState(loc_unit01, UNIT_STATE_LIFE) - GetUnitState(loc_unit01, UNIT_STATE_LIFE) * 0.04 * 0.02)
 		call Func0172(loc_real06, loc_real07, 200)
 		if ModuloInteger(loc_integer02, 10) == 0 then
-			set group028 = Func0030()
-			set unit124 = loc_unit01
+			set group028 = GetAvailableGroup()
+			set tt_unit1 = loc_unit01
 			set loc_integer03 = 0
 			loop
 				exitwhen loc_integer03 * 50 > real348
 				set loc_real39 = loc_real06 + loc_integer03 * 50 * Cos(loc_real02)
 				set loc_real40 = loc_real07 + loc_integer03 * 50 * Sin(loc_real02)
-				set loc_group01 = Func0030()
+				set loc_group01 = GetAvailableGroup()
 				call GroupEnumUnitsInRange(loc_group01, loc_real39, loc_real40, 130 + 25, Condition(function Func0283))
 				call GroupAddGroup(loc_group01, group028)
 				call GroupEnumUnitsInRange(loc_group01, loc_real39, loc_real40, 130 + 25, Condition(function Func0307))
 				call GroupAddGroup(loc_group01, group028)
-				call Func0029(loc_group01)
+				call KillGroup(loc_group01)
 				if ModuloInteger(loc_integer03, 3) == 0 then
 					call Func0176(GetOwningPlayer(loc_unit01), 2, loc_real39, loc_real40, 225)
 				endif
@@ -75351,7 +75332,7 @@ function Func3679 takes nothing returns boolean
 			set real353 = (integer499 + loc_real53 * (integer499)) / 100
 			call GroupRemoveUnit(group028, loc_unit01)
 			call ForGroup(group028, function Func3678)
-			call Func0029(group028)
+			call KillGroup(group028)
 			set loc_group01 = null
 			set group028 = null
 		endif
@@ -75557,12 +75538,12 @@ endfunction
 function Func3685 takes unit loc_unit01, unit loc_unit02, real loc_real01, unit loc_unit03, unit loc_unit04 returns nothing
 	local real loc_real02 = GetUnitX(loc_unit02)
 	local real loc_real03 = GetUnitY(loc_unit02)
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit362 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real02, loc_real03, 175 + 25, Condition(function Func0290))
 	call ForGroup(loc_group01, function Func3684)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\Firaga_2.mdx", loc_real02, loc_real03))
 	call KillUnit(loc_unit02)
 	call ShowUnit(loc_unit02, false)
@@ -75909,11 +75890,11 @@ function Func3694 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetSpellTargetX()
 	local real loc_real02 = GetSpellTargetY()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call DestroyEffect(AddSpecialEffect("Environment\\LargeBuildingFire\\LargeBuildingFire1.mdl", loc_real01, loc_real02))
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 275 + 25, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func3693)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -76047,21 +76028,21 @@ function Func3700 takes nothing returns boolean
 	local group loc_group02 = (LoadGroupHandle(HY, (loc_integer01), (133)))
 	local unit loc_unit03
 	if loc_integer02 == 75 then
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call KillUnit(loc_unit02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit363 = loc_unit01
 		set group029 = loc_group02
 		call SetUnitX(loc_unit02, loc_real02)
 		call SetUnitY(loc_unit02, loc_real03)
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, loc_real02, loc_real03, 180 + 25, Condition(function Func0290))
 		call ForGroup(loc_group01, function Func3699)
 		set loc_unit03 = FirstOfGroup(loc_group01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -76085,7 +76066,7 @@ function Func3701 takes nothing returns nothing
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer01), (45), (loc_unit02))
 	call SaveReal(HY, (loc_integer01), (137), ((loc_real03) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (133), (GetAvailableGroup()))
 	call Func0183(loc_unit01, 'A1S9')
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -76238,13 +76219,13 @@ endfunction
 function Func3710 takes nothing returns nothing
 	local real loc_real01 = GetSpellTargetX()
 	local real loc_real02 = GetSpellTargetY()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit01 = GetTriggerUnit()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A1SB')
 	local unit loc_unit02
 	local trigger loc_trigger01
 	local integer loc_integer02
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 475, Condition(function Func0290))
 	set loc_unit02 = (LoadUnitHandle(HY, (GetHandleId(loc_unit01)), (673)))
 	if loc_unit02 != null then
@@ -76253,7 +76234,7 @@ function Func3710 takes nothing returns nothing
 		endif
 	endif
 	set loc_unit02 = GroupPickRandomUnit(loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\Desecrate.mdx", loc_real01, loc_real02))
 	if loc_unit02 != null then
 		set loc_trigger01 = CreateTrigger()
@@ -76586,22 +76567,22 @@ function Func3729 takes nothing returns boolean
 	elseif loc_integer02 == 3 then
 		call DestroyEffect(AddSpecialEffect("war3mapImported\\Calldown_FlyDown.mdx", loc_real01, loc_real02))
 	elseif loc_integer02 == 4 then
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit364 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3727)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call DestroyEffect(AddSpecialEffect("Abilities\\Weapons\\DemolisherFireMissile\\DemolisherFireMissile.mdl", loc_real01, loc_real02))
 	elseif loc_integer02 == 5 then
 		call DestroyEffect(AddSpecialEffect("war3mapImported\\Calldown_FlyDown.mdx", loc_real01, loc_real02))
 	elseif loc_integer02 == 6 then
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit364 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3728)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call DestroyEffect(AddSpecialEffect("Abilities\\Weapons\\DemolisherFireMissile\\DemolisherFireMissile.mdl", loc_real01, loc_real02))
 		call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 		call FogModifierStop(loc_fogmodifier01)
@@ -76691,7 +76672,7 @@ function Func3734 takes nothing returns boolean
 		call UnitRemoveAbility(loc_unit01, 'A237')
 		call UnitAddAbility(loc_unit01, 'A22B')
 		call UnitRemoveAbility(loc_unit01, 'A22B')
-		if(Func0367((loc_unit01), integers084[integer359]) != null)then
+		if(Func0367((loc_unit01), Item_Real[integer359]) != null)then
 			call UnitAddAbility(loc_unit01, 'A237')
 		endif
 	endif
@@ -76707,7 +76688,7 @@ function Func3735 takes unit loc_unit01 returns nothing
 		call UnitRemoveAbility(loc_unit01, 'A237')
 		call UnitAddAbility(loc_unit01, 'A22B')
 		call UnitRemoveAbility(loc_unit01, 'A22B')
-		if(Func0367((loc_unit01), integers084[integer359]) != null)then
+		if(Func0367((loc_unit01), Item_Real[integer359]) != null)then
 			call UnitAddAbility(loc_unit01, 'A237')
 		endif
 	else
@@ -76775,7 +76756,7 @@ function Func3737 takes nothing returns nothing
 	call UnitRemoveAbility(loc_unit01, 'A237')
 	call UnitAddAbility(loc_unit01, 'A22A')
 	call UnitRemoveAbility(loc_unit01, 'A22A')
-	if(Func0367((loc_unit01), integers084[integer359]) != null)then
+	if(Func0367((loc_unit01), Item_Real[integer359]) != null)then
 		call UnitAddAbility(loc_unit01, 'A237')
 	endif
 	set loc_trigger01 = null
@@ -76817,7 +76798,7 @@ function Func3741 takes nothing returns boolean
 	local real loc_real06
 	local real loc_real07
 	local real loc_real08
-	if(Func0095(GetFilterUnit()) == false and IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
+	if(Func0095(GetFilterUnit()) == false and IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))then
 		if((LoadInteger(HY, (GetHandleId((loc_unit01))), ((4324)))) == 1) == false then
 			call Func0044(loc_unit01, 4324, 0.3)
 		endif
@@ -76857,11 +76838,11 @@ function Func3742 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set real355 = loc_real01
 		set real356 = loc_real02
 		set unit365 = loc_unit01
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		loop
 			exitwhen loc_integer02 > 16
 			set loc_real03 = loc_real01 + real359 * Cos(bj_DEGTORAD * 360.0 * loc_integer02 / 16.0)
@@ -76871,7 +76852,7 @@ function Func3742 takes nothing returns boolean
 			call GroupEnumUnitsInRange(loc_group01, loc_real03, loc_real04, 75, Condition(function Func3741))
 			set loc_integer02 = loc_integer02 + 1
 		endloop
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -77016,7 +76997,7 @@ function Func3749 takes nothing returns boolean
 endfunction
 
 function Func3750 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local integer loc_integer01 = GetHandleId(loc_unit01)
 	local integer loc_integer02 = 0
 	loop
@@ -77042,10 +77023,10 @@ function Func3751 takes nothing returns nothing
 endfunction
 
 function Func3752 takes nothing returns boolean
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 99999, Condition(function Func0323))
 	call ForGroup(loc_group01, function Func3751)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return false
 endfunction
@@ -77083,7 +77064,7 @@ function Func3755 takes nothing returns boolean
 	call SetUnitX(loc_unit04, GetUnitX(loc_unit02))
 	call SetUnitY(loc_unit04, GetUnitY(loc_unit02))
 	if loc_integer03 == 1 or loc_integer03 == 100 or loc_integer03 == 200 or loc_integer03 == 300 then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		if IsDead(loc_unit02)then
 			set loc_unit05 = CreateUnit(GetOwningPlayer(loc_unit02), 'e00C', GetUnitX(loc_unit02), GetUnitY(loc_unit02), 0)
 			call UnitApplyTimedLife(loc_unit05, 'BTLF', 0.2)
@@ -77093,13 +77074,13 @@ function Func3755 takes nothing returns boolean
 			call Func0109(loc_unit01, loc_unit02, 1, loc_integer02 * 20 + 20)
 		endif
 		call Func0153("war3mapImported\\ThunderStorm_Groundeffect.mdx", loc_unit02,"origin", 0.6)
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit367 = loc_unit01
 		set unit366 = loc_unit02
 		set integer500 = loc_integer02
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 240 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3754)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		if GetTriggerEvalCount(loc_trigger01) == 300 then
 			call KillUnit(loc_unit03)
 			call KillUnit(loc_unit04)
@@ -77176,8 +77157,8 @@ function Func3760 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit368 = loc_unit01
 		set real360 = 0.25 * (120 + 50 * loc_integer02) * (loc_integer03 / 20.0)
 		set boolean140 = false
@@ -77186,7 +77167,7 @@ function Func3760 takes nothing returns boolean
 		endif
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 400, Condition(function Func0294))
 		call ForGroup(loc_group01, function Func3759)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -77278,8 +77259,8 @@ function Func3766 takes nothing returns nothing
 endfunction
 
 function Func3767 takes unit loc_unit01, unit loc_unit02 returns nothing
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set real361 = 25 * integer501
 	set unit369 = loc_unit01
 	set unit370 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit02), GetUnitY(loc_unit02), 0)
@@ -77288,7 +77269,7 @@ function Func3767 takes unit loc_unit01, unit loc_unit02 returns nothing
 	call ForGroup(loc_group01, function Func3766)
 	call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Undead\\FreezingBreath\\FreezingBreathMissile.mdl", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
 	call KillUnit(loc_unit02)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call UnitApplyTimedLife(CreateUnit(GetOwningPlayer(loc_unit01), 'o00Q', GetUnitX(loc_unit02), GetUnitY(loc_unit02), 0), 'BTLF', 2)
 	set loc_group01 = null
 endfunction
@@ -77415,7 +77396,7 @@ function Func3768 takes nothing returns boolean
 			call Func3767(loc_unit01, loc_unit06)
 		endif
 	else
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		if IsDead(loc_unit02) == false and(LoadBoolean(HY, (loc_integer01), (511)))then
 			set loc_real08 = 360 * 5 / 5.0
 			set loc_real03 = loc_real08 + loc_real10
@@ -77423,7 +77404,7 @@ function Func3768 takes nothing returns boolean
 			set loc_real02 = Func0122(loc_real06 + loc_real04 * Sin(loc_real03 * bj_DEGTORAD))
 			call SetUnitX(loc_unit02, loc_real01)
 			call SetUnitY(loc_unit02, loc_real02)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 95, Condition(function Func0318))
 			if FirstOfGroup(loc_group01) != null then
 				call Func3767(loc_unit01, loc_unit02)
@@ -77443,7 +77424,7 @@ function Func3768 takes nothing returns boolean
 			set loc_real02 = Func0122(loc_real06 + loc_real04 * Sin(loc_real03 * bj_DEGTORAD))
 			call SetUnitX(loc_unit03, loc_real01)
 			call SetUnitY(loc_unit03, loc_real02)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 95, Condition(function Func0318))
 			if FirstOfGroup(loc_group01) != null then
 				call Func3767(loc_unit01, loc_unit03)
@@ -77463,7 +77444,7 @@ function Func3768 takes nothing returns boolean
 			set loc_real02 = Func0122(loc_real06 + loc_real04 * Sin(loc_real03 * bj_DEGTORAD))
 			call SetUnitX(loc_unit04, loc_real01)
 			call SetUnitY(loc_unit04, loc_real02)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 95, Condition(function Func0318))
 			if FirstOfGroup(loc_group01) != null then
 				call Func3767(loc_unit01, loc_unit04)
@@ -77483,7 +77464,7 @@ function Func3768 takes nothing returns boolean
 			set loc_real02 = Func0122(loc_real06 + loc_real04 * Sin(loc_real03 * bj_DEGTORAD))
 			call SetUnitX(loc_unit05, loc_real01)
 			call SetUnitY(loc_unit05, loc_real02)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 95, Condition(function Func0318))
 			if FirstOfGroup(loc_group01) != null then
 				call Func3767(loc_unit01, loc_unit05)
@@ -77503,7 +77484,7 @@ function Func3768 takes nothing returns boolean
 			set loc_real02 = Func0122(loc_real06 + loc_real04 * Sin(loc_real03 * bj_DEGTORAD))
 			call SetUnitX(loc_unit06, loc_real01)
 			call SetUnitY(loc_unit06, loc_real02)
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 95, Condition(function Func0318))
 			if FirstOfGroup(loc_group01) != null then
 				call Func3767(loc_unit01, loc_unit06)
@@ -77516,7 +77497,7 @@ function Func3768 takes nothing returns boolean
 			call ForGroup(loc_group01, function Func3764)
 			call GroupClear(loc_group01)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_trigger01 = null
 	set loc_unit01 = null
@@ -77782,7 +77763,7 @@ function Func3781 takes unit loc_unit01, unit loc_unit02, group loc_group01 retu
 	local real loc_real06
 	local real loc_real07
 	local real loc_real08 = Func0141(loc_real01, loc_real02, loc_real03, loc_real04)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer01 = 1
 	set group030 = loc_group01
 	set unit372 = loc_unit01
@@ -77790,7 +77771,7 @@ function Func3781 takes unit loc_unit01, unit loc_unit02, group loc_group01 retu
 	set real362 = integer503 * 50 + 50
 	loop
 		exitwhen loc_integer01 > 8
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set loc_real06 = loc_real01 + loc_real08 * loc_integer01 / 8 * Cos(loc_real05)
 		set loc_real07 = loc_real02 + loc_real08 * loc_integer01 / 8 * Sin(loc_real05)
 		call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 100, Condition(function Func0283))
@@ -77798,7 +77779,7 @@ function Func3781 takes unit loc_unit01, unit loc_unit02, group loc_group01 retu
 		call GroupClear(loc_group02)
 		set loc_integer01 = loc_integer01 + 1
 	endloop
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	set loc_group02 = null
 endfunction
 
@@ -77857,7 +77838,7 @@ function Func3784 takes nothing returns boolean
 	local real loc_real08
 	local real loc_real09 = 1.5
 	if loc_unit02 == null or loc_unit01 == null or IsDead(loc_unit01) == true or(loc_integer02 > 600 and Func3782(loc_unit01, loc_unit02) == false and((LoadInteger(HY, (GetHandleId((loc_unit01))), ((4295)))) == 1) == false)or(loc_real01 > 925 and((LoadInteger(HY, (GetHandleId((loc_unit01))), ((4295)))) == 1) == false)or GetTriggerEventId() == EVENT_UNIT_DEATH or(GetTriggerEventId() == EVENT_UNIT_SPELL_EFFECT and GetSpellAbilityId() == 'A1TU')then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call DestroyLightning(loc_lightning01)
 		call UnitRemoveAbility(loc_unit02, 'A1TH')
 		call UnitRemoveAbility(loc_unit02, 'A1TI')
@@ -77942,7 +77923,7 @@ function Func3785 takes nothing returns nothing
 	call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit02), loc_integer03, false)
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer01), (17), (loc_unit02))
-	call SaveGroupHandle(HY, (loc_integer01), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (133), (GetAvailableGroup()))
 	call SaveLightningHandle(HY, (loc_integer01), (196), (loc_lightning01))
 	call SaveReal(HY, (loc_integer01), (670), ((GetUnitState(loc_unit01, UNIT_STATE_LIFE) / GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE)) * 1.0))
 	call SaveReal(HY, (loc_integer01), (667), ((GetUnitState(loc_unit01, UNIT_STATE_MANA) / GetUnitState(loc_unit01, UNIT_STATE_MAX_MANA)) * 1.0))
@@ -78280,15 +78261,15 @@ function Func3798 takes nothing returns boolean
 	local real loc_real07 = loc_real04 + 18 * Sin(loc_real05)
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (133)))
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A1YO')
-	local group loc_group02 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group02 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit373 = loc_unit01
 	set group031 = loc_group01
 	set integer504 = loc_integer02
 	set unit374 = null
 	call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 225, Condition(function Func0283))
 	call ForGroup(loc_group02, function Func3797)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	call SetUnitPosition(loc_unit03, loc_real06, loc_real07)
 	if Func0141(loc_real06, loc_real07, loc_real01, loc_real02) < 40 or unit374 != null then
 		call Func0172(loc_real06, loc_real07, 300)
@@ -78300,7 +78281,7 @@ function Func3798 takes nothing returns boolean
 		else
 			call Func3796(loc_unit01, null, loc_real06, loc_real07, loc_real05 * bj_RADTODEG)
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -78332,7 +78313,7 @@ function Func3799 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (684), ((loc_real07) * 1.0))
 	call SaveReal(HY, (loc_integer01), (13), ((loc_real05) * 1.0))
 	call SaveUnitHandle(HY, (loc_integer01), (45), (loc_unit02))
-	call SaveGroupHandle(HY, (loc_integer01), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (133), (GetAvailableGroup()))
 	set loc_unit01 = null
 	set loc_unit02 = null
 	set loc_trigger01 = null
@@ -78611,7 +78592,7 @@ function Func3812 takes nothing returns boolean
 	local real loc_real07 = RMinBJ(2.5 + (loc_integer02 * 0.02), 10)
 	local real loc_real08 = 225 + 40 * (loc_integer02 * 0.02)
 	set integer505 = GetUnitAbilityLevel(loc_unit01, 'A1S7')
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set group032 = loc_group01
 	set unit375 = loc_unit01
 	set unit376 = loc_unit02
@@ -78624,26 +78605,26 @@ function Func3812 takes nothing returns boolean
 	call SetUnitScale(loc_unit03, loc_real07, loc_real07, loc_real07)
 	if Func0141(loc_real05, loc_real06, loc_real01, loc_real02) < loc_real03 * 2 or loc_integer02 == 150 then
 		call Func0172(loc_real05, loc_real06, 300)
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group02, loc_real05, loc_real06, loc_real08, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func3811)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		set loc_group02 = null
 		set real363 = loc_real05
 		set real364 = loc_real06
 		call ForGroup((LoadGroupHandle(HY, (loc_integer01), (22))), function Func3809)
-		call Func0029((LoadGroupHandle(HY, (loc_integer01), (22))))
-		call Func0029(loc_group01)
+		call KillGroup((LoadGroupHandle(HY, (loc_integer01), (22))))
+		call KillGroup(loc_group01)
 		call KillUnit(loc_unit03)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
 		if ModuloInteger(GetTriggerEvalCount(loc_trigger01), 5) == 0 then
 			call Func0172(loc_real05, loc_real06, 300)
-			set loc_group02 = Func0030()
+			set loc_group02 = GetAvailableGroup()
 			call GroupEnumUnitsInRange(loc_group02, loc_real05, loc_real06, loc_real08, Condition(function Func0283))
 			call ForGroup(loc_group02, function Func3811)
-			call Func0029(loc_group02)
+			call KillGroup(loc_group02)
 			set loc_group02 = null
 		endif
 	endif
@@ -78681,7 +78662,7 @@ function Func3815 takes nothing returns nothing
 	local real loc_real04 = GetUnitY(loc_unit02)
 	local real loc_real05 = Func0161(loc_real01, loc_real02, loc_real03, loc_real04) * bj_DEGTORAD
 	local unit loc_unit03 = CreateUnit(GetOwningPlayer(loc_unit01), 'h0C3', GetUnitX(loc_unit01), GetUnitY(loc_unit01), GetUnitFacing(loc_unit01))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set real365 = 0
 	set integer506 = 1
 	set unit375 = loc_unit01
@@ -78702,7 +78683,7 @@ function Func3815 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (47), ((loc_real03) * 1.0))
 	call SaveReal(HY, (loc_integer01), (48), ((loc_real04) * 1.0))
 	call SaveGroupHandle(HY, (loc_integer01), (22), (loc_group01))
-	call SaveGroupHandle(HY, (loc_integer01), (133), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (133), (GetAvailableGroup()))
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_unit03 = null
@@ -78912,13 +78893,13 @@ function Func3829 takes nothing returns boolean
 			call RemoveLocation(loc_location01)
 			set loc_location01 = null
 		endif
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit379 = loc_unit01
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 350, Condition(function Func0283))
 		call GroupRemoveUnit(loc_group01, loc_unit02)
 		call ForGroup(loc_group01, function Func3828)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call Func0172(GetUnitX(loc_unit02), GetUnitY(loc_unit02), 150)
 		call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Orc\\WarStomp\\WarStompCaster.mdl", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
 		call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
@@ -79132,19 +79113,19 @@ function Func3837 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (187)))
 	local real loc_real01 = GetUnitX(loc_unit02)
 	local real loc_real02 = GetUnitY(loc_unit02)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	call GroupAddUnit(loc_group01, loc_unit02)
 	call Func3835(loc_unit01, loc_unit02)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit380 = null
 	set unit381 = loc_unit02
 	set group033 = loc_group01
 	set real366 = 999999
 	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 440 + 25, Condition(function Func0291))
 	call ForGroup(loc_group02, function Func3836)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group02)
 	if unit380 == null or GetTriggerEvalCount(loc_trigger01) > 26 then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
@@ -79164,7 +79145,7 @@ function Func3838 takes nothing returns nothing
 	local unit loc_unit02 = GetSpellTargetUnit()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit03 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), GetUnitFacing(loc_unit01))
 	call Func0174(sound073, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
 	call Func0183(loc_unit03, 'A284')
@@ -79700,16 +79681,16 @@ function Func3859 takes nothing returns boolean
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (340)))
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
-	local group loc_group02 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
 	if loc_unit01 == null or GetUnitTypeId(loc_unit01) != 'E02X' then
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call ForGroup(loc_group01, function Func3857)
-		call Func0029(loc_group01)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group01)
+		call KillGroup(loc_group02)
 		return false
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set integer508 = GetUnitAbilityLevel(loc_unit01, 'A27V')
 	if IsDead(loc_unit01) == false then
 		call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 925, Condition(function Func0312))
@@ -79720,7 +79701,7 @@ function Func3859 takes nothing returns boolean
 		call ForGroup(loc_group02, function Func3858)
 	endif
 	call SaveGroupHandle(HY, (loc_integer01), (340), (loc_group02))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -79737,7 +79718,7 @@ function Func3860 takes nothing returns nothing
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.3, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func3859))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	call SaveGroupHandle(HY, (loc_integer01), (340), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (340), (GetAvailableGroup()))
 	set loc_integer02 = 0
 	loop
 		exitwhen loc_integer02 > 5
@@ -79977,13 +79958,13 @@ function Func3877 takes nothing returns boolean
 		call UnitRemoveAbility(loc_unit01, 'A2IV')
 		call UnitRemoveAbility(loc_unit01, 'A2IY')
 	else
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit382 = loc_unit01
 		set integer509 = loc_integer02
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 400 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func3876)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_group01 = null
 	set loc_trigger01 = null
@@ -80133,8 +80114,8 @@ function Func3887 takes nothing returns boolean
 		call SetUnitPathing(loc_unit01, true)
 		call SetUnitInvulnerable(loc_unit01, false)
 		call SetUnitTimeScale(loc_unit01, 1)
-		call Func0029(loc_group01)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group01)
+		call KillGroup(loc_group02)
 		call RemoveUnit((LoadUnitHandle(HY, (loc_integer01), (19))))
 		call FogModifierStop(loc_fogmodifier01)
 		call DestroyFogModifier(loc_fogmodifier01)
@@ -80160,12 +80141,12 @@ function Func3888 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local fogmodifier loc_fogmodifier01 = CreateFogModifierRadius(GetOwningPlayer(loc_unit01), FOG_OF_WAR_VISIBLE, loc_real01, loc_real02, 600, true, true)
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'h0E7', GetUnitX(loc_unit01), GetUnitY(loc_unit01), GetUnitFacing(loc_unit01))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A2H0')
 	call SetUnitVertexColor(loc_unit02, 255, 255, 255, 100)
 	call FogModifierStart(loc_fogmodifier01)
 	call SaveInteger(HY, (GetHandleId((loc_unit01))), ((4318)), (1))
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 150 + 100 * loc_integer02 + 25, Condition(function Func0293))
 	call Func0253(loc_unit01)
 	call Func3881(loc_unit01)
@@ -80182,7 +80163,7 @@ function Func3888 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (7), ((loc_real02) * 1.0))
 	call SaveReal(HY, (loc_integer01), (189), ((GetUnitX(loc_unit01)) * 1.0))
 	call SaveReal(HY, (loc_integer01), (190), ((GetUnitY(loc_unit01)) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call SaveGroupHandle(HY, (loc_integer01), (22), (loc_group01))
 	call SaveFogModifierHandle(HY, (loc_integer01), (42), (loc_fogmodifier01))
 	call SaveUnitHandle(HY, (loc_integer01), (19), (loc_unit02))
@@ -80247,7 +80228,7 @@ function Func3892 takes nothing returns boolean
 endfunction
 
 function Func3893 takes nothing returns nothing
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local unit loc_unit03 = CreateUnit(GetOwningPlayer(loc_unit02), 'e00E', GetUnitX(loc_unit02), GetUnitY(loc_unit02), 0)
 	local trigger loc_trigger01 = CreateTrigger()
@@ -80266,7 +80247,7 @@ endfunction
 
 function Func3894 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
 	local unit loc_unit02 = null
@@ -80275,7 +80256,7 @@ function Func3894 takes nothing returns nothing
 	local integer loc_integer01 = 0
 	local unit loc_unit05
 	local trigger loc_trigger01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 425, Condition(function Func0291))
 	loop
 		exitwhen FirstOfGroup(loc_group01) == null or loc_integer01 == 2
@@ -80292,7 +80273,7 @@ function Func3894 takes nothing returns nothing
 			call GroupRemoveUnit(loc_group01, loc_unit05)
 		endif
 	endloop
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_unit02 != null then
 		call Func0186(loc_unit01, loc_unit02, 'h0E0',"Func3893", 9000)
 	endif
@@ -80420,15 +80401,15 @@ function Func3903 takes unit loc_unit01, unit loc_unit02, real loc_real01, real 
 	local group loc_group01
 	call KillUnit(loc_unit02)
 	call Func0155("war3mapImported\\Firaga_2.mdx", loc_real01, loc_real02, 2)
-	set loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	set loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit383 = loc_unit01
 	set integer510 = GetUnitAbilityLevel(loc_unit01, 'A2JK')
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 450 + 25, Condition(function Func0283))
 	call UnitRemoveAbility(loc_unit01, 'A04R')
 	call ForGroup(loc_group01, function Func3902)
 	call Func0183(loc_unit01, 'A04R')
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -80561,14 +80542,14 @@ function Func3909 takes nothing returns nothing
 endfunction
 
 function Func3910 takes unit loc_unit01, real loc_real01, real loc_real02 returns unit
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set unit384 = null
 	set real369 = -1
 	set real367 = loc_real01
 	set real368 = loc_real02
 	call GroupEnumUnitsOfPlayer(loc_group01, GetOwningPlayer(loc_unit01), Condition(function Func3908))
 	call ForGroup(loc_group01, function Func3909)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	return unit384
 endfunction
@@ -80945,8 +80926,8 @@ endfunction
 
 function Func3930 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
-	local group loc_group02 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
+	local group loc_group02 = GetAvailableGroup()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2A6')
 	local real loc_real01 = GetUnitX(loc_unit01)
 	local real loc_real02 = GetUnitY(loc_unit01)
@@ -80958,8 +80939,8 @@ function Func3930 takes nothing returns nothing
 	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 825, Condition(function Func0278))
 	call GroupRemoveGroup(loc_group01, loc_group02)
 	call ForGroup(loc_group02, function Func3929)
-	call Func0029(loc_group01)
-	call Func0029(loc_group02)
+	call KillGroup(loc_group01)
+	call KillGroup(loc_group02)
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\ConjureForceAoE.mdx", loc_real01, loc_real02))
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -81000,21 +80981,21 @@ function Func3934 takes nothing returns boolean
 	local real loc_real03
 	local real loc_real04
 	if GetTriggerEvalCount(loc_trigger01) > 67 then
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call KillUnit(loc_unit01)
 	else
 		set loc_real03 = GetUnitX(loc_unit01)
 		set loc_real04 = GetUnitY(loc_unit01)
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		set group034 = loc_group01
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit386 = loc_unit02
 		set real370 = loc_real02
 		call GroupEnumUnitsInRange(loc_group02, loc_real03, loc_real04, 225, Condition(function Func0294))
 		call ForGroup(loc_group02, function Func3933)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call SetUnitX(loc_unit01, Func0120(loc_real03 + 15 * Cos(loc_real01 * bj_DEGTORAD)))
 		call SetUnitY(loc_unit01, Func0122(loc_real04 + 15 * Sin(loc_real01 * bj_DEGTORAD)))
 	endif
@@ -81029,7 +81010,7 @@ endfunction
 function Func3935 takes unit loc_unit01, real loc_real01, real loc_real02, real loc_real03 returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real04 = GetUnitX(loc_unit01)
 	local real loc_real05 = GetUnitY(loc_unit01)
 	local real loc_real06 = loc_real02
@@ -81210,7 +81191,7 @@ function Func3944 takes unit loc_unit01, unit loc_unit02, unit loc_unit03, integ
 endfunction
 
 function Func3945 takes nothing returns boolean
-	if(IsUnitEnemy(unit124, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(unit124)) == true or Func0265(GetFilterUnit()) == false)then
+	if(IsUnitEnemy(tt_unit1, GetOwningPlayer(GetFilterUnit()))and(GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit())))and(IsUnitVisible(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == true or Func0265(GetFilterUnit()) == false)then
 		return IsUnitInGroup(GetFilterUnit(), group035) == false
 	endif
 	return false
@@ -81241,12 +81222,12 @@ function Func3946 takes nothing returns boolean
 			call KillUnit((LoadUnitHandle(HY, (loc_integer01), (393 + loc_integer02 - 1))))
 			set loc_integer02 = loc_integer02 + 1
 		endloop
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 275, Condition(function Func3945))
 		loop
 			exitwhen loc_integer02 > 3
@@ -81270,7 +81251,7 @@ function Func3946 takes nothing returns boolean
 			endif
 			set loc_integer02 = loc_integer02 + 1
 		endloop
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 		set loc_unit02 = null
 		set loc_unit03 = null
@@ -81333,7 +81314,7 @@ function Func3947 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer02), (137), ((loc_real05) * 1.0))
 	call SaveReal(HY, (loc_integer02), (47), ((loc_real07) * 1.0))
 	call SaveReal(HY, (loc_integer02), (48), ((loc_real08) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer02), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer02), (187), (GetAvailableGroup()))
 	set loc_unit01 = null
 	set loc_unit02 = null
 	set loc_trigger01 = null
@@ -81388,14 +81369,14 @@ endfunction
 
 function Func3952 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', GetUnitX(loc_unit01), GetUnitY(loc_unit01), 0)
 	call UnitAddAbility(loc_unit02, 'A2B7')
 	call IssueImmediateOrderById(loc_unit02, 852625)
 	call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Undead\\AnimateDead\\AnimateDeadTarget.mdl", GetUnitX(loc_unit01), GetUnitY(loc_unit01)))
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 625, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func3951)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 	set loc_unit02 = null
@@ -81579,10 +81560,10 @@ endfunction
 
 function Func3964 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 375, Condition(function Func0308))
 	call ForGroup(loc_group01, function Func3963)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -82004,7 +81985,7 @@ function Func3990 takes nothing returns nothing
 	local real loc_real01 = GetSpellTargetX()
 	local real loc_real02 = GetSpellTargetY()
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2JB')
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call DestroyEffect(AddSpecialEffect("war3mapImported\\OverwhelmingOdds.mdx", loc_real01, loc_real02))
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 315 + 25, Condition(function Func0278))
 	set integer512 = 0
@@ -82012,7 +81993,7 @@ function Func3990 takes nothing returns nothing
 	set integer514 = loc_integer01
 	call ForGroup(loc_group01, function Func3989)
 	call ForGroup(loc_group01, function Func3988)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func3987(loc_unit01, 9 * integer513 + 3 * integer512)
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -82051,14 +82032,14 @@ function Func3994 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	else
-		set loc_group01 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 170 + 25, Condition(function Func0316))
 		set integer516 = GetUnitAbilityLevel(loc_unit01, 'A2BG')
 		set unit387 = loc_unit01
 		set integer515 = CountUnitsInGroup(loc_group01)
 		call ForGroup(loc_group01, function Func3993)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -82256,7 +82237,7 @@ endfunction
 
 function Func4006 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A2BE')
 	local real loc_real01 = 40 + 20 * loc_integer02 + 1.6 * GetHeroInt(loc_unit01, true)
@@ -82351,7 +82332,7 @@ endfunction
 
 function Func4014 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
-	local unit loc_unit01 = unit124
+	local unit loc_unit01 = tt_unit1
 	local unit loc_unit02 = unit125
 	local real loc_real01 = GetUnitX(loc_unit02)
 	local real loc_real02 = GetUnitY(loc_unit02)
@@ -82385,10 +82366,10 @@ endfunction
 function Func4016 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local unit loc_unit02 = null
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 1600 + 25, Condition(function Func0315))
 	set loc_unit02 = Func4015(loc_unit01, loc_group01)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if loc_unit02 != null then
 		call Func0186(loc_unit01, loc_unit02, 'h0E6',"Func4014", 800)
 	endif
@@ -82477,7 +82458,7 @@ endfunction
 
 function Func4021 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetSpellTargetX()
 	local real loc_real02 = GetSpellTargetY()
 	local real loc_real03 = Func0161(GetUnitX(loc_unit01), GetUnitY(loc_unit01), loc_real01, loc_real02) * bj_DEGTORAD
@@ -82490,7 +82471,7 @@ function Func4021 takes nothing returns nothing
 	endif
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, real371 + 25, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func4020)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffectTarget("war3mapImported\\WhirlingDeath_01.mdx", loc_unit01,"origin"))
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -82519,7 +82500,7 @@ endfunction
 function Func4025 takes nothing returns nothing
 	if IsUnitInGroup(GetEnumUnit(), group002) == false then
 		call GroupAddUnit(group002, GetEnumUnit())
-		call Func4024(unit124, GetEnumUnit())
+		call Func4024(tt_unit1, GetEnumUnit())
 	endif
 endfunction
 
@@ -82549,16 +82530,16 @@ function Func4026 takes nothing returns boolean
 			call SetUnitY(loc_unit01, GetUnitY(loc_unit03))
 		endif
 		call RemoveUnit(loc_unit03)
-		set loc_group02 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set group002 = loc_group01
 		call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 250, Condition(function Func0289))
 		call ForGroup(loc_group02, function Func4025)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 	endif
 	if loc_integer03 == (loc_integer02)then
 		call Func0172(GetUnitX(loc_unit01), GetUnitY(loc_unit01), 90)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
@@ -82609,7 +82590,7 @@ function Func4028 takes nothing returns boolean
 		call SaveInteger(HY, (loc_integer04), (18), (loc_integer03))
 		call SaveBoolean(HY, (loc_integer04), (727), (true))
 		call SaveUnitHandle(HY, (loc_integer04), (14), (loc_unit01))
-		call SaveGroupHandle(HY, (loc_integer04), (16), (Func0030()))
+		call SaveGroupHandle(HY, (loc_integer04), (16), (GetAvailableGroup()))
 		call SaveReal(HY, (loc_integer04), (6), ((loc_real02) * 1.0))
 		call SaveReal(HY, (loc_integer04), (7), ((loc_real03) * 1.0))
 		call SaveBoolean(HY, (loc_integer04), (740), (false))
@@ -82621,7 +82602,7 @@ function Func4028 takes nothing returns boolean
 		call SaveInteger(HY, (loc_integer04), (18), (loc_integer03))
 		call SaveBoolean(HY, (loc_integer04), (727), (false))
 		call SaveUnitHandle(HY, (loc_integer04), (14), (loc_unit01))
-		call SaveGroupHandle(HY, (loc_integer04), (16), (Func0030()))
+		call SaveGroupHandle(HY, (loc_integer04), (16), (GetAvailableGroup()))
 		call SaveBoolean(HY, (loc_integer04), (740), (false))
 	endif
 	set loc_trigger01 = null
@@ -82845,7 +82826,7 @@ function Func4042 takes nothing returns boolean
 		call UnitRemoveAbility(loc_unit01, 'Bpig')
 		call UnitRemoveAbility(loc_unit01, 'BEia')
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	elseif loc_integer02 == 0 then
@@ -82859,14 +82840,14 @@ function Func4042 takes nothing returns boolean
 		endif
 		call SetUnitX(loc_unit02, loc_real03)
 		call SetUnitY(loc_unit02, loc_real04)
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit388 = loc_unit01
 		set integer519 = GetUnitAbilityLevel(loc_unit01, 'A2E5')
 		set group036 = loc_group01
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group02, loc_real03, loc_real04, real372 + 25, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func4041)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		if loc_real03 == loc_real01 and loc_real04 == loc_real02 then
 			call SaveInteger(HY, (loc_integer01), (33), (1))
 			call GroupClear(loc_group01)
@@ -82878,13 +82859,13 @@ function Func4042 takes nothing returns boolean
 			set loc_real04 = GetUnitY(loc_unit02)
 			call Func0172(loc_real03, loc_real04, 175)
 			set loc_integer03 = 0
-			set unit124 = loc_unit01
+			set tt_unit1 = loc_unit01
 			set unit388 = loc_unit01
 			set integer519 = GetUnitAbilityLevel(loc_unit01, 'A2E5')
-			set loc_group02 = Func0030()
+			set loc_group02 = GetAvailableGroup()
 			call GroupEnumUnitsInRange(loc_group02, loc_real03, loc_real04, real373 + 25, Condition(function Func0283))
 			call ForGroup(loc_group02, function Func4040)
-			call Func0029(loc_group02)
+			call KillGroup(loc_group02)
 			set loc_real06 = (15 + 5 * integer519) / 2
 			if GetUnitState(loc_unit01, UNIT_STATE_MANA) < loc_real06 or Func0139(loc_unit01, loc_unit02) > 2000 then
 				call SaveInteger(HY, (loc_integer01), (33), (2))
@@ -82904,18 +82885,18 @@ function Func4042 takes nothing returns boolean
 		call Func0172(loc_real03, loc_real04, 175)
 		call SetUnitX(loc_unit02, loc_real03)
 		call SetUnitY(loc_unit02, loc_real04)
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit388 = loc_unit01
 		set integer519 = GetUnitAbilityLevel(loc_unit01, 'A2E5')
 		set group036 = loc_group01
-		set loc_group02 = Func0030()
+		set loc_group02 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group02, loc_real03, loc_real04, real372 + 25, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func4041)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		if Func0141(loc_real03, loc_real04, GetUnitX(loc_unit01), GetUnitY(loc_unit01)) < 40 then
 			call Func0263(loc_unit01)
 			call KillUnit(loc_unit02)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
 			if(LoadInteger(HY, (GetHandleId(loc_unit01)), (704))) == 0 or(LoadInteger(HY, (GetHandleId(loc_unit01)), (704))) == 'A2E5' then
@@ -82949,7 +82930,7 @@ function Func4043 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (6), ((loc_real01) * 1.0))
 	call SaveReal(HY, (loc_integer01), (7), ((loc_real02) * 1.0))
 	call SaveInteger(HY, (loc_integer01), (33), (0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call Func0262(loc_unit01)
 	call Func0183(loc_unit01, 'A2FX')
 	call SetPlayerAbilityAvailable(GetOwningPlayer(loc_unit01), 'A2E5', false)
@@ -83017,7 +82998,7 @@ endfunction
 
 function Func4051 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local trigger loc_trigger01 = CreateTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	set unit389 = loc_unit01
@@ -83026,7 +83007,7 @@ function Func4051 takes nothing returns nothing
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func4050))
 	call ForGroup(loc_group01, function Func4047)
 	call ForGroup(loc_group01, function Func4049)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	set loc_unit01 = null
 endfunction
@@ -83075,7 +83056,7 @@ endfunction
 function Func4055 takes unit loc_unit01, unit loc_unit02 returns nothing
 	local trigger loc_trigger01
 	local integer loc_integer01
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call SaveReal(HY, (GetHandleId(loc_unit02)), (753), (((TimerGetElapsed(GlobalTimer)) + real374) * 1.0))
 	set loc_trigger01 = CreateTrigger()
 	set loc_integer01 = GetHandleId(loc_trigger01)
@@ -83090,7 +83071,7 @@ function Func4055 takes unit loc_unit01, unit loc_unit02 returns nothing
 	set integer520 = 0
 	call GroupEnumUnitsInRange(loc_group01, 0, 0, 9999, Condition(function Func4050))
 	call ForGroup(loc_group01, function Func4048)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func4053(I2S(integer520), loc_unit02, loc_unit01)
 	set loc_trigger01 = null
 endfunction
@@ -83157,7 +83138,7 @@ endfunction
 function Func4060 takes nothing returns nothing
 	local integer loc_integer01 = GetHandleId(GetTriggeringTrigger())
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	local unit loc_unit02 = unit124
+	local unit loc_unit02 = tt_unit1
 	local unit loc_unit03 = unit125
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A2LA')
 	if Func0095(loc_unit03) == false then
@@ -83184,14 +83165,14 @@ endfunction
 
 function Func4062 takes unit loc_unit01, unit loc_unit02 returns nothing
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2LA')
-	local group loc_group01 = Func0030()
-	set unit124 = loc_unit01
+	local group loc_group01 = GetAvailableGroup()
+	set tt_unit1 = loc_unit01
 	set unit390 = loc_unit01
 	set unit391 = loc_unit02
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 500 + 25, Condition(function Func0283))
 	call GroupRemoveUnit(loc_group01, loc_unit02)
 	call ForGroup(loc_group01, function Func4061)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_unit02 = null
 	set loc_group01 = null
@@ -83376,15 +83357,15 @@ function Func4074 takes nothing returns boolean
 		call SaveInteger(HY, (loc_integer01), (34), (loc_integer03))
 		set group037 = loc_group01
 		set trigger070 = loc_trigger01
-		set loc_group02 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 350 + 25, Condition(function Func0290))
 		call GroupRemoveUnit(loc_group02, loc_unit02)
 		call ForGroup(loc_group02, function Func4073)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		if loc_integer03 == (2.25 + 0.25 * loc_integer02) * 20 or IsDead(loc_unit02)then
 			call ForGroup(loc_group01, function Func4072)
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 			call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (176))))
 			call FlushChildHashtable(HY, (loc_integer01))
@@ -83425,7 +83406,7 @@ function Func4075 takes nothing returns nothing
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
 	call SaveUnitHandle(HY, (loc_integer01), (17), (loc_unit02))
 	call SaveInteger(HY, (loc_integer01), (5), (loc_integer02))
-	call SaveGroupHandle(HY, (loc_integer01), (22), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (22), (GetAvailableGroup()))
 	call SaveEffectHandle(HY, (loc_integer01), (32), (AddSpecialEffectTarget("war3mapImported\\WintersCurse.mdx", loc_unit02,"overhead")))
 	call SaveEffectHandle(HY, (loc_integer01), (176), (AddSpecialEffect("war3mapImported\\WintersCurseAoE.mdx", GetUnitX(loc_unit02), GetUnitY(loc_unit02))))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func4074))
@@ -83807,7 +83788,7 @@ function Func4098 takes nothing returns boolean
 	local real loc_real03 = (LoadReal(HY, (loc_integer01), (48)))
 	local real loc_real04 = GetUnitX(loc_unit01)
 	local real loc_real05 = GetUnitY(loc_unit01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A2F4')
 	set loc_real04 = Func0120(loc_real04 + 32 * Cos(loc_real01))
 	set loc_real05 = Func0122(loc_real05 + 32 * Sin(loc_real01))
@@ -83818,7 +83799,7 @@ function Func4098 takes nothing returns boolean
 	call SetUnitX(loc_unit01, loc_real04)
 	call SetUnitY(loc_unit01, loc_real05)
 	call SetUnitFacing(loc_unit01, loc_real01 * bj_RADTODEG)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real04, loc_real05, 125 + 25, Condition(function Func0283))
 	if FirstOfGroup(loc_group01) != null or(loc_real04 == loc_real02 and loc_real05 == loc_real03)or GetTriggerEvalCount(loc_trigger01) > 200 or GetTriggerEventId() == EVENT_WIDGET_DEATH then
 		call DestroyEffect(AddSpecialEffect("war3mapImported\\BlackDragonMissile.mdx", loc_real04, loc_real05))
@@ -83831,7 +83812,7 @@ function Func4098 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -83886,17 +83867,17 @@ function Func4103 takes nothing returns nothing
 	local real loc_real01 = Func0133((TimerGetElapsed(GlobalTimer)) - (LoadReal(HY, (GetHandleId(loc_unit01)), (358))), 5.0)
 	local integer loc_integer01 = GetUnitAbilityLevel(loc_unit01, 'A2EE')
 	local real loc_real02 = (40 + 80 * loc_integer01) * (loc_real01)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real03 = loc_real01 * 600
 	local real loc_real04 = (LoadReal(HY, (GetHandleId(loc_unit01)), (736)))
 	local real loc_real05 = GetUnitX(loc_unit01) + loc_real03 * Cos(loc_real04)
 	local real loc_real06 = GetUnitY(loc_unit01) + loc_real03 * Sin(loc_real04)
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real05, loc_real06, 325, Condition(function Func0283))
 	set integer523 = loc_integer01
 	set unit395 = loc_unit01
 	call ForGroup(loc_group01, function Func4102)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func0155("effects\\BasicWaterFlash.mdx", loc_real05, loc_real06, 1)
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -84069,11 +84050,11 @@ function Func4114 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local real loc_real01 = GetSpellTargetX()
 	local real loc_real02 = GetSpellTargetY()
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	call Func0176(GetOwningPlayer(loc_unit01), 4, loc_real01, loc_real02, 300)
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 400 + 25, Condition(function Func0268))
 	call ForGroup(loc_group01, function Func4113)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -84115,14 +84096,14 @@ function Func4118 takes nothing returns nothing
 		call UnitApplyTimedLife(loc_unit04, 'BTLF', 0.5)
 		call UnitAddAbility(loc_unit03, 'A2T2')
 		call SetUnitAbilityLevel(loc_unit03, 'A2T2', loc_integer02)
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit396 = loc_unit01
 		set unit397 = loc_unit03
 		set integer524 = loc_integer01
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 215 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func4117)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit01 = null
 	set loc_unit02 = null
@@ -84501,11 +84482,11 @@ function Func4137 takes nothing returns boolean
 		call CleanTrigger(loc_trigger01)
 		call KillUnit(loc_unit01)
 	else
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 375 + 25, Condition(function Func0290))
 		set loc_unit02 = Func0243(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		if loc_unit02 != null then
 			call FlushChildHashtable(HY, (loc_integer01))
 			call CleanTrigger(loc_trigger01)
@@ -84646,33 +84627,33 @@ function Func4144 takes nothing returns boolean
 	local real loc_real03 = (LoadReal(HY, (loc_integer01), (442)))
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A2LM')
 	local group loc_group01 = (LoadGroupHandle(HY, (loc_integer01), (340)))
-	local group loc_group02 = Func0030()
-	local group loc_group03 = Func0030()
-	local group loc_group04 = Func0030()
+	local group loc_group02 = GetAvailableGroup()
+	local group loc_group03 = GetAvailableGroup()
+	local group loc_group04 = GetAvailableGroup()
 	set integer525 = loc_integer02
 	if(TimerGetElapsed(GlobalTimer)) > loc_real03 then
 		call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call ForGroup(loc_group01, function Func4142)
-		call Func0029(loc_group01)
-		call Func0029(loc_group02)
-		call Func0029(loc_group03)
-		call Func0029(loc_group04)
+		call KillGroup(loc_group01)
+		call KillGroup(loc_group02)
+		call KillGroup(loc_group03)
+		call KillGroup(loc_group04)
 		return false
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group03, loc_real01, loc_real02, 275 + 25, Condition(function Func0312))
 	call GroupEnumUnitsInRange(loc_group04, loc_real01, loc_real02, 275 + 144, Condition(function Func0298))
 	call GroupAddGroup(loc_group03, loc_group02)
 	call GroupAddGroup(loc_group04, loc_group02)
-	call Func0029(loc_group03)
-	call Func0029(loc_group04)
+	call KillGroup(loc_group03)
+	call KillGroup(loc_group04)
 	call GroupRemoveGroup(loc_group02, loc_group01)
 	call ForGroup(loc_group01, function Func4142)
 	call ForGroup(loc_group02, function Func4143)
 	call SaveGroupHandle(HY, (loc_integer01), (340), (loc_group02))
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_trigger01 = null
 	set loc_unit01 = null
 	set loc_group01 = null
@@ -84691,7 +84672,7 @@ function Func4145 takes nothing returns nothing
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.1, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func4144))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	call SaveGroupHandle(HY, (loc_integer01), (340), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (340), (GetAvailableGroup()))
 	call SaveReal(HY, (loc_integer01), (6), ((loc_real01) * 1.0))
 	call SaveReal(HY, (loc_integer01), (7), ((loc_real02) * 1.0))
 	call SaveReal(HY, (loc_integer01), (442), (((TimerGetElapsed(GlobalTimer)) + 3 + 0.5 * loc_integer03) * 1.0))
@@ -84747,8 +84728,8 @@ function Func4148 takes nothing returns boolean
 	else
 		set loc_integer04 = loc_integer04 + 1
 		call SaveInteger(HY, (loc_integer01), (34), (loc_integer04))
-		set unit124 = loc_unit01
-		set loc_group01 = Func0030()
+		set tt_unit1 = loc_unit01
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 225 + 25, Condition(function Func0283))
 		call GroupRemoveUnit(loc_group01, loc_unit02)
 		if FirstOfGroup(loc_group01) == null then
@@ -84781,7 +84762,7 @@ function Func4148 takes nothing returns boolean
 				endif
 			endif
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_trigger01 = null
@@ -84899,17 +84880,17 @@ function Func4155 takes nothing returns nothing
 		set loc_integer04 = 'I0PC'
 	endif
 	call SelectUnitAddForPlayer(loc_unit02, GetOwningPlayer(loc_unit01))
-	call DisableTrigger(trigger057)
+	call DisableTrigger(Trig_ManipulateItem)
 	loop
 		exitwhen loc_integer03 > 5
-		if UnitItemInSlot(loc_unit01, loc_integer03) != null and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != integers084[integer193]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != integers084[integer220]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != integers084[integer142]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != integers084[integer143]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != integers084[integer150]then
+		if UnitItemInSlot(loc_unit01, loc_integer03) != null and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer193]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer220]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer142]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer143]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer150]then
 			set loc_item01 = CreateItem(GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)), 0, 0)
 			if GetItemCharges(UnitItemInSlot(loc_unit01, loc_integer03)) > 0 then
 				call SetItemCharges(loc_item01, GetItemCharges(UnitItemInSlot(loc_unit01, loc_integer03)))
 			endif
 			call UnitAddItem(loc_unit02, loc_item01)
 			call SetItemPlayer(loc_item01, GetOwningPlayer(loc_unit02), false)
-			if GetItemTypeId(loc_item01) == integers084[integer207]or GetItemTypeId(loc_item01) == integers084[integer208]or GetItemTypeId(loc_item01) == integers084[integer081]then
+			if GetItemTypeId(loc_item01) == Item_Real[integer207]or GetItemTypeId(loc_item01) == Item_Real[integer208]or GetItemTypeId(loc_item01) == Item_Real[integer081]then
 				call SetItemDropOnDeath(loc_item01, false)
 			endif
 		else
@@ -84917,7 +84898,7 @@ function Func4155 takes nothing returns nothing
 		endif
 		set loc_integer03 = loc_integer03 + 1
 	endloop
-	call EnableTrigger(trigger057)
+	call EnableTrigger(Trig_ManipulateItem)
 	call SetHeroLevel(loc_unit02, GetHeroLevel(loc_unit01), false)
 	set loc_integer03 = 1
 	loop
@@ -84990,9 +84971,9 @@ function Func4158 takes nothing returns boolean
 	local trigger loc_trigger01 = GetTriggeringTrigger()
 	local integer loc_integer01 = GetHandleId(loc_trigger01)
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = GetUnitAbilityLevel(loc_unit01, 'A0VC')
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 375 + 25, Condition(function Func0316))
 	if FirstOfGroup(loc_group01) == null then
 		if GetUnitAbilityLevel(loc_unit01, 'A2NX') != loc_integer02 then
@@ -85004,7 +84985,7 @@ function Func4158 takes nothing returns boolean
 			call UnitRemoveAbility(loc_unit01, 'A2NX')
 		endif
 	endif
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_trigger01 = null
 	set loc_group01 = null
@@ -85196,14 +85177,14 @@ function Func4170 takes nothing returns boolean
 		call ForGroup(loc_group01, function Func4168)
 		call SaveReal(HY, (loc_integer01), (23), ((loc_real06) * 1.0))
 		call SaveReal(HY, (loc_integer01), (24), ((loc_real07) * 1.0))
-		set loc_group03 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group03 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set group038 = loc_group02
 		set unit398 = loc_unit01
 		set integer527 = GetUnitAbilityLevel(loc_unit01, 'A2QI')
 		call GroupEnumUnitsInRange(loc_group03, loc_real06, loc_real07, 180 + 25, Condition(function Func0283))
 		call ForGroup(loc_group03, function Func4167)
-		call Func0029(loc_group03)
+		call KillGroup(loc_group03)
 		set loc_group03 = null
 	endif
 	if loc_boolean01 then
@@ -85211,8 +85192,8 @@ function Func4170 takes nothing returns boolean
 		call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
-		call Func0029(loc_group02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group02)
+		call KillGroup(loc_group01)
 	endif
 	set loc_unit01 = null
 	set loc_trigger01 = null
@@ -85250,18 +85231,18 @@ function Func4174 takes nothing returns nothing
 	local unit loc_unit02 = GetSpellTargetUnit()
 	local group loc_group01
 	if loc_unit02 == null then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetSpellTargetX(), GetSpellTargetY(), 240 + 25, Condition(function Func4172))
 		if FirstOfGroup(loc_group01) == null then
-			call Func0029(loc_group01)
+			call KillGroup(loc_group01)
 			set loc_unit01 = null
 			set loc_group01 = null
 			return
 		endif
 		set loc_unit02 = FirstOfGroup(loc_group01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
-	set loc_group01 = Func0030()
+	set loc_group01 = GetAvailableGroup()
 	call GroupAddUnit(loc_group01, loc_unit02)
 	set loc_real01 = GetUnitX(loc_unit02)
 	set loc_real02 = GetUnitY(loc_unit02)
@@ -85280,7 +85261,7 @@ function Func4174 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (7), ((loc_real04) * 1.0))
 	call SaveReal(HY, (loc_integer01), (23), ((loc_real01) * 1.0))
 	call SaveReal(HY, (loc_integer01), (24), ((loc_real02) * 1.0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call SaveGroupHandle(HY, (loc_integer01), (803), (loc_group01))
 	call SaveEffectHandle(HY, (loc_integer01), (32), (AddSpecialEffectTarget("war3mapImported\\MagneticGripTarget.mdx", loc_unit02,"chest")))
 	set loc_unit01 = null
@@ -85292,13 +85273,13 @@ function Func4175 takes nothing returns nothing
 	local unit loc_unit01 = GetSpellTargetUnit()
 	local group loc_group01
 	if loc_unit01 == null then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call GroupEnumUnitsInRange(loc_group01, GetSpellTargetX(), GetSpellTargetY(), 240 + 25, Condition(function Func4172))
 		if FirstOfGroup(loc_group01) == null then
 			call Func0117(GetTriggerUnit())
 			call Func0114(GetOwningPlayer(GetTriggerUnit()), GetObjectName('n0N5'))
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_group01 = null
 	set loc_unit01 = null
@@ -85332,13 +85313,13 @@ function Func4179 takes nothing returns nothing
 endfunction
 
 function Func4180 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if((LoadInteger(HY, (GetHandleId((loc_unit01))), ((809)))) == 1) == true then
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 99999, Condition(function Func4178))
 	endif
 	call GroupAddUnit(loc_group01, loc_unit01)
 	call ForGroup(loc_group01, function Func4179)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -85405,14 +85386,14 @@ function Func4184 takes nothing returns boolean
 	call SetUnitAnimationByIndex(loc_unit01, 0)
 	if GetTriggerEvalCount(loc_trigger01) > 30 then
 		if loc_integer02 == 0 then
-			set loc_group02 = Func0030()
+			set loc_group02 = GetAvailableGroup()
 			call GroupEnumUnitsInRange(loc_group02, loc_real03, loc_real04, 150 + 25, Condition(function Func4183))
 			if FirstOfGroup(loc_group02) != null then
 				call KillUnit(FirstOfGroup(loc_group02))
 				set loc_integer02 = 1
 				call SaveInteger(HY, (loc_integer01), (34), (loc_integer02))
 			endif
-			call Func0029(loc_group02)
+			call KillGroup(loc_group02)
 		endif
 		if loc_integer02 == 1 then
 			set loc_real09 = loc_real09 * 2
@@ -85433,8 +85414,8 @@ function Func4184 takes nothing returns boolean
 		set loc_real05 = Func0141(loc_real01, loc_real02, GetUnitX(loc_unit01), GetUnitY(loc_unit01))
 		set loc_real10 = loc_real10 + loc_real05
 		call SaveReal(HY, (loc_integer01), (138), ((loc_real10) * 1.0))
-		set loc_group02 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		set unit399 = loc_unit01
 		set group039 = loc_group01
 		set integer529 = GetUnitAbilityLevel(loc_unit01, 'A2TH')
@@ -85444,13 +85425,13 @@ function Func4184 takes nothing returns boolean
 		set unit401 = null
 		call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 150 + 25, Condition(function Func0283))
 		call ForGroup(loc_group02, function Func4182)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		if unit401 != null then
-			set loc_group02 = Func0030()
+			set loc_group02 = GetAvailableGroup()
 			set unit400 = null
 			set real009 = 9999
 			call GroupEnumUnitsInRange(loc_group02, GetUnitX(unit401), GetUnitY(unit401), 600 + 25, Condition(function Func4178))
-			call Func0029(loc_group02)
+			call KillGroup(loc_group02)
 			if unit400 == null then
 				set loc_boolean01 = true
 				set unit400 = unit401
@@ -85465,7 +85446,7 @@ function Func4184 takes nothing returns boolean
 	endif
 	if Func0254(loc_unit01)or GetTriggerEventId() == EVENT_WIDGET_DEATH or loc_boolean01 or(loc_unit03 == null and(GetTriggerEvalCount(loc_trigger01) > 130 or boolean143 or(loc_integer02 == 0 and loc_real10 > 800)or(loc_integer02 == 1 and loc_real10 > 1600)))then
 		call KillUnit(loc_unit02)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call UnitAddAbility(loc_unit01, 'A2QR')
@@ -85498,7 +85479,7 @@ function Func4185 takes unit loc_unit01, unit loc_unit02 returns nothing
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.02, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func4184))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call SaveUnitHandle(HY, (loc_integer01), (19), (loc_unit03))
 	call SaveReal(HY, (loc_integer01), (6), ((GetUnitX(loc_unit01)) * 1.0))
 	call SaveReal(HY, (loc_integer01), (7), ((GetUnitY(loc_unit01)) * 1.0))
@@ -85522,12 +85503,12 @@ function Func4187 takes nothing returns boolean
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local group loc_group01
 	if GetUnitTypeId(loc_unit01) == 'N0MU' and IsDead(loc_unit01) == false then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		set unit399 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 150 + 25, Condition(function Func4186))
 		if FirstOfGroup(loc_group01) != null then
 		endif
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		set loc_group01 = null
 	endif
 	set loc_unit01 = null
@@ -85583,7 +85564,7 @@ function Func4189 takes unit loc_unit01 returns nothing
 endfunction
 
 function Func4190 takes nothing returns nothing
-	call Func4189(unit124)
+	call Func4189(tt_unit1)
 endfunction
 
 function Func4191 takes unit loc_unit01 returns nothing
@@ -85702,13 +85683,13 @@ function Func4199 takes nothing returns nothing
 endfunction
 
 function Func4200 takes unit loc_unit01 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if((LoadInteger(HY, (GetHandleId((loc_unit01))), ((809)))) == 1) == true then
 		call GroupEnumUnitsInRange(loc_group01, 0, 0, 99999, Condition(function Func4197))
 	endif
 	call GroupAddUnit(loc_group01, loc_unit01)
 	call ForGroup(loc_group01, function Func4199)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 endfunction
 
@@ -85790,18 +85771,18 @@ function Func4203 takes nothing returns boolean
 		call Func0172(loc_real06, loc_real07, 150)
 		call SaveReal(HY, (loc_integer01), (23), ((loc_real06) * 1.0))
 		call SaveReal(HY, (loc_integer01), (24), ((loc_real07) * 1.0))
-		set loc_group02 = Func0030()
-		set unit124 = loc_unit01
+		set loc_group02 = GetAvailableGroup()
+		set tt_unit1 = loc_unit01
 		call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 225 + 25, Condition(function Func0283))
 		call GroupRemoveUnit(loc_group02, loc_unit02)
 		call ForGroup(loc_group02, function Func4202)
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		if unit404 != null and integer533 == 1 then
-			set loc_group02 = Func0030()
+			set loc_group02 = GetAvailableGroup()
 			set unit403 = null
 			set real009 = 9999
 			call GroupEnumUnitsInRange(loc_group02, GetUnitX(unit404), GetUnitY(unit404), 600 + 25, Condition(function Func4197))
-			call Func0029(loc_group02)
+			call KillGroup(loc_group02)
 			if unit403 != null then
 				set loc_unit03 = unit403
 				call SaveUnitHandle(HY, (loc_integer01), (810), (loc_unit03))
@@ -85816,7 +85797,7 @@ function Func4203 takes nothing returns boolean
 		endif
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 		call SaveInteger(HY, (GetHandleId((loc_unit02))), ((4335)), (2))
 		if GetTriggerEventId() != EVENT_UNIT_DEATH then
 			if IsPlayerAlly(GetOwningPlayer(loc_unit01), GetOwningPlayer(loc_unit02)) == false then
@@ -85868,7 +85849,7 @@ function Func4204 takes nothing returns nothing
 	call SaveReal(HY, (loc_integer01), (23), ((GetUnitX(loc_unit01)) * 1.0))
 	call SaveReal(HY, (loc_integer01), (24), ((GetUnitY(loc_unit01)) * 1.0))
 	call SaveInteger(HY, (loc_integer01), (34), (0))
-	call SaveGroupHandle(HY, (loc_integer01), (187), (Func0030()))
+	call SaveGroupHandle(HY, (loc_integer01), (187), (GetAvailableGroup()))
 	call SaveUnitHandle(HY, (loc_integer01), (810), (null))
 	call SaveInteger(HY, (GetHandleId((loc_unit01))), ((4335)), (1))
 	set loc_unit01 = null
@@ -85921,7 +85902,7 @@ function Func4208 takes nothing returns boolean
 		endif
 	endif
 	if loc_boolean01 == true or GetTriggerEventId() != EVENT_UNIT_SPELL_EFFECT then
-		set loc_group01 = Func0030()
+		set loc_group01 = GetAvailableGroup()
 		call SetUnitX(loc_unit02, GetUnitX(loc_unit03))
 		call SetUnitY(loc_unit02, GetUnitY(loc_unit03))
 		call KillUnit(loc_unit03)
@@ -85933,7 +85914,7 @@ function Func4208 takes nothing returns boolean
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		set integer534 = loc_integer02 + 1
-		set unit124 = loc_unit01
+		set tt_unit1 = loc_unit01
 		set unit405 = loc_unit01
 		set real388 = 50 * GetUnitAbilityLevel(unit405, 'A2S9')
 		if loc_boolean01 then
@@ -85941,7 +85922,7 @@ function Func4208 takes nothing returns boolean
 		endif
 		call GroupEnumUnitsInRange(loc_group01, GetUnitX(loc_unit02), GetUnitY(loc_unit02), 350 + 25, Condition(function Func0283))
 		call ForGroup(loc_group01, function Func4207)
-		call Func0029(loc_group01)
+		call KillGroup(loc_group01)
 	endif
 	set loc_group01 = null
 	set loc_trigger01 = null
@@ -86037,7 +86018,7 @@ function Func4216 takes nothing returns boolean
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (17)))
 	local real loc_real01 = GetUnitX(loc_unit02)
 	local real loc_real02 = GetUnitY(loc_unit02)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local integer loc_integer02 = GetTriggerEvalCount(loc_trigger01)
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, 'A2TI')
 	local real loc_real03 = (LoadReal(HY, (GetHandleId(loc_unit02)), (807)))
@@ -86045,10 +86026,10 @@ function Func4216 takes nothing returns boolean
 		call Func0109(loc_unit01, loc_unit02, 1, (25 + 25 * loc_integer03) / 2)
 	endif
 	set unit406 = loc_unit01
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 300 + 25, Condition(function Func4215))
 	call ForGroup(loc_group01, function Func4214)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	if(TimerGetElapsed(GlobalTimer)) > loc_real03 or IsDead(loc_unit02)then
 		call SaveInteger(HY, (GetHandleId((loc_unit02))), ((809)), (2))
 		call DestroyEffect((LoadEffectHandle(HY, (loc_integer01), (32))))
@@ -86084,7 +86065,7 @@ function Func4218 takes nothing returns nothing
 endfunction
 
 function Func4219 takes unit loc_unit01, unit loc_unit02 returns nothing
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local real loc_real01 = GetUnitX(loc_unit02)
 	local real loc_real02 = GetUnitY(loc_unit02)
 	local real loc_real03 = 300
@@ -86097,12 +86078,12 @@ function Func4219 takes unit loc_unit01, unit loc_unit02 returns nothing
 	else
 		call DestroyEffect(AddSpecialEffect("war3mapImported\\MagnetizeCastAoE.mdx", GetUnitX(loc_unit02), GetUnitY(loc_unit02)))
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit406 = loc_unit01
 	set unit407 = loc_unit02
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, loc_real03 + 25, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func4218)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_unit01 = null
 	set loc_group01 = null
 endfunction
@@ -86217,14 +86198,14 @@ function Func4231 takes nothing returns boolean
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (2)))
 	local real loc_real01 = (LoadReal(HY, (loc_integer01), (6)))
 	local real loc_real02 = (LoadReal(HY, (loc_integer01), (7)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	set integer535 = GetUnitAbilityLevel(loc_unit01, 'A2SO')
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set unit408 = loc_unit01
 	set boolean144 = false
 	call GroupEnumUnitsInRange(loc_group01, loc_real01, loc_real02, 175 + 25, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func4229)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call Func0155("effects\\BasicWaterFlash.mdx", loc_real01, loc_real02, 1)
 	call FlushChildHashtable(HY, (loc_integer01))
 	call CleanTrigger(loc_trigger01)
@@ -86499,7 +86480,7 @@ function Func4248 takes nothing returns boolean
 	local real loc_real06 = (LoadReal(HY, (loc_integer01), (23)))
 	local real loc_real07 = (LoadReal(HY, (loc_integer01), (24)))
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer01), (19)))
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	local group loc_group02 = (LoadGroupHandle(HY, (loc_integer01), (187)))
 	local integer loc_integer03 = GetUnitAbilityLevel(loc_unit01, 'A2SQ')
 	if Func0141(loc_real04, loc_real05, loc_real01, loc_real02) <= real389 then
@@ -86509,19 +86490,19 @@ function Func4248 takes nothing returns boolean
 		set loc_real04 = Func0120(loc_real06 + 65 * Cos(loc_real03 * bj_DEGTORAD))
 		set loc_real05 = Func0122(loc_real07 + 65 * Sin(loc_real03 * bj_DEGTORAD))
 	endif
-	set unit124 = loc_unit01
+	set tt_unit1 = loc_unit01
 	set group041 = loc_group02
 	set unit409 = loc_unit02
 	set unit410 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real04, loc_real05, 200 + 25, Condition(function Func0283))
 	call ForGroup(loc_group01, function Func4247)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	call SaveReal(HY, (loc_integer01), (23), ((loc_real04) * 1.0))
 	call SaveReal(HY, (loc_integer01), (24), ((loc_real05) * 1.0))
 	call SetUnitX(loc_unit01, loc_real04)
 	call SetUnitY(loc_unit01, loc_real05)
 	if(loc_real04 == loc_real01 and loc_real05 == loc_real02)or loc_integer02 > 40 then
-		call Func0029(loc_group02)
+		call KillGroup(loc_group02)
 		call FlushChildHashtable(HY, (loc_integer01))
 		call CleanTrigger(loc_trigger01)
 		call KillUnit(loc_unit02)
@@ -86559,7 +86540,7 @@ function Func4249 takes nothing returns nothing
 	local real loc_real04
 	local real loc_real05
 	local unit loc_unit02 = CreateUnit(GetOwningPlayer(loc_unit01), 'e00E', loc_real01, loc_real02, 0)
-	local group loc_group01 = Func0030()
+	local group loc_group01 = GetAvailableGroup()
 	if GetSpellTargetUnit() == null then
 		set loc_location01 = GetSpellTargetLoc()
 	else
@@ -86575,7 +86556,7 @@ function Func4249 takes nothing returns nothing
 	set unit410 = loc_unit01
 	call GroupEnumUnitsInRange(loc_group01, loc_real03, loc_real04, 200 + 25, Condition(function Func0278))
 	call ForGroup(loc_group01, function Func4247)
-	call Func0029(loc_group01)
+	call KillGroup(loc_group01)
 	set loc_group01 = null
 	call UnitAddAbility(loc_unit01, 'A2SW')
 	call UnitRemoveAbility(loc_unit01, 'A2SW')
@@ -87017,7 +86998,7 @@ function main takes nothing returns nothing
 	set rect047 = Rect(-384.0, 3392.0, -192.0, 3520.0)
 	set rect048 = Rect(-1728.0, -5056.0, -768.0, -3840.0)
 	set rect049 = Rect(-1152.0, -4704.0, -960.0, -4480.0)
-	set rect050 = Rect(-480.0, -800.0, -256.0, -512.0)
+	set rect050 = FindRect(Rect(-480.0, -800.0, -256.0, -512.0))
 	set rect051 = Rect(2112.0, -1280.0, 3072.0, -288.0)
 	set rect052 = Rect(7264.0, -5504.0, 7488.0, -5280.0)
 	set rect053 = Rect(-8160.0, 6848.0, -7968.0, 7040.0)
@@ -87966,2054 +87947,2054 @@ function main takes nothing returns nothing
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0553))
 	call TriggerRegisterTimerEvent(loc_trigger01, 6, false)
 	set loc_trigger01 = null
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0FF'
-	set integers084[integer064] = 'I0FG'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02Q'
-	set integers084[integer064] = 'I02O'
-	set integers085[integer064] = 'h011'
-	set integers086[integer064] = 'I00A'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp"
-	set integers087[integer064] = 0
-	set integer067 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02S'
-	set integers084[integer064] = 'I02P'
-	set integers085[integer064] = 'h012'
-	set integers086[integer064] = 'I0CA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
-	set integers087[integer064] = 0
-	set integer068 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02N'
-	set integers084[integer064] = 'I02R'
-	set integers085[integer064] = 'h013'
-	set integers086[integer064] = 'I0CS'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBoots.blp"
-	set integers087[integer064] = 0
-	set integer069 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02X'
-	set integers084[integer064] = 'I02Y'
-	set integers085[integer064] = 'h015'
-	set integers086[integer064] = 'I0D4'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNCirclet.blp"
-	set integers087[integer064] = 0
-	set integer070 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02Z'
-	set integers084[integer064] = 'I043'
-	set integers085[integer064] = 'h016'
-	set integers086[integer064] = 'I0CV'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBelt.blp"
-	set integers087[integer064] = 0
-	set integer071 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I030'
-	set integers084[integer064] = 'I044'
-	set integers085[integer064] = 'h017'
-	set integers086[integer064] = 'I0D2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingKnife_03.blp"
-	set integers087[integer064] = 0
-	set integer072 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I031'
-	set integers084[integer064] = 'I045'
-	set integers085[integer064] = 'h018'
-	set integers086[integer064] = 'I0D5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNClawsOfAttack.blp"
-	set integers087[integer064] = 0
-	set integer073 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I032'
-	set integers084[integer064] = 'I046'
-	set integers085[integer064] = 'h019'
-	set integers086[integer064] = 'I0CZ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSteelMelee.blp"
-	set integers087[integer064] = 0
-	set integer074 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I033'
-	set integers084[integer064] = 'I047'
-	set integers085[integer064] = 'h01A'
-	set integers086[integer064] = 'I0D7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Chain_12.blp"
-	set integers087[integer064] = 0
-	set integer075 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I034'
-	set integers084[integer064] = 'I048'
-	set integers085[integer064] = 'h01B'
-	set integers086[integer064] = 'I0CX'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_19.blp"
-	set integers087[integer064] = 0
-	set integer076 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I035'
-	set integers084[integer064] = 'I049'
-	set integers085[integer064] = 'h01C'
-	set integers086[integer064] = 'I0CI'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNFrostMourne.blp"
-	set integers087[integer064] = 0
-	set integer077 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I036'
-	set integers084[integer064] = 'I04A'
-	set integers085[integer064] = 'h01D'
-	set integers086[integer064] = 'I0CH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Bow_06.blp"
-	set integers087[integer064] = 0
-	set integer078 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I037'
-	set integers084[integer064] = 'I04B'
-	set integers085[integer064] = 'h01E'
-	set integers086[integer064] = 'I0CR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNEnchantedGemstone.blp"
-	set integers087[integer064] = 0
-	set integer079 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I038'
-	set integers084[integer064] = 'I04C'
-	set integers085[integer064] = 'h01F'
-	set integers086[integer064] = 'I0CJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGauntletsOfOgrePower.blp"
-	set integers087[integer064] = 0
-	set integer080 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I039'
-	set integers084[integer064] = 'I04D'
-	set integers085[integer064] = 'h01G'
-	set integers086[integer064] = 'I0DG'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGem.blp"
-	set integers087[integer064] = 0
-	set integer081 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MS'
-	set integers084[integer064] = 'I0MR'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MT'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGem.blp"
-	set integers087[integer064] = 0
-	set integer082 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03B'
-	set integers084[integer064] = 'I04E'
-	set integers085[integer064] = 'h01H'
-	set integers086[integer064] = 'I0DA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHelmutPurple.blp"
-	set integers087[integer064] = 0
-	set integer083 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03C'
-	set integers084[integer064] = 'I04F'
-	set integers085[integer064] = 'h01I'
-	set integers086[integer064] = 'I0CQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPeriapt1.blp"
-	set integers087[integer064] = 0
-	set integer084 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03D'
-	set integers084[integer064] = 'I04G'
-	set integers085[integer064] = 'h01J'
-	set integers086[integer064] = 'I0CU'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNNatureTouchGrow.blp"
-	set integers087[integer064] = 0
-	set integer085 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03E'
-	set integers084[integer064] = 'I04H'
-	set integers085[integer064] = 'h01K'
-	set integers086[integer064] = 'I0C7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp"
-	set integers087[integer064] = 12
-	set integer086 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03E'
-	set integers084[integer064] = 'I04I'
-	set integers085[integer064] = 'h01K'
-	set integers086[integer064] = 'I0DH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp"
-	set integers087[integer064] = 0
-	set integer087 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03F'
-	set integers084[integer064] = 'I04J'
-	set integers085[integer064] = 'h01L'
-	set integers086[integer064] = 'I0CM'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNMantleOfIntelligence.blp"
-	set integers087[integer064] = 0
-	set integer088 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03G'
-	set integers084[integer064] = 'I04K'
-	set integers085[integer064] = 'h01M'
-	set integers086[integer064] = 'I0CD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNUndeadShrine.blp"
-	set integers087[integer064] = 0
-	set integer089 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03H'
-	set integers084[integer064] = 'I04L'
-	set integers085[integer064] = 'h01N'
-	set integers086[integer064] = 'I0CG'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSpiritWalkerMasterTraining.blp"
-	set integers087[integer064] = 0
-	set integer090 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03I'
-	set integers084[integer064] = 'I04M'
-	set integers085[integer064] = 'h01O'
-	set integers086[integer064] = 'I0D0'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHammer.blp"
-	set integers087[integer064] = 0
-	set integer091 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03J'
-	set integers084[integer064] = 'I04N'
-	set integers085[integer064] = 'h01P'
-	set integers086[integer064] = 'I0CN'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNStaffOfNegation.blp"
-	set integers087[integer064] = 0
-	set integer092 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03K'
-	set integers084[integer064] = 'I04O'
-	set integers085[integer064] = 'h01Q'
-	set integers086[integer064] = 'I0D8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSpiritWalkerAdeptTraining.tga"
-	set integers087[integer064] = 0
-	set integer093 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03L'
-	set integers084[integer064] = 'I04P'
-	set integers085[integer064] = 'h01R'
-	set integers086[integer064] = 'I0CE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Cape_08.blp"
-	set integers087[integer064] = 0
-	set integer094 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03M'
-	set integers084[integer064] = 'I04Q'
-	set integers085[integer064] = 'h01S'
-	set integers086[integer064] = 'I0DB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Plate13.blp"
-	set integers087[integer064] = 0
-	set integer095 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03N'
-	set integers084[integer064] = 'I04R'
-	set integers085[integer064] = 'h01T'
-	set integers086[integer064] = 'I0CL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNUsedSoulGem.blp"
-	set integers087[integer064] = 0
-	set integer096 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03P'
-	set integers084[integer064] = 'I04S'
-	set integers085[integer064] = 'h01U'
-	set integers086[integer064] = 'I0CY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAlleriaFlute.blp"
-	set integers087[integer064] = 0
-	set integer097 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03Q'
-	set integers084[integer064] = 'I04T'
-	set integers085[integer064] = 'h01V'
-	set integers086[integer064] = 'I0DI'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGoldRing.blp"
-	set integers087[integer064] = 0
-	set integer098 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03R'
-	set integers084[integer064] = 'I04U'
-	set integers085[integer064] = 'h01W'
-	set integers086[integer064] = 'I0CW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRingPurple.blp"
-	set integers087[integer064] = 0
-	set integer099 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03S'
-	set integers084[integer064] = 'I04V'
-	set integers085[integer064] = 'h01X'
-	set integers086[integer064] = 'I0DJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRingSkull.blp"
-	set integers087[integer064] = 0
-	set integer100 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03T'
-	set integers084[integer064] = 'I04W'
-	set integers085[integer064] = 'h01Y'
-	set integers086[integer064] = 'I0CP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp"
-	set integers087[integer064] = 0
-	set integer101 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03U'
-	set integers084[integer064] = 'I04X'
-	set integers085[integer064] = 'h01Z'
-	set integers086[integer064] = 'I0CC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNStaffOfTeleportation.blp"
-	set integers087[integer064] = 0
-	set integer102 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03V'
-	set integers084[integer064] = 'I04Y'
-	set integers085[integer064] = 'h020'
-	set integers086[integer064] = 'I0C5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSlippersOfAgility.blp"
-	set integers087[integer064] = 0
-	set integer103 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03W'
-	set integers084[integer064] = 'I04Z'
-	set integers085[integer064] = 'h021'
-	set integers086[integer064] = 'I0DK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSobiMask.blp"
-	set integers087[integer064] = 0
-	set integer104 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03X'
-	set integers084[integer064] = 'I050'
-	set integers085[integer064] = 'h022'
-	set integers086[integer064] = 'I0D1'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWandOfCyclone.blp"
-	set integers087[integer064] = 0
-	set integer105 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03A'
-	set integers084[integer064] = 'I051'
-	set integers085[integer064] = 'h023'
-	set integers086[integer064] = 'I0D9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSteelArmor.blp"
-	set integers087[integer064] = 0
-	set integer106 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KB'
-	set integers084[integer064] = 'I0KA'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0KC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSteelArmor.blp"
-	set integers087[integer064] = 0
-	set integer107 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03Y'
-	set integers084[integer064] = 'I052'
-	set integers085[integer064] = 'h024'
-	set integers086[integer064] = 'I0C9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrbofSlowness.blp"
-	set integers087[integer064] = 0
-	set integer108 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03Z'
-	set integers084[integer064] = 'I053'
-	set integers085[integer064] = 'h025'
-	set integers086[integer064] = 'I0CK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSoulGem.blp"
-	set integers087[integer064] = 0
-	set integer109 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I040'
-	set integers084[integer064] = 'I054'
-	set integers085[integer064] = 'h026'
-	set integers086[integer064] = 'I0DL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp"
-	set integers087[integer064] = 0
-	set integer110 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I041'
-	set integers084[integer064] = 'I055'
-	set integers085[integer064] = 'h027'
-	set integers086[integer064] = 'I0D6'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSteelRanged.blp"
-	set integers087[integer064] = 0
-	set integer111 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00L'
-	set integers084[integer064] = 'I0AV'
-	set integers085[integer064] = 'h02B'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle0.blp"
-	set integers087[integer064] = 0
-	set integer112 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05E'
-	set integers084[integer064] = 'I0AM'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DN'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle0.blp"
-	set integers087[integer064] = 0
-	set integer113 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AU'
-	set integers084[integer064] = 'I0AN'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle1.blp"
-	set integers087[integer064] = 0
-	set integer114 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AS'
-	set integers084[integer064] = 'I0AO'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle2.blp"
-	set integers087[integer064] = 0
-	set integer115 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AT'
-	set integers084[integer064] = 'I0AP'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle3.blp"
-	set integers087[integer064] = 0
-	set integer116 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0GW'
-	set integers084[integer064] = 'I0GY'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0H3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Illusion.blp"
-	set integers087[integer064] = 0
-	set integer121 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0H2'
-	set integers084[integer064] = 'I0GX'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Regeneration.blp"
-	set integers087[integer064] = 0
-	set integer120 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0GV'
-	set integers084[integer064] = 'I0H1'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0H4'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Haste.blp"
-	set integers087[integer064] = 0
-	set integer119 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AR'
-	set integers084[integer064] = 'I0H0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0H6'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle_DoubleDamage.blp"
-	set integers087[integer064] = 0
-	set integer118 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AQ'
-	set integers084[integer064] = 'I0GZ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0H5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Invisibility.blp"
-	set integers087[integer064] = 0
-	set integer117 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0GD'
-	set integers084[integer064] = 'I0GC'
-	set integers085[integer064] = 'h074'
-	set integers086[integer064] = 'I0GE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWand.blp"
-	set integers087[integer064] = 17
-	set integer122 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HC'
-	set integers084[integer064] = 'I0HB'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0HA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNStarWand.blp"
-	set integers087[integer064] = 17
-	set integer239 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HT'
-	set integers084[integer064] = 'I0HR'
-	set integers085[integer064] = 'h07W'
-	set integers086[integer064] = 'I0HV'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrcMeleeUpTwo.blp"
-	set integers087[integer064] = 5
-	set integer123 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HU'
-	set integers084[integer064] = 'I0HP'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0HW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrcMeleeUpTwo.blp"
-	set integers087[integer064] = 5
-	set integer124 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0N4'
-	set integers084[integer064] = 'I0N3'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0N5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPoisonBlade.blp"
-	set integers087[integer064] = 30
-	set integer127 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0N7'
-	set integers084[integer064] = 'I0N6'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0N8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPoisonBlade.blp"
-	set integers087[integer064] = 30
-	set integer128 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J7'
-	set integers084[integer064] = 'I0J6'
-	set integers085[integer064] = 'h083'
-	set integers086[integer064] = 'I0J8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAmulet.blp"
-	set integers087[integer064] = 0
-	set integer125 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0JJ'
-	set integers084[integer064] = 'I0JI'
-	set integers085[integer064] = 'h087'
-	set integers086[integer064] = 'I0JK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGreenStaff.blp"
-	set integers087[integer064] = 30
-	set integer244 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0P9'
-	set integers084[integer064] = 'I0PB'
-	set integers085[integer064] = 'h0EI'
-	set integers086[integer064] = 'I0PA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp"
-	set integers087[integer064] = 0
-	set integer253 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PN'
-	set integers084[integer064] = 'I0PM'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp"
-	set integers087[integer064] = 10
-	set integer254 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MA'
-	set integers084[integer064] = 'I0M9'
-	set integers085[integer064] = 'h0CM'
-	set integers086[integer064] = 'I0MB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp"
-	set integers087[integer064] = 0
-	set integer065 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MD'
-	set integers084[integer064] = 'I0ME'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp"
-	set integers087[integer064] = 0
-	set integer066 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I057'
-	set integers084[integer064] = 'I05C'
-	set integers085[integer064] = 'h02A'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAncientOfTheEarth.blp"
-	set integers087[integer064] = 0
-	set integer141 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I042'
-	set integers084[integer064] = 'I05D'
-	set integers085[integer064] = 'h028'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNLesserClarityPotion.blp"
-	set integers087[integer064] = 0
-	set integer138 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HO'
-	set integers084[integer064] = 'I0HN'
-	set integers085[integer064] = 'h07V'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNVialFull.blp"
-	set integers087[integer064] = 0
-	set integer139 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I056'
-	set integers084[integer064] = 'I05F'
-	set integers085[integer064] = 'h029'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHealingSalve.blp"
-	set integers087[integer064] = 0
-	set integer140 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I058'
-	set integers084[integer064] = 'I05G'
-	set integers085[integer064] = 'h02C'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSentryWard.blp"
-	set integers087[integer064] = 0
-	set integer142 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I059'
-	set integers084[integer064] = 'I05H'
-	set integers085[integer064] = 'h02D'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBlueSentryWard.blp"
-	set integers087[integer064] = 0
-	set integer143 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05A'
-	set integers084[integer064] = 'I05I'
-	set integers085[integer064] = 'h02E'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNScrollUber.blp"
-	set integers087[integer064] = 0
-	set integer144 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05B'
-	set integers084[integer064] = 'I05J'
-	set integers085[integer064] = 'h02F'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNCritterChicken.blp"
-	set integers087[integer064] = 0
-	set integer145 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B0'
-	set integers084[integer064] = 'I0B1'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNCheese.blp"
-	set integers087[integer064] = 0
-	set integer146 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0GG'
-	set integers084[integer064] = 'I0GF'
-	set integers085[integer064] = 'h075'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPotionOfDivinity.blp"
-	set integers087[integer064] = 30
-	set integer147 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0GI'
-	set integers084[integer064] = 'I0GH'
-	set integers085[integer064] = 'h076'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNDustOfAppearance.blp"
-	set integers087[integer064] = 60
-	set integer148 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KT'
-	set integers084[integer064] = 'I0KS'
-	set integers085[integer064] = 'h0B9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWandOfManaSteal.blp"
-	set integers087[integer064] = 0
-	set integer149 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NF'
-	set integers084[integer064] = 'I0NG'
-	set integers085[integer064] = 'h0D3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSmokePotion.blp"
-	set integers087[integer064] = 90
-	set integer150 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I061'
-	set integers084[integer064] = 'I062'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01J'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfFire.blp"
-	set integers087[integer064] = 0
-	set integer151 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I064'
-	set integers084[integer064] = 'I063'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01K'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Helmet_17.blp"
-	set integers087[integer064] = 0
-	set integer152 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I065'
-	set integers084[integer064] = 'I066'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01L'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNThoriumArmor.blp"
-	set integers087[integer064] = 25
-	set integer153 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I068'
-	set integers084[integer064] = 'I067'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01M'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.tga"
-	set integers087[integer064] = 0
-	set integer154 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I069'
-	set integers084[integer064] = 'I06A'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0C6'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.tga"
-	set integers087[integer064] = 0
-	set integer155 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06C'
-	set integers084[integer064] = 'I06B'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01P'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAbility_Rogue_Sprint.blp"
-	set integers087[integer064] = 60
-	set integer156 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03O'
-	set integers084[integer064] = 'I02T'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01R'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWirtsLegGreen.blp"
-	set integers087[integer064] = 0
-	set integer157 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02U'
-	set integers084[integer064] = 'I05Y'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01Q'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWirtsLeg.blp"
-	set integers087[integer064] = 0
-	set integer158 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I060'
-	set integers084[integer064] = 'I05Z'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01S'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWirtsLegBlue.blp"
-	set integers087[integer064] = 0
-	set integer159 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06E'
-	set integers084[integer064] = 'I06D'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01T'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGoldGloves.BLP"
-	set integers087[integer064] = 100
-	set integer160 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NO'
-	set integers084[integer064] = 'I0NN'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGoldGloves.BLP"
-	set integers087[integer064] = 100
-	set integer161 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06G'
-	set integers084[integer064] = 'I06F'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01U'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Mace_10.blp"
-	set integers087[integer064] = 0
-	set integer162 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06I'
-	set integers084[integer064] = 'I06H'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01V'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRunedBracers.blp"
-	set integers087[integer064] = 0
-	set integer163 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06K'
-	set integers084[integer064] = 'I06J'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01W'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRevenant.blp"
-	set integers087[integer064] = 0
-	set integer164 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06M'
-	set integers084[integer064] = 'I06L'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01X'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNTalisman.tga"
-	set integers087[integer064] = 0
-	set integer165 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08F'
-	set integers084[integer064] = 'I08G'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01Y'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_10.blp"
-	set integers087[integer064] = 0
-	set integer166 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08I'
-	set integers084[integer064] = 'I08H'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01Z'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNJapaneseSword.BLP"
-	set integers087[integer064] = 0
-	set integer167 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08J'
-	set integers084[integer064] = 'I08K'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I020'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Hammer_10.blp"
-	set integers087[integer064] = 0
-	set integer168 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08M'
-	set integers084[integer064] = 'I08L'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0C8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Hammer_10.blp"
-	set integers087[integer064] = 0
-	set integer169 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08N'
-	set integers084[integer064] = 'I08O'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I021'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Plate06.blp"
-	set integers087[integer064] = 17
-	set integer170 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08Q'
-	set integers084[integer064] = 'I08P'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I022'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNStormHammer.blp"
-	set integers087[integer064] = 0
-	set integer171 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08S'
-	set integers084[integer064] = 'I08R'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I023'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_11.blp"
-	set integers087[integer064] = 12
-	set integer172 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0JB'
-	set integers084[integer064] = 'I0J9'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNDiffusal2.blp"
-	set integers087[integer064] = 12
-	set integer173 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0EW'
-	set integers084[integer064] = 'I0EV'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0EX'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_11.blp"
-	set integers087[integer064] = 0
-	set integer174 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0JC'
-	set integers084[integer064] = 'I0JA'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNDiffusal2.blp"
-	set integers087[integer064] = 0
-	set integer175 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08U'
-	set integers084[integer064] = 'I08T'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I024'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Helmet_13.blp"
-	set integers087[integer064] = 60
-	set integer176 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08W'
-	set integers084[integer064] = 'I08V'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0CO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Helmet_13.blp"
-	set integers087[integer064] = 0
-	set integer177 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I08X'
-	set integers084[integer064] = 'I08Y'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I025'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHelmOfValor.blp"
-	set integers087[integer064] = 22
-	set integer178 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I090'
-	set integers084[integer064] = 'I08Z'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I026'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNStaffofpurification.blp"
-	set integers087[integer064] = 30
-	set integer179 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I092'
-	set integers084[integer064] = 'I091'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I027'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPhilosophersStone.blp"
-	set integers087[integer064] = 0
-	set integer180 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I094'
-	set integers084[integer064] = 'I093'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I028'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSpellShieldAmulet.blp"
-	set integers087[integer064] = 45
-	set integer181 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I096'
-	set integers084[integer064] = 'I095'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I029'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSpell_Holy_BlessingOfStrength.blp"
-	set integers087[integer064] = 0
-	set integer182 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I098'
-	set integers084[integer064] = 'I097'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02A'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAbility_Gouge.blp"
-	set integers087[integer064] = 0
-	set integer183 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09A'
-	set integers084[integer064] = 'I099'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02B'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingAxe_06.blp"
-	set integers087[integer064] = 0
-	set integer184 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09B'
-	set integers084[integer064] = 'I09C'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02C'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp"
-	set integers087[integer064] = 0
-	set integer185 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0G2'
-	set integers084[integer064] = 'I0FZ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0G8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
-	set integers087[integer064] = 80
-	set integer186 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0G6'
-	set integers084[integer064] = 'I0G0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0G9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
-	set integers087[integer064] = 75
-	set integer187 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09E'
-	set integers084[integer064] = 'I0FY'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0G7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
-	set integers087[integer064] = 70
-	set integer188 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0G5'
-	set integers084[integer064] = 'I0FS'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02D'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
-	set integers087[integer064] = 65
-	set integer189 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0G3'
-	set integers084[integer064] = 'I09D'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0GB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
-	set integers087[integer064] = 60
-	set integer190 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0G4'
-	set integers084[integer064] = 'I0G1'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0GA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
-	set integers087[integer064] = 55
-	set integer191 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0P6'
-	set integers084[integer064] = 'I0P8'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0P7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
-	set integers087[integer064] = 50
-	set integer192 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AX'
-	set integers084[integer064] = 'I0AW'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNArcaniteArmor.blp"
-	set integers087[integer064] = 0
-	set integer193 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09G'
-	set integers084[integer064] = 'I09F'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02E'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingAxe_02.blp"
-	set integers087[integer064] = 35
-	set integer194 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MV'
-	set integers084[integer064] = 'I0MU'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingAxe_02.blp"
-	set integers087[integer064] = 50
-	set integer195 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09I'
-	set integers084[integer064] = 'I09H'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02F'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNLothars.BLP"
-	set integers087[integer064] = 22
-	set integer196 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09K'
-	set integers084[integer064] = 'I09M'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01G'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
-	set integers087[integer064] = 40
-	set integer197 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09J'
-	set integers084[integer064] = 'I09P'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02G'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
-	set integers087[integer064] = 36
-	set integer198 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09Q'
-	set integers084[integer064] = 'I09N'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
-	set integers087[integer064] = 32
-	set integer199 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09S'
-	set integers084[integer064] = 'I09O'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
-	set integers087[integer064] = 28
-	set integer200 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09R'
-	set integers084[integer064] = 'I09L'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0D3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
-	set integers087[integer064] = 24
-	set integer201 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09U'
-	set integers084[integer064] = 'I09T'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02H'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNNecromancerAdept.blp"
-	set integers087[integer064] = 90
-	set integer202 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09V'
-	set integers084[integer064] = 'I09X'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02I'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBookOfTheDead.blp"
-	set integers087[integer064] = 90
-	set integer203 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I09W'
-	set integers084[integer064] = 'I09Y'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I02J'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
-	set integers087[integer064] = 90
-	set integer204 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0A0'
-	set integers084[integer064] = 'I09Z'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrb of Water.blp"
-	set integers087[integer064] = 0
-	set integer205 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HK'
-	set integers084[integer064] = 'I0HJ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0HL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrb of Water.blp"
-	set integers087[integer064] = 0
-	set integer206 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0A2'
-	set integers084[integer064] = 'I0A1'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_25.blp"
-	set integers087[integer064] = 0
-	set integer207 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LI'
-	set integers084[integer064] = 'I0LJ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_25.blp"
-	set integers087[integer064] = 0
-	set integer208 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0A4'
-	set integers084[integer064] = 'I0A3'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Crossbow_10.blp"
-	set integers087[integer064] = 0
-	set integer209 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0A6'
-	set integers084[integer064] = 'I0A5'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Halberd_10.blp"
-	set integers087[integer064] = 0
-	set integer210 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K8'
-	set integers084[integer064] = 'I0K7'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0K9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Halberd_10.blp"
-	set integers087[integer064] = 0
-	set integer211 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0A7'
-	set integers084[integer064] = 'I0A8'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BS'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNTransmute.blp"
-	set integers087[integer064] = 0
-	set integer212 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KQ'
-	set integers084[integer064] = 'I0KP'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0KR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNTransmute.blp"
-	set integers087[integer064] = 0
-	set integer213 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AA'
-	set integers084[integer064] = 'I0A9'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BT'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHeartOfAszune.blp"
-	set integers087[integer064] = 0
-	set integer214 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AA'
-	set integers084[integer064] = 'I0KL'
-	set integers086[integer064] = 'I0KM'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHeartOfAszune.blp"
-	set integers087[integer064] = 0
-	set integer215 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AC'
-	set integers084[integer064] = 'I0AB'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BU'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHornOfDoom.blp"
-	set integers087[integer064] = 35
-	set integer216 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AD'
-	set integers084[integer064] = 'I0AE'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BV'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNIceShard.blp"
-	set integers087[integer064] = 0
-	set integer217 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AG'
-	set integers084[integer064] = 'I0AF'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0CT'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNIceShard.blp"
-	set integers087[integer064] = 0
-	set integer218 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AH'
-	set integers084[integer064] = 'I0AI'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingKnife_04.blp"
-	set integers087[integer064] = 0
-	set integer219 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B8'
-	set integers084[integer064] = 'I0AY'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I00B'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer310 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AK'
-	set integers084[integer064] = 'I0AJ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BX'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHeartOfSearinox.blp"
-	set integers087[integer064] = 210
-	set integer220 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07K'
-	set integers084[integer064] = 'I0AL'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_09.blp"
-	set integers087[integer064] = 35
-	set integer221 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0BB'
-	set integers084[integer064] = 'I0BA'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0BZ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedUnholyArmor.blp"
-	set integers087[integer064] = 0
-	set integer222 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LE'
-	set integers084[integer064] = 'I0LC'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedUnholyArmor.blp"
-	set integers087[integer064] = 0
-	set integer223 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0BC'
-	set integers084[integer064] = 'I0BD'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I00C'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNArcaneRing.blp"
-	set integers087[integer064] = 33
-	set integer224 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0BF'
-	set integers084[integer064] = 'I0BE'
-	set integers086[integer064] = 'I0C0'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNThunderMallet.blp"
-	set integers087[integer064] = 35
-	set integer225 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I014'
-	set integers084[integer064] = 'I01D'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRavenForm.blp"
-	set integers087[integer064] = 0
-	set integer226 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0BH'
-	set integers084[integer064] = 'I0BG'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0C1'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNCloakOfFlames.blp"
-	set integers087[integer064] = 0
-	set integer227 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0BI'
-	set integers084[integer064] = 'I0BJ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0C2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Chain_14.blp"
-	set integers087[integer064] = 0
-	set integer228 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0BL'
-	set integers084[integer064] = 'I0BK'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0C3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Gem_Bloodstone_02.blp"
-	set integers087[integer064] = 300
-	set integer229 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0BN'
-	set integers084[integer064] = 'I0BM'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0C4'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHoodOfCunning.blp"
-	set integers087[integer064] = 0
-	set integer230 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00S'
-	set integers084[integer064] = 'I00M'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01C'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyStrength.blp"
-	set integers087[integer064] = 0
-	set integer231 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00T'
-	set integers084[integer064] = 'I00Q'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01E'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNUnholyStrength.blp"
-	set integers087[integer064] = 0
-	set integer232 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00V'
-	set integers084[integer064] = 'I00N'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I01F'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyStrength.blp"
-	set integers087[integer064] = 0
-	set integer233 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00W'
-	set integers084[integer064] = 'I00R'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNUnholyStrength.blp"
-	set integers087[integer064] = 0
-	set integer234 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00X'
-	set integers084[integer064] = 'I00Z'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0CF'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedMoonArmor.blp"
-	set integers087[integer064] = 30
-	set integer235 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00Y'
-	set integers084[integer064] = 'I010'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0DF'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedMoonArmor.blp"
-	set integers087[integer064] = 0
-	set integer236 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I013'
-	set integers084[integer064] = 'I012'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0CB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNStaffOfSilence.blp"
-	set integers087[integer064] = 18
-	set integer237 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0GK'
-	set integers084[integer064] = 'I0GJ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0GL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPhaseBoots.blp"
-	set integers087[integer064] = 8
-	set integer238 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HG'
-	set integers084[integer064] = 'I0HI'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0HH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNForceStaff.blp"
-	set integers087[integer064] = 20
-	set integer240 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0I0'
-	set integers084[integer064] = 'I0K6'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0I2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPipeOfInsight.blp"
-	set integers087[integer064] = 25
-	set integer241 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0JG'
-	set integers084[integer064] = 'I0JF'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyArmor.blp"
-	set integers087[integer064] = 12
-	set integer242 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KD'
-	set integers084[integer064] = 'I0KF'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0KE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyArmor.blp"
-	set integers087[integer064] = 12
-	set integer243 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KX'
-	set integers084[integer064] = 'I0KY'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0KZ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNUrnOfKelThuzad.blp"
-	set integers087[integer064] = 8
-	set integer245 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LG'
-	set integers084[integer064] = 'I0LF'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNUrnOfKelThuzad.blp"
-	set integers087[integer064] = 0
-	set integer246 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LP'
-	set integers084[integer064] = 'I0LL'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSoulRing.blp"
-	set integers087[integer064] = 30
-	set integer247 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LR'
-	set integers084[integer064] = 'I0LT'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LS'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGhostBlade.blp"
-	set integers087[integer064] = 30
-	set integer126 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MJ'
-	set integers084[integer064] = 'I0MI'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNArcaneBoots.blp"
-	set integers087[integer064] = 45
-	set integer248 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0N1'
-	set integers084[integer064] = 'I0N0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0N2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNMedalionOfCourage.blp"
-	set integers087[integer064] = 7
-	set integer249 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0ND'
-	set integers084[integer064] = 'I0NE'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNJanggo.blp"
-	set integers087[integer064] = 30
-	set integer129 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NL'
-	set integers084[integer064] = 'I0NK'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NM'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNJanggo.blp"
-	set integers087[integer064] = 0
-	set integer130 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0O2'
-	set integers084[integer064] = 'I0O3'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0O4'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBoneChimes.blp"
-	set integers087[integer064] = 30
-	set integer250 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OC'
-	set integers084[integer064] = 'I0OE'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBoneChimes.blp"
-	set integers087[integer064] = 30
-	set integer131 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OF'
-	set integers084[integer064] = 'I0OG'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNTranquilBoots.blp"
-	set integers087[integer064] = 60
-	set integer132 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OJ'
-	set integers084[integer064] = 'I0OI'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNTranquilBoots.blp"
-	set integers087[integer064] = 60
-	set integer133 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OM'
-	set integers084[integer064] = 'I0OL'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0ON'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWitchDoctorMaster.blp"
-	set integers087[integer064] = 16
-	set integer134 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OP'
-	set integers084[integer064] = 'I0OO'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp"
-	set integers087[integer064] = 20
-	set integer135 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OU'
-	set integers084[integer064] = 'I0OV'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHalberd.blp"
-	set integers087[integer064] = 30
-	set integer251 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OY'
-	set integers084[integer064] = 'I0OX'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OZ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAnnihilator.blp"
-	set integers087[integer064] = 60
-	set integer252 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0P0'
-	set integers084[integer064] = 'I0P1'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0P2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRingJadeFalcon.blp"
-	set integers087[integer064] = 0
-	set integer136 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0P3'
-	set integers084[integer064] = 'I0P4'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0P5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRingJadeFalcon.blp"
-	set integers087[integer064] = 0
-	set integer137 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h02G'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h086'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05L'
-	set integers084[integer064] = 'I05R'
-	set integers085[integer064] = 'h02H'
-	set integers086[integer064] = 'I0DS'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer255 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05M'
-	set integers084[integer064] = 'I05S'
-	set integers085[integer064] = 'h02I'
-	set integers086[integer064] = 'I0DT'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer256 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h02J'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05O'
-	set integers084[integer064] = 'I05T'
-	set integers085[integer064] = 'h02K'
-	set integers086[integer064] = 'I0DU'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer257 = integer064
-	set integer064 = integer064 + 1
-	set integers085[integer064] = 'h014'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer258 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05P'
-	set integers084[integer064] = 'I05U'
-	set integers085[integer064] = 'h02L'
-	set integers086[integer064] = 'I0DW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer259 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h02M'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05K'
-	set integers084[integer064] = 'I05V'
-	set integers085[integer064] = 'h02N'
-	set integers086[integer064] = 'I0DX'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer260 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05N'
-	set integers084[integer064] = 'I05W'
-	set integers085[integer064] = 'h02O'
-	set integers086[integer064] = 'I0DY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer261 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05Q'
-	set integers084[integer064] = 'I05X'
-	set integers085[integer064] = 'h02P'
-	set integers086[integer064] = 'I0DZ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer262 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06N'
-	set integers084[integer064] = 'I06O'
-	set integers085[integer064] = 'h02Q'
-	set integers086[integer064] = 'I0E0'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer263 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06Q'
-	set integers084[integer064] = 'I06P'
-	set integers085[integer064] = 'h02R'
-	set integers086[integer064] = 'I0E1'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer264 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06R'
-	set integers084[integer064] = 'I06S'
-	set integers085[integer064] = 'h02S'
-	set integers086[integer064] = 'I0E2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer265 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h02T'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06W'
-	set integers084[integer064] = 'I06V'
-	set integers085[integer064] = 'h02U'
-	set integers086[integer064] = 'I0E4'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer266 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I06X'
-	set integers084[integer064] = 'I06Y'
-	set integers085[integer064] = 'h02V'
-	set integers086[integer064] = 'I0E5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer267 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h02W'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I070'
-	set integers084[integer064] = 'I06Z'
-	set integers085[integer064] = 'h02X'
-	set integers086[integer064] = 'I0E6'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer268 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I071'
-	set integers084[integer064] = 'I072'
-	set integers085[integer064] = 'h02Y'
-	set integers086[integer064] = 'I0E7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer269 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h02Z'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I074'
-	set integers084[integer064] = 'I073'
-	set integers085[integer064] = 'h030'
-	set integers086[integer064] = 'I0E8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer270 = integer064
-	set integer064 = integer064 + 1
-	set integers085[integer064] = 'h031'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer271 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I076'
-	set integers084[integer064] = 'I07V'
-	set integers085[integer064] = 'h032'
-	set integers086[integer064] = 'I0EA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer272 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h033'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I077'
-	set integers084[integer064] = 'I07W'
-	set integers085[integer064] = 'h034'
-	set integers086[integer064] = 'I0EB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer273 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I078'
-	set integers084[integer064] = 'I07X'
-	set integers085[integer064] = 'h035'
-	set integers086[integer064] = 'I0EC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer274 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I079'
-	set integers084[integer064] = 'I07Y'
-	set integers085[integer064] = 'h036'
-	set integers086[integer064] = 'I0ED'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer275 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07A'
-	set integers084[integer064] = 'I07Z'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0EE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer276 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07B'
-	set integers084[integer064] = 'I080'
-	set integers085[integer064] = 'h038'
-	set integers086[integer064] = 'I0EF'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer277 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07C'
-	set integers084[integer064] = 'I081'
-	set integers085[integer064] = 'h039'
-	set integers086[integer064] = 'I0EG'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer278 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07D'
-	set integers084[integer064] = 'I082'
-	set integers085[integer064] = 'h03A'
-	set integers086[integer064] = 'I0EH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer279 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h03C'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07E'
-	set integers084[integer064] = 'I083'
-	set integers085[integer064] = 'h03D'
-	set integers086[integer064] = 'I0EI'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer280 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h03E'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07G'
-	set integers084[integer064] = 'I07F'
-	set integers085[integer064] = 'h03F'
-	set integers086[integer064] = 'I0EJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer281 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07H'
-	set integers084[integer064] = 'I084'
-	set integers085[integer064] = 'h03G'
-	set integers086[integer064] = 'I0EK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer282 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07O'
-	set integers084[integer064] = 'I085'
-	set integers085[integer064] = 'h03H'
-	set integers086[integer064] = 'I0EL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer283 = integer064
-	set integer064 = integer064 + 1
-	set integers085[integer064] = 'h03I'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer284 = integer064
-	set integer064 = integer064 + 1
-	set integers085[integer064] = 'h03J'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer285 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h03K'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer296 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07J'
-	set integers084[integer064] = 'I088'
-	set integers085[integer064] = 'h03L'
-	set integers086[integer064] = 'I0EO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer286 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h03M'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h03N'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07M'
-	set integers084[integer064] = 'I089'
-	set integers085[integer064] = 'h03O'
-	set integers086[integer064] = 'I0EP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer287 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07P'
-	set integers084[integer064] = 'I08A'
-	set integers085[integer064] = 'h03Q'
-	set integers086[integer064] = 'I0EQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer288 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07Q'
-	set integers084[integer064] = 'I08B'
-	set integers085[integer064] = 'h03R'
-	set integers086[integer064] = 'I0ER'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer289 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07R'
-	set integers084[integer064] = 'I08C'
-	set integers085[integer064] = 'h03S'
-	set integers086[integer064] = 'I0ES'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer290 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h03T'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h03U'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07S'
-	set integers084[integer064] = 'I08D'
-	set integers085[integer064] = 'h03V'
-	set integers086[integer064] = 'I0ET'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer291 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07T'
-	set integers084[integer064] = 'I08E'
-	set integers085[integer064] = 'h03W'
-	set integers086[integer064] = 'I0EU'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer292 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h079'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0H8'
-	set integers084[integer064] = 'I0H7'
-	set integers085[integer064] = 'h07S'
-	set integers086[integer064] = 'I0H9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer293 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HD'
-	set integers084[integer064] = 'I0HF'
-	set integers085[integer064] = 'h07T'
-	set integers086[integer064] = 'I0HE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer294 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PD'
-	set integers084[integer064] = 'I0PE'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PF'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer307 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HX'
-	set integers084[integer064] = 'I0HZ'
-	set integers085[integer064] = 'h07X'
-	set integers086[integer064] = 'I0HY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer295 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I07L'
-	set integers084[integer064] = 'I0KN'
-	set integers085[integer064] = 'h03P'
-	set integers086[integer064] = 'I0KO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer297 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KW'
-	set integers084[integer064] = 'I0KV'
-	set integers085[integer064] = 'h0BA'
-	set integers086[integer064] = 'I0KU'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer298 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LM'
-	set integers084[integer064] = 'I0LN'
-	set integers085[integer064] = 'h0BQ'
-	set integers086[integer064] = 'I0LO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer299 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 0
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer300 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0N9'
-	set integers084[integer064] = 'I0NA'
-	set integers085[integer064] = 'h0D1'
-	set integers086[integer064] = 'I0NB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer301 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NH'
-	set integers084[integer064] = 'I0NI'
-	set integers085[integer064] = 'h0CY'
-	set integers086[integer064] = 'I0NJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer302 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0O5'
-	set integers084[integer064] = 'I0O6'
-	set integers085[integer064] = 'h0DD'
-	set integers086[integer064] = 'I0O7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer303 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OB'
-	set integers084[integer064] = 'I0OA'
-	set integers085[integer064] = 'h03X'
-	set integers086[integer064] = 'I0O9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
-	set integers087[integer064] = 0
-	set integer304 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h0DT'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer305 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h0DU'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer306 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h0E9'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h0EA'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 0
-	set integers084[integer064] = 0
-	set integers085[integer064] = 'h0EC'
-	set strings012[integer064] = ""
-	set integers087[integer064] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0FF'
+	set Item_Real[ItemCount] = 'I0FG'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSelectHeroOn.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02Q'
+	set Item_Real[ItemCount] = 'I02O'
+	set Item_SellerUnit[ItemCount] = 'h011'
+	set Item_Mute[ItemCount] = 'I00A'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBootsOfSpeed.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer067 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02S'
+	set Item_Real[ItemCount] = 'I02P'
+	set Item_SellerUnit[ItemCount] = 'h012'
+	set Item_Mute[ItemCount] = 'I0CA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer068 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02N'
+	set Item_Real[ItemCount] = 'I02R'
+	set Item_SellerUnit[ItemCount] = 'h013'
+	set Item_Mute[ItemCount] = 'I0CS'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBoots.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer069 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02X'
+	set Item_Real[ItemCount] = 'I02Y'
+	set Item_SellerUnit[ItemCount] = 'h015'
+	set Item_Mute[ItemCount] = 'I0D4'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNCirclet.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer070 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02Z'
+	set Item_Real[ItemCount] = 'I043'
+	set Item_SellerUnit[ItemCount] = 'h016'
+	set Item_Mute[ItemCount] = 'I0CV'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBelt.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer071 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I030'
+	set Item_Real[ItemCount] = 'I044'
+	set Item_SellerUnit[ItemCount] = 'h017'
+	set Item_Mute[ItemCount] = 'I0D2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingKnife_03.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer072 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I031'
+	set Item_Real[ItemCount] = 'I045'
+	set Item_SellerUnit[ItemCount] = 'h018'
+	set Item_Mute[ItemCount] = 'I0D5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNClawsOfAttack.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer073 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I032'
+	set Item_Real[ItemCount] = 'I046'
+	set Item_SellerUnit[ItemCount] = 'h019'
+	set Item_Mute[ItemCount] = 'I0CZ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSteelMelee.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer074 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I033'
+	set Item_Real[ItemCount] = 'I047'
+	set Item_SellerUnit[ItemCount] = 'h01A'
+	set Item_Mute[ItemCount] = 'I0D7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Chain_12.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer075 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I034'
+	set Item_Real[ItemCount] = 'I048'
+	set Item_SellerUnit[ItemCount] = 'h01B'
+	set Item_Mute[ItemCount] = 'I0CX'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_19.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer076 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I035'
+	set Item_Real[ItemCount] = 'I049'
+	set Item_SellerUnit[ItemCount] = 'h01C'
+	set Item_Mute[ItemCount] = 'I0CI'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNFrostMourne.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer077 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I036'
+	set Item_Real[ItemCount] = 'I04A'
+	set Item_SellerUnit[ItemCount] = 'h01D'
+	set Item_Mute[ItemCount] = 'I0CH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Bow_06.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer078 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I037'
+	set Item_Real[ItemCount] = 'I04B'
+	set Item_SellerUnit[ItemCount] = 'h01E'
+	set Item_Mute[ItemCount] = 'I0CR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNEnchantedGemstone.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer079 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I038'
+	set Item_Real[ItemCount] = 'I04C'
+	set Item_SellerUnit[ItemCount] = 'h01F'
+	set Item_Mute[ItemCount] = 'I0CJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGauntletsOfOgrePower.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer080 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I039'
+	set Item_Real[ItemCount] = 'I04D'
+	set Item_SellerUnit[ItemCount] = 'h01G'
+	set Item_Mute[ItemCount] = 'I0DG'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGem.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer081 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MS'
+	set Item_Real[ItemCount] = 'I0MR'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MT'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGem.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer082 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03B'
+	set Item_Real[ItemCount] = 'I04E'
+	set Item_SellerUnit[ItemCount] = 'h01H'
+	set Item_Mute[ItemCount] = 'I0DA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHelmutPurple.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer083 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03C'
+	set Item_Real[ItemCount] = 'I04F'
+	set Item_SellerUnit[ItemCount] = 'h01I'
+	set Item_Mute[ItemCount] = 'I0CQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPeriapt1.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer084 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03D'
+	set Item_Real[ItemCount] = 'I04G'
+	set Item_SellerUnit[ItemCount] = 'h01J'
+	set Item_Mute[ItemCount] = 'I0CU'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNNatureTouchGrow.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer085 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03E'
+	set Item_Real[ItemCount] = 'I04H'
+	set Item_SellerUnit[ItemCount] = 'h01K'
+	set Item_Mute[ItemCount] = 'I0C7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp"
+	set Item_Cooldown[ItemCount] = 12
+	set integer086 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03E'
+	set Item_Real[ItemCount] = 'I04I'
+	set Item_SellerUnit[ItemCount] = 'h01K'
+	set Item_Mute[ItemCount] = 'I0DH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer087 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03F'
+	set Item_Real[ItemCount] = 'I04J'
+	set Item_SellerUnit[ItemCount] = 'h01L'
+	set Item_Mute[ItemCount] = 'I0CM'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNMantleOfIntelligence.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer088 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03G'
+	set Item_Real[ItemCount] = 'I04K'
+	set Item_SellerUnit[ItemCount] = 'h01M'
+	set Item_Mute[ItemCount] = 'I0CD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNUndeadShrine.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer089 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03H'
+	set Item_Real[ItemCount] = 'I04L'
+	set Item_SellerUnit[ItemCount] = 'h01N'
+	set Item_Mute[ItemCount] = 'I0CG'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSpiritWalkerMasterTraining.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer090 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03I'
+	set Item_Real[ItemCount] = 'I04M'
+	set Item_SellerUnit[ItemCount] = 'h01O'
+	set Item_Mute[ItemCount] = 'I0D0'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHammer.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer091 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03J'
+	set Item_Real[ItemCount] = 'I04N'
+	set Item_SellerUnit[ItemCount] = 'h01P'
+	set Item_Mute[ItemCount] = 'I0CN'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNStaffOfNegation.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer092 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03K'
+	set Item_Real[ItemCount] = 'I04O'
+	set Item_SellerUnit[ItemCount] = 'h01Q'
+	set Item_Mute[ItemCount] = 'I0D8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSpiritWalkerAdeptTraining.tga"
+	set Item_Cooldown[ItemCount] = 0
+	set integer093 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03L'
+	set Item_Real[ItemCount] = 'I04P'
+	set Item_SellerUnit[ItemCount] = 'h01R'
+	set Item_Mute[ItemCount] = 'I0CE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Cape_08.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer094 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03M'
+	set Item_Real[ItemCount] = 'I04Q'
+	set Item_SellerUnit[ItemCount] = 'h01S'
+	set Item_Mute[ItemCount] = 'I0DB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Plate13.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer095 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03N'
+	set Item_Real[ItemCount] = 'I04R'
+	set Item_SellerUnit[ItemCount] = 'h01T'
+	set Item_Mute[ItemCount] = 'I0CL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNUsedSoulGem.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer096 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03P'
+	set Item_Real[ItemCount] = 'I04S'
+	set Item_SellerUnit[ItemCount] = 'h01U'
+	set Item_Mute[ItemCount] = 'I0CY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAlleriaFlute.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer097 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03Q'
+	set Item_Real[ItemCount] = 'I04T'
+	set Item_SellerUnit[ItemCount] = 'h01V'
+	set Item_Mute[ItemCount] = 'I0DI'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGoldRing.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer098 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03R'
+	set Item_Real[ItemCount] = 'I04U'
+	set Item_SellerUnit[ItemCount] = 'h01W'
+	set Item_Mute[ItemCount] = 'I0CW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRingPurple.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer099 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03S'
+	set Item_Real[ItemCount] = 'I04V'
+	set Item_SellerUnit[ItemCount] = 'h01X'
+	set Item_Mute[ItemCount] = 'I0DJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRingSkull.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer100 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03T'
+	set Item_Real[ItemCount] = 'I04W'
+	set Item_SellerUnit[ItemCount] = 'h01Y'
+	set Item_Mute[ItemCount] = 'I0CP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer101 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03U'
+	set Item_Real[ItemCount] = 'I04X'
+	set Item_SellerUnit[ItemCount] = 'h01Z'
+	set Item_Mute[ItemCount] = 'I0CC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNStaffOfTeleportation.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer102 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03V'
+	set Item_Real[ItemCount] = 'I04Y'
+	set Item_SellerUnit[ItemCount] = 'h020'
+	set Item_Mute[ItemCount] = 'I0C5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSlippersOfAgility.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer103 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03W'
+	set Item_Real[ItemCount] = 'I04Z'
+	set Item_SellerUnit[ItemCount] = 'h021'
+	set Item_Mute[ItemCount] = 'I0DK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSobiMask.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer104 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03X'
+	set Item_Real[ItemCount] = 'I050'
+	set Item_SellerUnit[ItemCount] = 'h022'
+	set Item_Mute[ItemCount] = 'I0D1'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWandOfCyclone.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer105 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03A'
+	set Item_Real[ItemCount] = 'I051'
+	set Item_SellerUnit[ItemCount] = 'h023'
+	set Item_Mute[ItemCount] = 'I0D9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSteelArmor.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer106 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KB'
+	set Item_Real[ItemCount] = 'I0KA'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0KC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSteelArmor.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer107 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03Y'
+	set Item_Real[ItemCount] = 'I052'
+	set Item_SellerUnit[ItemCount] = 'h024'
+	set Item_Mute[ItemCount] = 'I0C9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrbofSlowness.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer108 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03Z'
+	set Item_Real[ItemCount] = 'I053'
+	set Item_SellerUnit[ItemCount] = 'h025'
+	set Item_Mute[ItemCount] = 'I0CK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSoulGem.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer109 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I040'
+	set Item_Real[ItemCount] = 'I054'
+	set Item_SellerUnit[ItemCount] = 'h026'
+	set Item_Mute[ItemCount] = 'I0DL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPeriapt.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer110 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I041'
+	set Item_Real[ItemCount] = 'I055'
+	set Item_SellerUnit[ItemCount] = 'h027'
+	set Item_Mute[ItemCount] = 'I0D6'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSteelRanged.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer111 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00L'
+	set Item_Real[ItemCount] = 'I0AV'
+	set Item_SellerUnit[ItemCount] = 'h02B'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle0.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer112 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05E'
+	set Item_Real[ItemCount] = 'I0AM'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DN'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle0.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer113 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AU'
+	set Item_Real[ItemCount] = 'I0AN'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle1.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer114 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AS'
+	set Item_Real[ItemCount] = 'I0AO'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle2.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer115 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AT'
+	set Item_Real[ItemCount] = 'I0AP'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle3.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer116 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0GW'
+	set Item_Real[ItemCount] = 'I0GY'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0H3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Illusion.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer121 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0H2'
+	set Item_Real[ItemCount] = 'I0GX'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Regeneration.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer120 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0GV'
+	set Item_Real[ItemCount] = 'I0H1'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0H4'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Haste.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer119 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AR'
+	set Item_Real[ItemCount] = 'I0H0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0H6'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle_DoubleDamage.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer118 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AQ'
+	set Item_Real[ItemCount] = 'I0GZ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0H5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBottle_Invisibility.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer117 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0GD'
+	set Item_Real[ItemCount] = 'I0GC'
+	set Item_SellerUnit[ItemCount] = 'h074'
+	set Item_Mute[ItemCount] = 'I0GE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWand.blp"
+	set Item_Cooldown[ItemCount] = 17
+	set integer122 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HC'
+	set Item_Real[ItemCount] = 'I0HB'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0HA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNStarWand.blp"
+	set Item_Cooldown[ItemCount] = 17
+	set integer239 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HT'
+	set Item_Real[ItemCount] = 'I0HR'
+	set Item_SellerUnit[ItemCount] = 'h07W'
+	set Item_Mute[ItemCount] = 'I0HV'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrcMeleeUpTwo.blp"
+	set Item_Cooldown[ItemCount] = 5
+	set integer123 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HU'
+	set Item_Real[ItemCount] = 'I0HP'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0HW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrcMeleeUpTwo.blp"
+	set Item_Cooldown[ItemCount] = 5
+	set integer124 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0N4'
+	set Item_Real[ItemCount] = 'I0N3'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0N5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPoisonBlade.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer127 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0N7'
+	set Item_Real[ItemCount] = 'I0N6'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0N8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPoisonBlade.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer128 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J7'
+	set Item_Real[ItemCount] = 'I0J6'
+	set Item_SellerUnit[ItemCount] = 'h083'
+	set Item_Mute[ItemCount] = 'I0J8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAmulet.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer125 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0JJ'
+	set Item_Real[ItemCount] = 'I0JI'
+	set Item_SellerUnit[ItemCount] = 'h087'
+	set Item_Mute[ItemCount] = 'I0JK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGreenStaff.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer244 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0P9'
+	set Item_Real[ItemCount] = 'I0PB'
+	set Item_SellerUnit[ItemCount] = 'h0EI'
+	set Item_Mute[ItemCount] = 'I0PA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer253 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PN'
+	set Item_Real[ItemCount] = 'I0PM'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp"
+	set Item_Cooldown[ItemCount] = 10
+	set integer254 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MA'
+	set Item_Real[ItemCount] = 'I0M9'
+	set Item_SellerUnit[ItemCount] = 'h0CM'
+	set Item_Mute[ItemCount] = 'I0MB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer065 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MD'
+	set Item_Real[ItemCount] = 'I0ME'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer066 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I057'
+	set Item_Real[ItemCount] = 'I05C'
+	set Item_SellerUnit[ItemCount] = 'h02A'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAncientOfTheEarth.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer141 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I042'
+	set Item_Real[ItemCount] = 'I05D'
+	set Item_SellerUnit[ItemCount] = 'h028'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNLesserClarityPotion.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer138 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HO'
+	set Item_Real[ItemCount] = 'I0HN'
+	set Item_SellerUnit[ItemCount] = 'h07V'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNVialFull.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer139 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I056'
+	set Item_Real[ItemCount] = 'I05F'
+	set Item_SellerUnit[ItemCount] = 'h029'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHealingSalve.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer140 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I058'
+	set Item_Real[ItemCount] = 'I05G'
+	set Item_SellerUnit[ItemCount] = 'h02C'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSentryWard.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer142 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I059'
+	set Item_Real[ItemCount] = 'I05H'
+	set Item_SellerUnit[ItemCount] = 'h02D'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBlueSentryWard.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer143 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05A'
+	set Item_Real[ItemCount] = 'I05I'
+	set Item_SellerUnit[ItemCount] = 'h02E'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNScrollUber.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer144 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05B'
+	set Item_Real[ItemCount] = 'I05J'
+	set Item_SellerUnit[ItemCount] = 'h02F'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNCritterChicken.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer145 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B0'
+	set Item_Real[ItemCount] = 'I0B1'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNCheese.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer146 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0GG'
+	set Item_Real[ItemCount] = 'I0GF'
+	set Item_SellerUnit[ItemCount] = 'h075'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPotionOfDivinity.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer147 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0GI'
+	set Item_Real[ItemCount] = 'I0GH'
+	set Item_SellerUnit[ItemCount] = 'h076'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNDustOfAppearance.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer148 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KT'
+	set Item_Real[ItemCount] = 'I0KS'
+	set Item_SellerUnit[ItemCount] = 'h0B9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWandOfManaSteal.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer149 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NF'
+	set Item_Real[ItemCount] = 'I0NG'
+	set Item_SellerUnit[ItemCount] = 'h0D3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSmokePotion.blp"
+	set Item_Cooldown[ItemCount] = 90
+	set integer150 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I061'
+	set Item_Real[ItemCount] = 'I062'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01J'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfFire.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer151 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I064'
+	set Item_Real[ItemCount] = 'I063'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01K'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Helmet_17.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer152 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I065'
+	set Item_Real[ItemCount] = 'I066'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01L'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNThoriumArmor.blp"
+	set Item_Cooldown[ItemCount] = 25
+	set integer153 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I068'
+	set Item_Real[ItemCount] = 'I067'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01M'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.tga"
+	set Item_Cooldown[ItemCount] = 0
+	set integer154 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I069'
+	set Item_Real[ItemCount] = 'I06A'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0C6'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRingVioletSpider.tga"
+	set Item_Cooldown[ItemCount] = 0
+	set integer155 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06C'
+	set Item_Real[ItemCount] = 'I06B'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01P'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAbility_Rogue_Sprint.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer156 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03O'
+	set Item_Real[ItemCount] = 'I02T'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01R'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWirtsLegGreen.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer157 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02U'
+	set Item_Real[ItemCount] = 'I05Y'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01Q'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWirtsLeg.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer158 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I060'
+	set Item_Real[ItemCount] = 'I05Z'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01S'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWirtsLegBlue.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer159 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06E'
+	set Item_Real[ItemCount] = 'I06D'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01T'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGoldGloves.BLP"
+	set Item_Cooldown[ItemCount] = 100
+	set integer160 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NO'
+	set Item_Real[ItemCount] = 'I0NN'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGoldGloves.BLP"
+	set Item_Cooldown[ItemCount] = 100
+	set integer161 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06G'
+	set Item_Real[ItemCount] = 'I06F'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01U'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Mace_10.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer162 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06I'
+	set Item_Real[ItemCount] = 'I06H'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01V'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRunedBracers.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer163 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06K'
+	set Item_Real[ItemCount] = 'I06J'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01W'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRevenant.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer164 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06M'
+	set Item_Real[ItemCount] = 'I06L'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01X'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNTalisman.tga"
+	set Item_Cooldown[ItemCount] = 0
+	set integer165 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08F'
+	set Item_Real[ItemCount] = 'I08G'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01Y'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_10.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer166 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08I'
+	set Item_Real[ItemCount] = 'I08H'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01Z'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNJapaneseSword.BLP"
+	set Item_Cooldown[ItemCount] = 0
+	set integer167 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08J'
+	set Item_Real[ItemCount] = 'I08K'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I020'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Hammer_10.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer168 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08M'
+	set Item_Real[ItemCount] = 'I08L'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0C8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Hammer_10.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer169 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08N'
+	set Item_Real[ItemCount] = 'I08O'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I021'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Plate06.blp"
+	set Item_Cooldown[ItemCount] = 17
+	set integer170 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08Q'
+	set Item_Real[ItemCount] = 'I08P'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I022'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNStormHammer.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer171 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08S'
+	set Item_Real[ItemCount] = 'I08R'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I023'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_11.blp"
+	set Item_Cooldown[ItemCount] = 12
+	set integer172 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0JB'
+	set Item_Real[ItemCount] = 'I0J9'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNDiffusal2.blp"
+	set Item_Cooldown[ItemCount] = 12
+	set integer173 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0EW'
+	set Item_Real[ItemCount] = 'I0EV'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0EX'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_11.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer174 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0JC'
+	set Item_Real[ItemCount] = 'I0JA'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNDiffusal2.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer175 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08U'
+	set Item_Real[ItemCount] = 'I08T'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I024'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Helmet_13.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer176 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08W'
+	set Item_Real[ItemCount] = 'I08V'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0CO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Helmet_13.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer177 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I08X'
+	set Item_Real[ItemCount] = 'I08Y'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I025'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHelmOfValor.blp"
+	set Item_Cooldown[ItemCount] = 22
+	set integer178 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I090'
+	set Item_Real[ItemCount] = 'I08Z'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I026'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNStaffofpurification.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer179 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I092'
+	set Item_Real[ItemCount] = 'I091'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I027'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPhilosophersStone.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer180 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I094'
+	set Item_Real[ItemCount] = 'I093'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I028'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSpellShieldAmulet.blp"
+	set Item_Cooldown[ItemCount] = 45
+	set integer181 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I096'
+	set Item_Real[ItemCount] = 'I095'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I029'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSpell_Holy_BlessingOfStrength.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer182 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I098'
+	set Item_Real[ItemCount] = 'I097'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02A'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAbility_Gouge.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer183 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09A'
+	set Item_Real[ItemCount] = 'I099'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02B'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingAxe_06.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer184 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09B'
+	set Item_Real[ItemCount] = 'I09C'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02C'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNThoriumMelee.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer185 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0G2'
+	set Item_Real[ItemCount] = 'I0FZ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0G8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
+	set Item_Cooldown[ItemCount] = 80
+	set integer186 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0G6'
+	set Item_Real[ItemCount] = 'I0G0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0G9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
+	set Item_Cooldown[ItemCount] = 75
+	set integer187 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09E'
+	set Item_Real[ItemCount] = 'I0FY'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0G7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
+	set Item_Cooldown[ItemCount] = 70
+	set integer188 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0G5'
+	set Item_Real[ItemCount] = 'I0FS'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02D'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
+	set Item_Cooldown[ItemCount] = 65
+	set integer189 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0G3'
+	set Item_Real[ItemCount] = 'I09D'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0GB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer190 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0G4'
+	set Item_Real[ItemCount] = 'I0G1'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0GA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
+	set Item_Cooldown[ItemCount] = 55
+	set integer191 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0P6'
+	set Item_Real[ItemCount] = 'I0P8'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0P7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRodOfNecromancy.blp"
+	set Item_Cooldown[ItemCount] = 50
+	set integer192 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AX'
+	set Item_Real[ItemCount] = 'I0AW'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNArcaniteArmor.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer193 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09G'
+	set Item_Real[ItemCount] = 'I09F'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02E'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingAxe_02.blp"
+	set Item_Cooldown[ItemCount] = 35
+	set MantaStyle = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MV'
+	set Item_Real[ItemCount] = 'I0MU'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingAxe_02.blp"
+	set Item_Cooldown[ItemCount] = 50
+	set MantaStyle_Ranged = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09I'
+	set Item_Real[ItemCount] = 'I09H'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02F'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNLothars.BLP"
+	set Item_Cooldown[ItemCount] = 22
+	set integer196 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09K'
+	set Item_Real[ItemCount] = 'I09M'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01G'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
+	set Item_Cooldown[ItemCount] = 40
+	set integer197 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09J'
+	set Item_Real[ItemCount] = 'I09P'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02G'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
+	set Item_Cooldown[ItemCount] = 36
+	set integer198 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09Q'
+	set Item_Real[ItemCount] = 'I09N'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
+	set Item_Cooldown[ItemCount] = 32
+	set integer199 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09S'
+	set Item_Real[ItemCount] = 'I09O'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
+	set Item_Cooldown[ItemCount] = 28
+	set integer200 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09R'
+	set Item_Real[ItemCount] = 'I09L'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0D3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_06.blp"
+	set Item_Cooldown[ItemCount] = 24
+	set integer201 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09U'
+	set Item_Real[ItemCount] = 'I09T'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02H'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNNecromancerAdept.blp"
+	set Item_Cooldown[ItemCount] = 90
+	set integer202 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09V'
+	set Item_Real[ItemCount] = 'I09X'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02I'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBookOfTheDead.blp"
+	set Item_Cooldown[ItemCount] = 90
+	set integer203 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I09W'
+	set Item_Real[ItemCount] = 'I09Y'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I02J'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNNecromancerMaster.blp"
+	set Item_Cooldown[ItemCount] = 90
+	set integer204 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0A0'
+	set Item_Real[ItemCount] = 'I09Z'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrb of Water.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer205 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HK'
+	set Item_Real[ItemCount] = 'I0HJ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0HL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrb of Water.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer206 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0A2'
+	set Item_Real[ItemCount] = 'I0A1'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_25.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer207 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LI'
+	set Item_Real[ItemCount] = 'I0LJ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_25.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer208 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0A4'
+	set Item_Real[ItemCount] = 'I0A3'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Crossbow_10.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer209 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0A6'
+	set Item_Real[ItemCount] = 'I0A5'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Halberd_10.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer210 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K8'
+	set Item_Real[ItemCount] = 'I0K7'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0K9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Weapon_Halberd_10.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer211 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0A7'
+	set Item_Real[ItemCount] = 'I0A8'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BS'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNTransmute.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer212 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KQ'
+	set Item_Real[ItemCount] = 'I0KP'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0KR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNTransmute.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer213 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AA'
+	set Item_Real[ItemCount] = 'I0A9'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BT'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHeartOfAszune.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer214 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AA'
+	set Item_Real[ItemCount] = 'I0KL'
+	set Item_Mute[ItemCount] = 'I0KM'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHeartOfAszune.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer215 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AC'
+	set Item_Real[ItemCount] = 'I0AB'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BU'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHornOfDoom.blp"
+	set Item_Cooldown[ItemCount] = 35
+	set integer216 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AD'
+	set Item_Real[ItemCount] = 'I0AE'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BV'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNIceShard.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set EyeOfSkadi = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AG'
+	set Item_Real[ItemCount] = 'I0AF'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0CT'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNIceShard.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set EyeOfSkadiRanged = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AH'
+	set Item_Real[ItemCount] = 'I0AI'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_ThrowingKnife_04.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer219 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B8'
+	set Item_Real[ItemCount] = 'I0AY'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I00B'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer310 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AK'
+	set Item_Real[ItemCount] = 'I0AJ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BX'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHeartOfSearinox.blp"
+	set Item_Cooldown[ItemCount] = 210
+	set integer220 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07K'
+	set Item_Real[ItemCount] = 'I0AL'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Sword_09.blp"
+	set Item_Cooldown[ItemCount] = 35
+	set integer221 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0BB'
+	set Item_Real[ItemCount] = 'I0BA'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0BZ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedUnholyArmor.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer222 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LE'
+	set Item_Real[ItemCount] = 'I0LC'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedUnholyArmor.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer223 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0BC'
+	set Item_Real[ItemCount] = 'I0BD'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I00C'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNArcaneRing.blp"
+	set Item_Cooldown[ItemCount] = 33
+	set integer224 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0BF'
+	set Item_Real[ItemCount] = 'I0BE'
+	set Item_Mute[ItemCount] = 'I0C0'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNThunderMallet.blp"
+	set Item_Cooldown[ItemCount] = 35
+	set integer225 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I014'
+	set Item_Real[ItemCount] = 'I01D'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRavenForm.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer226 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0BH'
+	set Item_Real[ItemCount] = 'I0BG'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0C1'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNCloakOfFlames.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer227 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0BI'
+	set Item_Real[ItemCount] = 'I0BJ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0C2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Chest_Chain_14.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer228 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0BL'
+	set Item_Real[ItemCount] = 'I0BK'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0C3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Gem_Bloodstone_02.blp"
+	set Item_Cooldown[ItemCount] = 300
+	set integer229 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0BN'
+	set Item_Real[ItemCount] = 'I0BM'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0C4'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHoodOfCunning.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer230 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00S'
+	set Item_Real[ItemCount] = 'I00M'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01C'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyStrength.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer231 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00T'
+	set Item_Real[ItemCount] = 'I00Q'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01E'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNUnholyStrength.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer232 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00V'
+	set Item_Real[ItemCount] = 'I00N'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I01F'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyStrength.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer233 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00W'
+	set Item_Real[ItemCount] = 'I00R'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNUnholyStrength.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer234 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00X'
+	set Item_Real[ItemCount] = 'I00Z'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0CF'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedMoonArmor.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer235 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00Y'
+	set Item_Real[ItemCount] = 'I010'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0DF'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAdvancedMoonArmor.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer236 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I013'
+	set Item_Real[ItemCount] = 'I012'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0CB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNStaffOfSilence.blp"
+	set Item_Cooldown[ItemCount] = 18
+	set integer237 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0GK'
+	set Item_Real[ItemCount] = 'I0GJ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0GL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPhaseBoots.blp"
+	set Item_Cooldown[ItemCount] = 8
+	set integer238 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HG'
+	set Item_Real[ItemCount] = 'I0HI'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0HH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNForceStaff.blp"
+	set Item_Cooldown[ItemCount] = 20
+	set integer240 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0I0'
+	set Item_Real[ItemCount] = 'I0K6'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0I2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPipeOfInsight.blp"
+	set Item_Cooldown[ItemCount] = 25
+	set integer241 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0JG'
+	set Item_Real[ItemCount] = 'I0JF'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyArmor.blp"
+	set Item_Cooldown[ItemCount] = 12
+	set integer242 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KD'
+	set Item_Real[ItemCount] = 'I0KF'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0KE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNImprovedUnholyArmor.blp"
+	set Item_Cooldown[ItemCount] = 12
+	set integer243 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KX'
+	set Item_Real[ItemCount] = 'I0KY'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0KZ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNUrnOfKelThuzad.blp"
+	set Item_Cooldown[ItemCount] = 8
+	set integer245 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LG'
+	set Item_Real[ItemCount] = 'I0LF'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNUrnOfKelThuzad.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer246 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LP'
+	set Item_Real[ItemCount] = 'I0LL'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSoulRing.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer247 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LR'
+	set Item_Real[ItemCount] = 'I0LT'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LS'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGhostBlade.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer126 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MJ'
+	set Item_Real[ItemCount] = 'I0MI'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNArcaneBoots.blp"
+	set Item_Cooldown[ItemCount] = 45
+	set integer248 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0N1'
+	set Item_Real[ItemCount] = 'I0N0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0N2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNMedalionOfCourage.blp"
+	set Item_Cooldown[ItemCount] = 7
+	set integer249 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0ND'
+	set Item_Real[ItemCount] = 'I0NE'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNJanggo.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer129 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NL'
+	set Item_Real[ItemCount] = 'I0NK'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NM'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNJanggo.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer130 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0O2'
+	set Item_Real[ItemCount] = 'I0O3'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0O4'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBoneChimes.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer250 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OC'
+	set Item_Real[ItemCount] = 'I0OE'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBoneChimes.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer131 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OF'
+	set Item_Real[ItemCount] = 'I0OG'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNTranquilBoots.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer132 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OJ'
+	set Item_Real[ItemCount] = 'I0OI'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNTranquilBoots.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer133 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OM'
+	set Item_Real[ItemCount] = 'I0OL'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0ON'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWitchDoctorMaster.blp"
+	set Item_Cooldown[ItemCount] = 16
+	set integer134 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OP'
+	set Item_Real[ItemCount] = 'I0OO'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNPendantOfMana.blp"
+	set Item_Cooldown[ItemCount] = 20
+	set integer135 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OU'
+	set Item_Real[ItemCount] = 'I0OV'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHalberd.blp"
+	set Item_Cooldown[ItemCount] = 30
+	set integer251 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OY'
+	set Item_Real[ItemCount] = 'I0OX'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OZ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAnnihilator.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer252 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0P0'
+	set Item_Real[ItemCount] = 'I0P1'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0P2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRingJadeFalcon.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer136 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0P3'
+	set Item_Real[ItemCount] = 'I0P4'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0P5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRingJadeFalcon.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer137 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h02G'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h086'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05L'
+	set Item_Real[ItemCount] = 'I05R'
+	set Item_SellerUnit[ItemCount] = 'h02H'
+	set Item_Mute[ItemCount] = 'I0DS'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer255 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05M'
+	set Item_Real[ItemCount] = 'I05S'
+	set Item_SellerUnit[ItemCount] = 'h02I'
+	set Item_Mute[ItemCount] = 'I0DT'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer256 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h02J'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05O'
+	set Item_Real[ItemCount] = 'I05T'
+	set Item_SellerUnit[ItemCount] = 'h02K'
+	set Item_Mute[ItemCount] = 'I0DU'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer257 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_SellerUnit[ItemCount] = 'h014'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer258 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05P'
+	set Item_Real[ItemCount] = 'I05U'
+	set Item_SellerUnit[ItemCount] = 'h02L'
+	set Item_Mute[ItemCount] = 'I0DW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer259 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h02M'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05K'
+	set Item_Real[ItemCount] = 'I05V'
+	set Item_SellerUnit[ItemCount] = 'h02N'
+	set Item_Mute[ItemCount] = 'I0DX'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer260 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05N'
+	set Item_Real[ItemCount] = 'I05W'
+	set Item_SellerUnit[ItemCount] = 'h02O'
+	set Item_Mute[ItemCount] = 'I0DY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer261 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05Q'
+	set Item_Real[ItemCount] = 'I05X'
+	set Item_SellerUnit[ItemCount] = 'h02P'
+	set Item_Mute[ItemCount] = 'I0DZ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer262 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06N'
+	set Item_Real[ItemCount] = 'I06O'
+	set Item_SellerUnit[ItemCount] = 'h02Q'
+	set Item_Mute[ItemCount] = 'I0E0'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer263 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06Q'
+	set Item_Real[ItemCount] = 'I06P'
+	set Item_SellerUnit[ItemCount] = 'h02R'
+	set Item_Mute[ItemCount] = 'I0E1'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer264 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06R'
+	set Item_Real[ItemCount] = 'I06S'
+	set Item_SellerUnit[ItemCount] = 'h02S'
+	set Item_Mute[ItemCount] = 'I0E2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer265 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h02T'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06W'
+	set Item_Real[ItemCount] = 'I06V'
+	set Item_SellerUnit[ItemCount] = 'h02U'
+	set Item_Mute[ItemCount] = 'I0E4'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer266 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I06X'
+	set Item_Real[ItemCount] = 'I06Y'
+	set Item_SellerUnit[ItemCount] = 'h02V'
+	set Item_Mute[ItemCount] = 'I0E5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer267 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h02W'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I070'
+	set Item_Real[ItemCount] = 'I06Z'
+	set Item_SellerUnit[ItemCount] = 'h02X'
+	set Item_Mute[ItemCount] = 'I0E6'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer268 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I071'
+	set Item_Real[ItemCount] = 'I072'
+	set Item_SellerUnit[ItemCount] = 'h02Y'
+	set Item_Mute[ItemCount] = 'I0E7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer269 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h02Z'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I074'
+	set Item_Real[ItemCount] = 'I073'
+	set Item_SellerUnit[ItemCount] = 'h030'
+	set Item_Mute[ItemCount] = 'I0E8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer270 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_SellerUnit[ItemCount] = 'h031'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set integer271 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I076'
+	set Item_Real[ItemCount] = 'I07V'
+	set Item_SellerUnit[ItemCount] = 'h032'
+	set Item_Mute[ItemCount] = 'I0EA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer272 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h033'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I077'
+	set Item_Real[ItemCount] = 'I07W'
+	set Item_SellerUnit[ItemCount] = 'h034'
+	set Item_Mute[ItemCount] = 'I0EB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer273 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I078'
+	set Item_Real[ItemCount] = 'I07X'
+	set Item_SellerUnit[ItemCount] = 'h035'
+	set Item_Mute[ItemCount] = 'I0EC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer274 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I079'
+	set Item_Real[ItemCount] = 'I07Y'
+	set Item_SellerUnit[ItemCount] = 'h036'
+	set Item_Mute[ItemCount] = 'I0ED'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer275 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07A'
+	set Item_Real[ItemCount] = 'I07Z'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0EE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer276 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07B'
+	set Item_Real[ItemCount] = 'I080'
+	set Item_SellerUnit[ItemCount] = 'h038'
+	set Item_Mute[ItemCount] = 'I0EF'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer277 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07C'
+	set Item_Real[ItemCount] = 'I081'
+	set Item_SellerUnit[ItemCount] = 'h039'
+	set Item_Mute[ItemCount] = 'I0EG'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer278 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07D'
+	set Item_Real[ItemCount] = 'I082'
+	set Item_SellerUnit[ItemCount] = 'h03A'
+	set Item_Mute[ItemCount] = 'I0EH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer279 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h03C'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07E'
+	set Item_Real[ItemCount] = 'I083'
+	set Item_SellerUnit[ItemCount] = 'h03D'
+	set Item_Mute[ItemCount] = 'I0EI'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer280 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h03E'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07G'
+	set Item_Real[ItemCount] = 'I07F'
+	set Item_SellerUnit[ItemCount] = 'h03F'
+	set Item_Mute[ItemCount] = 'I0EJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer281 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07H'
+	set Item_Real[ItemCount] = 'I084'
+	set Item_SellerUnit[ItemCount] = 'h03G'
+	set Item_Mute[ItemCount] = 'I0EK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer282 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07O'
+	set Item_Real[ItemCount] = 'I085'
+	set Item_SellerUnit[ItemCount] = 'h03H'
+	set Item_Mute[ItemCount] = 'I0EL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer283 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_SellerUnit[ItemCount] = 'h03I'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer284 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_SellerUnit[ItemCount] = 'h03J'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer285 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h03K'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer296 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07J'
+	set Item_Real[ItemCount] = 'I088'
+	set Item_SellerUnit[ItemCount] = 'h03L'
+	set Item_Mute[ItemCount] = 'I0EO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer286 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h03M'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h03N'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07M'
+	set Item_Real[ItemCount] = 'I089'
+	set Item_SellerUnit[ItemCount] = 'h03O'
+	set Item_Mute[ItemCount] = 'I0EP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer287 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07P'
+	set Item_Real[ItemCount] = 'I08A'
+	set Item_SellerUnit[ItemCount] = 'h03Q'
+	set Item_Mute[ItemCount] = 'I0EQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer288 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07Q'
+	set Item_Real[ItemCount] = 'I08B'
+	set Item_SellerUnit[ItemCount] = 'h03R'
+	set Item_Mute[ItemCount] = 'I0ER'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer289 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07R'
+	set Item_Real[ItemCount] = 'I08C'
+	set Item_SellerUnit[ItemCount] = 'h03S'
+	set Item_Mute[ItemCount] = 'I0ES'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer290 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h03T'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h03U'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07S'
+	set Item_Real[ItemCount] = 'I08D'
+	set Item_SellerUnit[ItemCount] = 'h03V'
+	set Item_Mute[ItemCount] = 'I0ET'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer291 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07T'
+	set Item_Real[ItemCount] = 'I08E'
+	set Item_SellerUnit[ItemCount] = 'h03W'
+	set Item_Mute[ItemCount] = 'I0EU'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer292 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h079'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0H8'
+	set Item_Real[ItemCount] = 'I0H7'
+	set Item_SellerUnit[ItemCount] = 'h07S'
+	set Item_Mute[ItemCount] = 'I0H9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer293 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HD'
+	set Item_Real[ItemCount] = 'I0HF'
+	set Item_SellerUnit[ItemCount] = 'h07T'
+	set Item_Mute[ItemCount] = 'I0HE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer294 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PD'
+	set Item_Real[ItemCount] = 'I0PE'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PF'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer307 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HX'
+	set Item_Real[ItemCount] = 'I0HZ'
+	set Item_SellerUnit[ItemCount] = 'h07X'
+	set Item_Mute[ItemCount] = 'I0HY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer295 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I07L'
+	set Item_Real[ItemCount] = 'I0KN'
+	set Item_SellerUnit[ItemCount] = 'h03P'
+	set Item_Mute[ItemCount] = 'I0KO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer297 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KW'
+	set Item_Real[ItemCount] = 'I0KV'
+	set Item_SellerUnit[ItemCount] = 'h0BA'
+	set Item_Mute[ItemCount] = 'I0KU'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer298 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LM'
+	set Item_Real[ItemCount] = 'I0LN'
+	set Item_SellerUnit[ItemCount] = 'h0BQ'
+	set Item_Mute[ItemCount] = 'I0LO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer299 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer300 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0N9'
+	set Item_Real[ItemCount] = 'I0NA'
+	set Item_SellerUnit[ItemCount] = 'h0D1'
+	set Item_Mute[ItemCount] = 'I0NB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer301 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NH'
+	set Item_Real[ItemCount] = 'I0NI'
+	set Item_SellerUnit[ItemCount] = 'h0CY'
+	set Item_Mute[ItemCount] = 'I0NJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer302 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0O5'
+	set Item_Real[ItemCount] = 'I0O6'
+	set Item_SellerUnit[ItemCount] = 'h0DD'
+	set Item_Mute[ItemCount] = 'I0O7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer303 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OB'
+	set Item_Real[ItemCount] = 'I0OA'
+	set Item_SellerUnit[ItemCount] = 'h03X'
+	set Item_Mute[ItemCount] = 'I0O9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSnazzyScroll.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integer304 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h0DT'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set integer305 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h0DU'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set integer306 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h0E9'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h0EA'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 0
+	set Item_Real[ItemCount] = 0
+	set Item_SellerUnit[ItemCount] = 'h0EC'
+	set Item_Icon[ItemCount] = ""
+	set Item_Cooldown[ItemCount] = 0
 	set region007 = CreateRegion()
 	call RegionAddRect(region007, rect202)
 	call RegionAddRect(region007, rect203)
@@ -90173,7 +90154,7 @@ function main takes nothing returns nothing
 	set integers089[integer309] = integer166
 	set integers090[integer309] = integer108
 	set integers091[integer309] = integer275
-	set integers094[integer309] = integer195
+	set integers094[integer309] = MantaStyle_Ranged
 	set integer309 = integer309 + 1
 	set integers089[integer309] = integer076
 	set integers090[integer309] = integer253
@@ -90255,13 +90236,13 @@ function main takes nothing returns nothing
 	set integers090[integer309] = integer108
 	set integers091[integer309] = integer096
 	set integers092[integer309] = integer065
-	set integers094[integer309] = integer217
+	set integers094[integer309] = EyeOfSkadi
 	set integer309 = integer309 + 1
 	set integers089[integer309] = integer108
 	set integers090[integer309] = integer108
 	set integers091[integer309] = integer096
 	set integers092[integer309] = integer066
-	set integers094[integer309] = integer217
+	set integers094[integer309] = EyeOfSkadi
 	set integer309 = integer309 + 1
 	set integers089[integer309] = integer078
 	set integers090[integer309] = integer097
@@ -90451,649 +90432,647 @@ function main takes nothing returns nothing
 	set integers089[integer309] = integer164
 	set integers090[integer309] = integer155
 	set integers094[integer309] = integer137
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0AZ'
-	set integers084[integer064] = 'I011'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0EY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer311 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I00F'
-	set integers084[integer064] = 'I00D'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0EZ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer312 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I018'
-	set integers084[integer064] = 'I009'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F0'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer313 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I019'
-	set integers084[integer064] = 'I005'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F6'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer314 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01A'
-	set integers084[integer064] = 'I00G'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F1'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer315 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01B'
-	set integers084[integer064] = 'I004'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer316 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01H'
-	set integers084[integer064] = 'I003'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer317 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I01I'
-	set integers084[integer064] = 'I002'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer318 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02K'
-	set integers084[integer064] = 'I001'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F4'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer319 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02L'
-	set integers084[integer064] = 'I00I'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer320 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B2'
-	set integers084[integer064] = 'I00H'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer322 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B3'
-	set integers084[integer064] = 'I00P'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer323 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B4'
-	set integers084[integer064] = 'I00U'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer324 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B7'
-	set integers084[integer064] = 'I000'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer325 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B6'
-	set integers084[integer064] = 'I016'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer326 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B5'
-	set integers084[integer064] = 'I017'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0FB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer327 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0B9'
-	set integers084[integer064] = 'I00O'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0F8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer328 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J5'
-	set integers084[integer064] = 'I0IT'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer329 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IV'
-	set integers084[integer064] = 'I0IU'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0I9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer330 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IW'
-	set integers084[integer064] = 'I0IS'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0II'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer331 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IX'
-	set integers084[integer064] = 'I0IR'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer332 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IY'
-	set integers084[integer064] = 'I0IQ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer333 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0IZ'
-	set integers084[integer064] = 'I0IK'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IG'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer334 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J0'
-	set integers084[integer064] = 'I0IL'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IF'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer335 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J1'
-	set integers084[integer064] = 'I0IM'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer336 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J2'
-	set integers084[integer064] = 'I0IP'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0ID'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer337 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J3'
-	set integers084[integer064] = 'I0IO'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IC'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer338 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J4'
-	set integers084[integer064] = 'I0IN'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0IB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer339 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0I6'
-	set integers084[integer064] = 'I0I7'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0I8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer340 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0JZ'
-	set integers084[integer064] = 'I0JS'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer341 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K0'
-	set integers084[integer064] = 'I0JT'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer342 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K1'
-	set integers084[integer064] = 'I0JU'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JM'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer343 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K2'
-	set integers084[integer064] = 'I0JW'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JN'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer344 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K3'
-	set integers084[integer064] = 'I0JV'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer345 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K4'
-	set integers084[integer064] = 'I0JY'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer346 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0K5'
-	set integers084[integer064] = 'I0JX'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0JO'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer347 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0KI'
-	set integers084[integer064] = 'I0KH'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0KJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer348 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0L4'
-	set integers084[integer064] = 'I0L5'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0L8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer321 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0L3'
-	set integers084[integer064] = 'I0L0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0L9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer349 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0L2'
-	set integers084[integer064] = 'I0L7'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer350 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0LU'
-	set integers084[integer064] = 'I0LV'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0LW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer351 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0M1'
-	set integers084[integer064] = 'I0M0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0M2'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer352 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0M5'
-	set integers084[integer064] = 'I0M4'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0M3'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer353 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0M6'
-	set integers084[integer064] = 'I0M7'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0M8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer354 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MF'
-	set integers084[integer064] = 'I0MG'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MH'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer355 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MM'
-	set integers084[integer064] = 'I0ML'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MN'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer356 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MO'
-	set integers084[integer064] = 'I0MP'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0MQ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer357 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NQ'
-	set integers084[integer064] = 'I0NR'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NS'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer358 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NT'
-	set integers084[integer064] = 'I0NU'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NV'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer359 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NW'
-	set integers084[integer064] = 'I0NX'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0NY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer360 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0NZ'
-	set integers084[integer064] = 'I0O0'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0O1'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer361 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0OR'
-	set integers084[integer064] = 'I0OS'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0OT'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer362 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PG'
-	set integers084[integer064] = 'I0PH'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PI'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer363 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PJ'
-	set integers084[integer064] = 'I0PK'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PL'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer364 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0PP'
-	set integers084[integer064] = 'I0PQ'
-	set integers085[integer064] = 0
-	set integers086[integer064] = 'I0PR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
-	set integers087[integer064] = 60
-	set integer365 = integer064
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03A'
-	set integers084[integer064] = 'I051'
-	set integers085[integer064] = 'h08K'
-	set integers086[integer064] = 'I0D9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSteelArmor.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer106
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03Y'
-	set integers084[integer064] = 'I052'
-	set integers085[integer064] = 'h08X'
-	set integers086[integer064] = 'I0C9'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrbofSlowness.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer108
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02S'
-	set integers084[integer064] = 'I02P'
-	set integers085[integer064] = 'h08S'
-	set integers086[integer064] = 'I0CA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer068
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02N'
-	set integers084[integer064] = 'I02R'
-	set integers085[integer064] = 'h08P'
-	set integers086[integer064] = 'I0CS'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBoots.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer069
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02Z'
-	set integers084[integer064] = 'I043'
-	set integers085[integer064] = 'h08Q'
-	set integers086[integer064] = 'I0CV'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNBelt.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer071
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I031'
-	set integers084[integer064] = 'I045'
-	set integers085[integer064] = 'h08T'
-	set integers086[integer064] = 'I0D5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNClawsOfAttack.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer073
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03B'
-	set integers084[integer064] = 'I04E'
-	set integers085[integer064] = 'h08N'
-	set integers086[integer064] = 'I0DA'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNHelmutPurple.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer083
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03E'
-	set integers084[integer064] = 'I04H'
-	set integers085[integer064] = 'h08W'
-	set integers086[integer064] = 'I0C7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp"
-	set integers087[integer064] = 18
-	set integers088[integer064] = integer086
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03G'
-	set integers084[integer064] = 'I04K'
-	set integers085[integer064] = 'h08O'
-	set integers086[integer064] = 'I0CD'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNUndeadShrine.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer089
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03P'
-	set integers084[integer064] = 'I04S'
-	set integers085[integer064] = 'h08U'
-	set integers086[integer064] = 'I0CY'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAlleriaFlute.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer097
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03Q'
-	set integers084[integer064] = 'I04T'
-	set integers085[integer064] = 'h08G'
-	set integers086[integer064] = 'I0DI'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGoldRing.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer098
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03S'
-	set integers084[integer064] = 'I04V'
-	set integers085[integer064] = 'h08L'
-	set integers086[integer064] = 'I0DJ'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRingSkull.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer100
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03T'
-	set integers084[integer064] = 'I04W'
-	set integers085[integer064] = 'h08R'
-	set integers086[integer064] = 'I0CP'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer101
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03V'
-	set integers084[integer064] = 'I04Y'
-	set integers085[integer064] = 'h08E'
-	set integers086[integer064] = 'I0C5'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSlippersOfAgility.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer103
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03W'
-	set integers084[integer064] = 'I04Z'
-	set integers085[integer064] = 'h08J'
-	set integers086[integer064] = 'I0DK'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNSobiMask.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer104
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0GD'
-	set integers084[integer064] = 'I0GC'
-	set integers085[integer064] = 'h08I'
-	set integers086[integer064] = 'I0GE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNWand.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer122
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0HT'
-	set integers084[integer064] = 'I0HR'
-	set integers085[integer064] = 'h08F'
-	set integers086[integer064] = 'I0HW'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrcMeleeUpTwo.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer123
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0J7'
-	set integers084[integer064] = 'I0J6'
-	set integers085[integer064] = 'h08V'
-	set integers086[integer064] = 'I0J8'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNAmulet.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer125
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I03L'
-	set integers084[integer064] = 'I04P'
-	set integers085[integer064] = 'h08M'
-	set integers086[integer064] = 'I0CE'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Cape_08.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer094
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I05A'
-	set integers084[integer064] = 'I05I'
-	set integers085[integer064] = 'h08H'
-	set integers086[integer064] = 0
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNScrollUber.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer144
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I037'
-	set integers084[integer064] = 'I04B'
-	set integers085[integer064] = 'h093'
-	set integers086[integer064] = 'I0CR'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNEnchantedGemstone.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer079
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I02Q'
-	set integers084[integer064] = 'I02O'
-	set integers085[integer064] = 'h0BO'
-	set integers086[integer064] = 'I00A'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Cape_08.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer067
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I0MA'
-	set integers084[integer064] = 'I0M9'
-	set integers085[integer064] = 'h0CN'
-	set integers086[integer064] = 'I0MB'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer065
-	set integer064 = integer064 + 1
-	set integers083[integer064] = 'I033'
-	set integers084[integer064] = 'I047'
-	set integers085[integer064] = 'h0D0'
-	set integers086[integer064] = 'I0D7'
-	set strings012[integer064] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
-	set integers087[integer064] = 0
-	set integers088[integer064] = integer075
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0AZ'
+	set Item_Real[ItemCount] = 'I011'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0EY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer311 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I00F'
+	set Item_Real[ItemCount] = 'I00D'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0EZ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer312 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I018'
+	set Item_Real[ItemCount] = 'I009'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F0'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer313 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I019'
+	set Item_Real[ItemCount] = 'I005'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F6'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer314 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01A'
+	set Item_Real[ItemCount] = 'I00G'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F1'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer315 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01B'
+	set Item_Real[ItemCount] = 'I004'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer316 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01H'
+	set Item_Real[ItemCount] = 'I003'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer317 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I01I'
+	set Item_Real[ItemCount] = 'I002'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer318 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02K'
+	set Item_Real[ItemCount] = 'I001'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F4'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer319 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02L'
+	set Item_Real[ItemCount] = 'I00I'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer320 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B2'
+	set Item_Real[ItemCount] = 'I00H'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer322 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B3'
+	set Item_Real[ItemCount] = 'I00P'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer323 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B4'
+	set Item_Real[ItemCount] = 'I00U'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer324 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B7'
+	set Item_Real[ItemCount] = 'I000'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer325 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B6'
+	set Item_Real[ItemCount] = 'I016'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer326 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B5'
+	set Item_Real[ItemCount] = 'I017'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0FB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer327 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0B9'
+	set Item_Real[ItemCount] = 'I00O'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0F8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer328 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J5'
+	set Item_Real[ItemCount] = 'I0IT'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer329 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IV'
+	set Item_Real[ItemCount] = 'I0IU'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0I9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer330 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IW'
+	set Item_Real[ItemCount] = 'I0IS'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0II'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer331 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IX'
+	set Item_Real[ItemCount] = 'I0IR'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer332 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IY'
+	set Item_Real[ItemCount] = 'I0IQ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer333 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0IZ'
+	set Item_Real[ItemCount] = 'I0IK'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IG'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer334 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J0'
+	set Item_Real[ItemCount] = 'I0IL'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IF'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer335 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J1'
+	set Item_Real[ItemCount] = 'I0IM'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer336 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J2'
+	set Item_Real[ItemCount] = 'I0IP'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0ID'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer337 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J3'
+	set Item_Real[ItemCount] = 'I0IO'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IC'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer338 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J4'
+	set Item_Real[ItemCount] = 'I0IN'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0IB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer339 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0I6'
+	set Item_Real[ItemCount] = 'I0I7'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0I8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer340 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0JZ'
+	set Item_Real[ItemCount] = 'I0JS'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer341 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K0'
+	set Item_Real[ItemCount] = 'I0JT'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer342 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K1'
+	set Item_Real[ItemCount] = 'I0JU'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JM'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer343 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K2'
+	set Item_Real[ItemCount] = 'I0JW'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JN'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer344 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K3'
+	set Item_Real[ItemCount] = 'I0JV'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer345 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K4'
+	set Item_Real[ItemCount] = 'I0JY'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer346 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0K5'
+	set Item_Real[ItemCount] = 'I0JX'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0JO'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer347 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0KI'
+	set Item_Real[ItemCount] = 'I0KH'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0KJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer348 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0L4'
+	set Item_Real[ItemCount] = 'I0L5'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0L8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer321 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0L3'
+	set Item_Real[ItemCount] = 'I0L0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0L9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer349 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0L2'
+	set Item_Real[ItemCount] = 'I0L7'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer350 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0LU'
+	set Item_Real[ItemCount] = 'I0LV'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0LW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer351 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0M1'
+	set Item_Real[ItemCount] = 'I0M0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0M2'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer352 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0M5'
+	set Item_Real[ItemCount] = 'I0M4'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0M3'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer353 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0M6'
+	set Item_Real[ItemCount] = 'I0M7'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0M8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer354 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MF'
+	set Item_Real[ItemCount] = 'I0MG'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MH'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer355 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MM'
+	set Item_Real[ItemCount] = 'I0ML'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MN'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer356 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MO'
+	set Item_Real[ItemCount] = 'I0MP'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0MQ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer357 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NQ'
+	set Item_Real[ItemCount] = 'I0NR'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NS'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer358 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NT'
+	set Item_Real[ItemCount] = 'I0NU'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NV'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer359 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NW'
+	set Item_Real[ItemCount] = 'I0NX'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0NY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer360 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0NZ'
+	set Item_Real[ItemCount] = 'I0O0'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0O1'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer361 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0OR'
+	set Item_Real[ItemCount] = 'I0OS'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0OT'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer362 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PG'
+	set Item_Real[ItemCount] = 'I0PH'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PI'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer363 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PJ'
+	set Item_Real[ItemCount] = 'I0PK'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PL'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer364 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0PP'
+	set Item_Real[ItemCount] = 'I0PQ'
+	set Item_SellerUnit[ItemCount] = 0
+	set Item_Mute[ItemCount] = 'I0PR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Wand_05.blp"
+	set Item_Cooldown[ItemCount] = 60
+	set integer365 = ItemCount
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03A'
+	set Item_Real[ItemCount] = 'I051'
+	set Item_SellerUnit[ItemCount] = 'h08K'
+	set Item_Mute[ItemCount] = 'I0D9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSteelArmor.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer106
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03Y'
+	set Item_Real[ItemCount] = 'I052'
+	set Item_SellerUnit[ItemCount] = 'h08X'
+	set Item_Mute[ItemCount] = 'I0C9'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrbofSlowness.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer108
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02S'
+	set Item_Real[ItemCount] = 'I02P'
+	set Item_SellerUnit[ItemCount] = 'h08S'
+	set Item_Mute[ItemCount] = 'I0CA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer068
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02N'
+	set Item_Real[ItemCount] = 'I02R'
+	set Item_SellerUnit[ItemCount] = 'h08P'
+	set Item_Mute[ItemCount] = 'I0CS'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBoots.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer069
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02Z'
+	set Item_Real[ItemCount] = 'I043'
+	set Item_SellerUnit[ItemCount] = 'h08Q'
+	set Item_Mute[ItemCount] = 'I0CV'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNBelt.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer071
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I031'
+	set Item_Real[ItemCount] = 'I045'
+	set Item_SellerUnit[ItemCount] = 'h08T'
+	set Item_Mute[ItemCount] = 'I0D5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNClawsOfAttack.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer073
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03B'
+	set Item_Real[ItemCount] = 'I04E'
+	set Item_SellerUnit[ItemCount] = 'h08N'
+	set Item_Mute[ItemCount] = 'I0DA'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNHelmutPurple.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer083
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03E'
+	set Item_Real[ItemCount] = 'I04H'
+	set Item_SellerUnit[ItemCount] = 'h08W'
+	set Item_Mute[ItemCount] = 'I0C7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNDaggerOfEscape.blp"
+	set Item_Cooldown[ItemCount] = 18
+	set integers088[ItemCount] = integer086
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03G'
+	set Item_Real[ItemCount] = 'I04K'
+	set Item_SellerUnit[ItemCount] = 'h08O'
+	set Item_Mute[ItemCount] = 'I0CD'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNUndeadShrine.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer089
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03P'
+	set Item_Real[ItemCount] = 'I04S'
+	set Item_SellerUnit[ItemCount] = 'h08U'
+	set Item_Mute[ItemCount] = 'I0CY'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAlleriaFlute.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer097
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03Q'
+	set Item_Real[ItemCount] = 'I04T'
+	set Item_SellerUnit[ItemCount] = 'h08G'
+	set Item_Mute[ItemCount] = 'I0DI'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGoldRing.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer098
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03S'
+	set Item_Real[ItemCount] = 'I04V'
+	set Item_SellerUnit[ItemCount] = 'h08L'
+	set Item_Mute[ItemCount] = 'I0DJ'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRingSkull.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer100
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03T'
+	set Item_Real[ItemCount] = 'I04W'
+	set Item_SellerUnit[ItemCount] = 'h08R'
+	set Item_Mute[ItemCount] = 'I0CP'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNRobeOfTheMagi.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer101
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03V'
+	set Item_Real[ItemCount] = 'I04Y'
+	set Item_SellerUnit[ItemCount] = 'h08E'
+	set Item_Mute[ItemCount] = 'I0C5'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSlippersOfAgility.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer103
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03W'
+	set Item_Real[ItemCount] = 'I04Z'
+	set Item_SellerUnit[ItemCount] = 'h08J'
+	set Item_Mute[ItemCount] = 'I0DK'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNSobiMask.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer104
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0GD'
+	set Item_Real[ItemCount] = 'I0GC'
+	set Item_SellerUnit[ItemCount] = 'h08I'
+	set Item_Mute[ItemCount] = 'I0GE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNWand.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer122
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0HT'
+	set Item_Real[ItemCount] = 'I0HR'
+	set Item_SellerUnit[ItemCount] = 'h08F'
+	set Item_Mute[ItemCount] = 'I0HW'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrcMeleeUpTwo.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer123
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0J7'
+	set Item_Real[ItemCount] = 'I0J6'
+	set Item_SellerUnit[ItemCount] = 'h08V'
+	set Item_Mute[ItemCount] = 'I0J8'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNAmulet.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer125
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I03L'
+	set Item_Real[ItemCount] = 'I04P'
+	set Item_SellerUnit[ItemCount] = 'h08M'
+	set Item_Mute[ItemCount] = 'I0CE'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Cape_08.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer094
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I05A'
+	set Item_Real[ItemCount] = 'I05I'
+	set Item_SellerUnit[ItemCount] = 'h08H'
+	set Item_Mute[ItemCount] = 0
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNScrollUber.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer144
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I037'
+	set Item_Real[ItemCount] = 'I04B'
+	set Item_SellerUnit[ItemCount] = 'h093'
+	set Item_Mute[ItemCount] = 'I0CR'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNEnchantedGemstone.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer079
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I02Q'
+	set Item_Real[ItemCount] = 'I02O'
+	set Item_SellerUnit[ItemCount] = 'h0BO'
+	set Item_Mute[ItemCount] = 'I00A'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNINV_Misc_Cape_08.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer067
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I0MA'
+	set Item_Real[ItemCount] = 'I0M9'
+	set Item_SellerUnit[ItemCount] = 'h0CN'
+	set Item_Mute[ItemCount] = 'I0MB'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNOrbOfVenom.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer065
+	set ItemCount = ItemCount + 1
+	set Item_Dummy[ItemCount] = 'I033'
+	set Item_Real[ItemCount] = 'I047'
+	set Item_SellerUnit[ItemCount] = 'h0D0'
+	set Item_Mute[ItemCount] = 'I0D7'
+	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNGlove.blp"
+	set Item_Cooldown[ItemCount] = 0
+	set integers088[ItemCount] = integer075
 	set loc_trigger01 = CreateTrigger()
 	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_SELL)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0593))
 	set loc_trigger01 = null
-	set loc_trigger01 = CreateTrigger()
-	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_PICKUP_ITEM)
-	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_DROP_ITEM)
-	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_PAWN_ITEM)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func0608))
-	set trigger057 = loc_trigger01
-	set loc_trigger01 = null
+	set Trig_ManipulateItem = CreateTrigger()
+	call Func0168(Trig_ManipulateItem, EVENT_PLAYER_UNIT_PICKUP_ITEM)
+	call Func0168(Trig_ManipulateItem, EVENT_PLAYER_UNIT_DROP_ITEM)
+	call Func0168(Trig_ManipulateItem, EVENT_PLAYER_UNIT_PAWN_ITEM)
+	call TriggerAddCondition(Trig_ManipulateItem, Condition(function ManipulateItem))
 	set loc_trigger01 = CreateTrigger()
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0609))
 	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_SPELL_EFFECT)
@@ -91208,49 +91187,7 @@ function main takes nothing returns nothing
 	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_DEATH)
 	call TriggerAddAction(loc_trigger01, function Func0893)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0892))
-	set loc_location01 = GetRectCenter(rect033)
-	set unit001 = CreateUnitAtLoc(Player(12), 'n00L', loc_location01, bj_UNIT_FACING)
-	call SetUnitAcquireRange(unit001, 150)
-	call Func0529(unit001)
-	call RemoveLocation(loc_location01)
-	call UnitAddItem(unit001, CreateItem(integers084[integer193], 0, 0))
-	call UnitAddAbility(unit001, 'A142')
-	set loc_location01 = GetRectCenter(rect019)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect020)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect021)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect022)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect023)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect024)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect025)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect026)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect027)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect028)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect047)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
-	set loc_location01 = GetRectCenter(rect049)
-	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', loc_location01, 0))
-	call RemoveLocation(loc_location01)
+	call InitNeutralsDots()
 	set loc_trigger01 = CreateTrigger()
 	call TriggerRegisterUnitInRange(loc_trigger01, unit010, 300, Condition(function Func0167))
 	call TriggerRegisterUnitInRange(loc_trigger01, unit015, 300, Condition(function Func0167))
@@ -91394,11 +91331,11 @@ function main takes nothing returns nothing
 	call TriggerAddAction(trigger021, function Func0928)
 	set trigger022 = CreateTrigger()
 	call TriggerAddAction(trigger022, function Func0929)
-	set trigger023 = CreateTrigger()
-	call TriggerRegisterTimerEventSingle(trigger023, 75.00)
-	call TriggerAddAction(trigger023, function Func0930)
-	set trigger024 = CreateTrigger()
-	call TriggerAddCondition(trigger024, Condition(function Func0966))
+	// set trigger023 = CreateTrigger()
+	// call TriggerRegisterTimerEventSingle(trigger023, 75.00)
+	// call TriggerAddAction(trigger023, function Func0930)
+	set Trig_SpawnNeutrals = CreateTrigger()
+	call TriggerAddCondition(Trig_SpawnNeutrals, Condition(function SpawnNeutrals))
 	set trigger025 = CreateTrigger()
 	call TriggerAddAction(trigger025, function Func0967)
 	set trigger026 = CreateTrigger()
@@ -91563,7 +91500,7 @@ function main takes nothing returns nothing
 	call TriggerRegisterTimerEvent(loc_trigger01, 4, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1068))
 	set loc_trigger01 = null
-	set group005 = Func0030()
+	set group005 = GetAvailableGroup()
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, bj_mapInitialPlayableArea)
