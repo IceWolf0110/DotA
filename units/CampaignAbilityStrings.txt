@@ -155,7 +155,6 @@ Tip=Shackl|cffffcc00e|rs - [|cffffcc00Level 1|r],Shackl|cffffcc00e|rs - [|cffffc
 Ubertip="Magically binds a target enemy unit, so that it cannot move or attack for 2.5 seconds dealing 40 damage per second.  |n|n|cff99ccffCooldown: |r 16 seconds.|n|c00ff0303Channeling|r","Magically binds a target enemy unit, so that it cannot move or attack for 3.25 seconds dealing 40 damage per second.  |n|n|cff99ccffCooldown: |r 16 seconds.|n|c00ff0303Channeling|r","Magically binds a target enemy unit, so that it cannot move or attack for 4 seconds dealing 40 damage per second.  |n|n|cff99ccffCooldown: |r 16 seconds.|n|c00ff0303Channeling|r","Magically binds a target enemy unit, so that it cannot move or attack for 4.75 seconds dealing 40 damage per second.  |n|n|cff99ccffCooldown: |r 16 seconds.|n|c00ff0303Channeling|r"
 
 [A00R]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Chaos Knight Sphere
@@ -209,7 +208,6 @@ Tip=Return - [|cffffcc00Level 1|r],Return - [|cffffcc00Level 2|r],Return - [|cff
 Ubertip="Any attack against the Centaur Warchief gets a swift stroke returned, dealing 16 + 26% of STR as damage to enemy units.","Any attack against the Centaur Warchief gets a swift stroke returned, dealing 18 + 34% of STR as damage to enemy units.","Any attack against the Centaur Warchief gets a swift stroke returned, dealing 20 + 42% of STR as damage to enemy units.","Any attack against the Centaur Warchief gets a swift stroke returned, dealing 22 + 50% of STR as damage to enemy units."
 
 [A00W]
-Art=,
 LightningEffect=CHIM
 Missileart=Abilities\Weapons\ChimaeraLightningMissile\ChimaeraLightningMissile.mdl
 Missilespeed=1500
@@ -336,7 +334,6 @@ Tip=Natu|cffffcc00r|re's Attendants - [|cffffcc00Level 1|r],Natu|cffffcc00r|re's
 Ubertip=Releases 3 curative wisps into the area around Aiushtha.  These wisps heal for 10 health each second. |n|n|cff99ccffCooldown: |r 45 seconds.,Releases 5 curative wisps into the area around Aiushtha.  These wisps heal for 10 health each second. |n|n|cff99ccffCooldown: |r 45 seconds.,Releases 7 curative wisps into the area around Aiushtha.  These wisps heal for 10 health each second. |n|n|cff99ccffCooldown: |r 45 seconds.,Releases 9 curative wisps into the area around Aiushtha.  These wisps heal for 10 health each second. |n|n|cff99ccffCooldown: |r 45 seconds.
 
 [A01C]
-Art=,
 Name=Item Mana Bonus +300
 
 [A01D]
@@ -466,7 +463,6 @@ Art=ReplaceableTextures\CommandButtons\BTNStaffOfNegation.blp
 Name=Item Int Bonus
 
 [A01R]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Flaming Hand
@@ -476,7 +472,6 @@ Targetattach1=hand,right
 Targetattachcount=2
 
 [A01S]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Icy hands
@@ -564,7 +559,6 @@ Tip=Ar|cffffcc00c|r Lightning - [|cffffcc00Level 1|r],Ar|cffffcc00c|r Lightning 
 Ubertip="Creates an arc of lightning that hits up to 5 enemy units, dealing 85 damage to each. |n|n|cff99ccffCooldown: |r 1.75","Creates an arc of lightning that hits up to 7 enemy units, dealing 100 damage to each. |n|n|cff99ccffCooldown: |r 1.75","Creates an arc of lightning that hits up to 9 enemy units, dealing 115 damage to each. |n|n|cff99ccffCooldown: |r 1.75","Creates an arc of lightning that hits up to 15 enemy units, dealing 145 damage to each. |n|n|cff99ccffCooldown: |r 1.75"
 
 [A021]
-Art=,
 Name=Permanent Invisibility
 
 [A022]
@@ -857,7 +851,6 @@ Researchbuttonpos=3
 Researchhotkey=G
 Researchtip=Learn Pur|cffffcc00g|re - [|cffffcc00Level %d|r]
 Specialattach=origin
-Tip=,
 UnButtonpos=3
 
 [A02W]
@@ -1318,7 +1311,6 @@ Art=ReplaceableTextures\CommandButtons\BTNStaffOfNegation.blp
 Name=Item Int Bonus
 
 [A04I]
-Art=,
 Name=Radiance Damage Aura
 TargetArt=Abilities\Spells\Items\HealingSalve\HealingSalveTarget.mdl
 Targetattach=origin
@@ -1433,7 +1425,6 @@ Untip=Can only be cast on any non-hero unit.
 Unubertip=   
 
 [A04R]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Marker
@@ -1649,19 +1640,15 @@ Ubertip=Plants an invisible land mine that waits indefinitely for an enemy unit.
 Unart=ReplaceableTextures\CommandButtons\BTNGoblinLandMine.blp
 
 [A05K]
-Art=,
 Name=AOE damage upon death
 
 [A05L]
-Art=,
 Name=AOE damage upon death
 
 [A05M]
-Art=,
 Name=AOE damage upon death
 
 [A05N]
-Art=,
 Name=AOE damage upon death
 
 [A05S]
@@ -1679,7 +1666,6 @@ Researchhotkey=C
 Researchtip=Learn C|cffffcc00h|rain Lightning - [|cffffcc00Level %d|r]
 Researchubertip=Hurls a bolt of damaging lightning at a target enemy. |n|n|cffffcc00Level 1|r - 100 damage. |n|cffffcc00Level 2|r - 200 damage. |n|cffffcc00Level 3|r - 300 damage.
 TargetArt=Abilities\Weapons\Bolt\BoltImpact.mdl
-Tip=,
 
 [A05T]
 Art=ReplaceableTextures\CommandButtons\BTNBreathOfFrost.blp
@@ -1939,7 +1925,6 @@ Researchtip=Learn Re|cffffcc00v|rerse Polarity - [|cffffcc00Level %d|r].
 Tip=Re|cffffcc00v|rerse Polarity - [|cffffcc00Level 1|r],Re|cffffcc00v|rerse Polarity - [|cffffcc00Level 2|r],Re|cffffcc00v|rerse Polarity - [|cffffcc00Level 3|r]
 
 [A06G]
-Art=,
 Name=Creep next waypoint
 
 [A06H]
@@ -2411,7 +2396,6 @@ Order=chainlightning
 ResearchArt=ReplaceableTextures\CommandButtons\BTNTreeOfEternity.blp
 Researchbuttonpos=3
 Researchhotkey=W
-Tip=,
 
 [A07Z]
 Animnames=spell,channel
@@ -3015,7 +2999,6 @@ Art=ReplaceableTextures\CommandButtons\BTNGlove.blp
 Name=Item Attack Speed 55%
 
 [A09M]
-Art=,
 Name=Item Mana Bonus +400
 
 [A09O]
@@ -3404,7 +3387,6 @@ Order=chainlightning
 ResearchArt=ReplaceableTextures\CommandButtons\BTNTreeOfEternity.blp
 Researchbuttonpos=3
 Researchhotkey=W
-Tip=,
 
 [A0AM]
 Animnames=spell,channel
@@ -3428,7 +3410,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn T|cffffcc00e|rrror - [|cffffcc00Level %d|r]
 Researchubertip="Shendelzare lets loose a wicked cry, terrorizing nearby enemy units.  Their armor and damage are reduced. |n|n|cffffcc00Level 1|r - Reduces base armor by 2 and damage by 5%. |n|cffffcc00Level 2|r - Reduces base armor by 3 and damage by 10%.|n|cffffcc00Level 3|r - Reduces base armor by 4 and damage by 15%.|n|cffffcc00Level 4|r - Reduces base armor by 5 and damage by 20%. |n|n|cff99ccffCooldown: |r 15 seconds."
-Tip=,
 
 [A0AQ]
 Art=ReplaceableTextures\CommandButtons\PASBTNShadeTrueSight.blp
@@ -3504,7 +3485,6 @@ Art=ReplaceableTextures\CommandButtons\BTNPeriapt1.blp
 Name=Item Life bonus (+250)
 
 [A0AZ]
-Art=,
 Name=Rot slow
 
 [A0B0]
@@ -3521,7 +3501,6 @@ Researchbuttonpos=2
 Researchhotkey=B
 Researchtip=Learn Acid |cffffcc00B|romb - [|cffffcc00Level %d|r]
 Researchubertip="Hurls a flask of acid at a target.  The flask breaks upon impact, splashing a powerful acid on nearby hostile units.|n|nDecreases armor; deals high damage over time to the primary target; deals slightly less damage over time to nearby targets.|nLasts 15 seconds.|n|n|cffffcc00Level 1|r - 5 max damage per second, reduces armor by 3.|n|cffffcc00Level 2|r - 10 max damage per second, reduces armor by 4.|n|cffffcc00Level 3|r - 15 max damage per second, reduces armor by 5."
-Tip=,
 
 [A0B1]
 Animnames=attack
@@ -3660,7 +3639,6 @@ Art=ReplaceableTextures\PassiveButtons\PASBTNUnholyAura.blp
 Buttonpos=2,2
 Name=Web Bonus
 Targetattach=origin
-Tip=,
 
 [A0BG]
 Art=ReplaceableTextures\CommandButtons\BTNWeb.blp
@@ -3850,7 +3828,6 @@ Tip=|cffffcc00T|ross - [|cffffcc00Level 1|r],|cffffcc00T|ross - [|cffffcc00Level
 Ubertip="Grabs a nearby unit, friend or foe, and launches at a location up to 1300 units away. Upon impact the units in the area will take 75 damage, with the projectile taking 20% of that damage if it is an enemy (this damage increases as your size increases). |n|n|cff99ccffCooldown: |r 9","Grabs a nearby unit, friend or foe, and launches at a location up to 1300 units away. Upon impact the units in the area will take 150 damage, with the projectile taking 20% of that damage (this damage if it is an enemy increases as your size increases). |n|n|cff99ccffCooldown: |r 9","Grabs a nearby unit, friend or foe, and launches at a location up to 1300 units away. Upon impact the units in the area will take 225 damage, with the projectile taking 20% of that damage if it is an enemy (this damage increases as your size increases). |n|n|cff99ccffCooldown: |r 9","Grabs a nearby unit, friend or foe, and launches at a location up to 1300 units away. Upon impact the units in the area will take 300 damage, with the projectile taking 20% of that damage if it is an enemy (this damage increases as your size increases). |n|n|cff99ccffCooldown: |r 9"
 
 [A0C0]
-Art=,
 Name=Tidal Forces
 TargetArt=Abilities\Spells\Items\HealingSalve\HealingSalveTarget.mdl
 Targetattach=origin
@@ -4192,7 +4169,6 @@ Name=Item Skeleton Summon lvl 3
 TargetArt=Abilities\Spells\Undead\RaiseSkeletonWarrior\RaiseSkeleton.mdl
 
 [A0DG]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -4272,7 +4248,6 @@ Tip=|cffffcc00F|ran of Knives - [|cffffcc00Level 1|r],|cffffcc00F|ran of Knives 
 Ubertip="The Warden hurls a flurry of knives, damaging nearby enemies. Each knife does 125 damage.","The Warden hurls a flurry of knives, damaging nearby enemies. Each knife does 200 damage.","The Warden hurls a flurry of knives damaging, nearby enemies. Each knife does 275 damage."
 
 [A0DN]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -4430,7 +4405,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNHire.blp
 Researchbuttonpos=2
 Researchhotkey=E
 Targetattach=origin
-Tip=,
 
 [A0EJ]
 Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
@@ -4535,7 +4509,6 @@ Name=Orchid Malevolence
 Order=soulburn
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStaffOfSilence.blp
 Researchhotkey=B
-Tip=,
 
 [A0FF]
 Art=ReplaceableTextures\PassiveButtons\PASBTNUnholyAura.blp
@@ -4548,7 +4521,6 @@ Researchtip=Learn |cffffcc00U|rnholy Aura - [|cffffcc00Level %d|r]
 Researchubertip="Increases the movement speed and life regeneration rate of nearby friendly units. |n|n|cffffcc00Level 1|r - 10% movement, minor regeneration bonus. |n|cffffcc00Level 2|r - 20% movement, moderate regeneration bonus. |n|cffffcc00Level 3|r - 30% movement, greater regeneration bonus."
 TargetArt=war3mapImported\aura_luci.mdx
 Targetattach=origin
-Tip=,
 
 [A0FH]
 Animnames=spell
@@ -5134,7 +5106,6 @@ Order=carrionswarm
 ResearchArt=ReplaceableTextures\CommandButtons\BTNDizzy.blp
 Researchhotkey=R
 SpecialArt=Objects\Spawnmodels\Undead\UndeadDissipate\UndeadDissipate.mdl
-Tip=,
 
 [A0HH]
 Art=ReplaceableTextures\CommandButtons\BTNCripple.blp
@@ -5143,7 +5114,6 @@ Hotkey=C
 Name=Requiem of Souls Cripple Far
 Order=cripple
 Requiresamount=2
-Tip=,
 
 [A0HN]
 Art=ReplaceableTextures\CommandButtons\BTNUnstableConcoction.blp
@@ -5166,7 +5136,6 @@ Hotkey=I
 Name=Sand Storm Invisibility
 Order=invisibility
 Targetattach=chest
-Tip=,
 
 [A0HP]
 Art=ReplaceableTextures\CommandButtons\BTNHelmutPurple.blp
@@ -5222,10 +5191,8 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNAbility_Spectral_Dagger.blp
 Researchbuttonpos=2
 Researchhotkey=E
 Targetattach=origin
-Tip=,
 
 [A0HZ]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -5234,7 +5201,6 @@ Targetattach=sprite,third
 Targetattachcount=1
 
 [A0I0]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -5243,7 +5209,6 @@ Targetattach=sprite,second
 Targetattachcount=1
 
 [A0I1]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -5259,7 +5224,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNAbility_Spectral_Dagger.blp
 Researchbuttonpos=2
 Researchhotkey=E
 Targetattach=origin
-Tip=,
 
 [A0I3]
 Animnames=spell
@@ -5282,7 +5246,6 @@ Tip=Unit Inventory
 Ubertip=Allows this unit to carry items for Heroes. Items cannot be used from this unit's inventory.
 
 [A0I5]
-Art=,
 Name=Berserker's Call Armor Bonus
 
 [A0I6]
@@ -5345,7 +5308,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSobiMask.blp
 Name=Item Mana Regeneration
 
 [A0IB]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -5354,7 +5316,6 @@ Targetattach=sprite,second
 Targetattachcount=1
 
 [A0IC]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -5363,7 +5324,6 @@ Targetattach=sprite,first
 Targetattachcount=1
 
 [A0ID]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -5389,7 +5349,6 @@ Tip=Essence Aura - [|cffffcc00Level 1|r],Essence Aura - [|cffffcc00Level 2|r],Es
 Ubertip="Whenever a nearby allied hero casts a spell, it has a 10% chance to restore 25% of its maximum mana. Passively increases the Destroyer’s base mana pool by 75 points.","Whenever a nearby allied hero casts a spell, it has a 20% chance to restore 25% of its maximum mana. Passively increases the Destroyer’s base mana pool by 150 points.","Whenever a nearby allied hero casts a spell, it has a 30% chance to restore 25% of its maximum mana. Passively increases the Destroyer’s base mana pool by 225 points.","Whenever a nearby allied hero casts a spell, it has a 40% chance to restore 25% of its maximum mana. Passively increases the Destroyer’s base mana pool by 300 points."
 
 [A0IH]
-Art=,
 Name=Rupture
 
 [A0II]
@@ -5461,7 +5420,6 @@ Tip=Flaming Fists
 Ubertip=Gives a 60% chance that an attack will deal 200 damage to nearby units.
 
 [A0IX]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere
@@ -5509,7 +5467,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNHealingSpray.blp
 Researchbuttonpos=2
 Researchhotkey=P
 Targetattach=origin
-Tip=,
 
 [A0J5]
 Animnames=spell
@@ -5674,7 +5631,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A0JZ]
 Art=ReplaceableTextures\CommandButtons\BTNEnchantedCrows.blp
@@ -5703,7 +5659,6 @@ Tip=Unit Inventory
 Ubertip=Allows this unit to carry items for Heroes. Items cannot be used from this unit's inventory.
 
 [A0K4]
-Art=,
 Name=Permanent Invisibility
 
 [A0K5]
@@ -5818,7 +5773,6 @@ Art=ReplaceableTextures\CommandButtons\BTNCirclet.blp
 Name=Item Hero Stat Bonus
 
 [A0KT]
-Art=,
 Name=Moonlight Shadow
 
 [A0KU]
@@ -5943,7 +5897,6 @@ Name=Basic Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0L8]
 Animnames=attack
@@ -5972,7 +5925,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNThunderclap.blp
 Researchhotkey=C
 Researchtip=Learn Thunder |cffffcc00C|rlap - [|cffffcc00Level %d|r]
 Researchubertip="Slams the ground, dealing damage to and slowing the movement speed and attack rate of nearby enemy land units. |n|n|cffffcc00Level 1|r - 100 damage, 25% movement and attack speeds.|n|cffffcc00Level 2|r - 175 damage, 35% movement and attack speeds.|n|cffffcc00Level 3|r - 250 damage, 45% movement and attack speeds.  |n|cffffcc00Level 4|r - 300 damage, 55% movement and attack speeds.  "
-Tip=,
 
 [A0LC]
 Art=ReplaceableTextures\CommandButtons\BTNImprovedStrengthOfTheWild.blp
@@ -6072,10 +6024,8 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNAdvancedStrengthOfTheWild.blp
 Researchbuttonpos=2
 Researchhotkey=E
 Targetattach=origin
-Tip=,
 
 [A0LR]
-Art=,
 Name=Soul Assumption FX Level 1
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs1.mdl
 Targetattach=chest
@@ -6089,7 +6039,6 @@ Name=Last Word Effect
 Order=soulburn
 ResearchArt=ReplaceableTextures\CommandButtons\BTNSoulBurn.blp
 Researchhotkey=B
-Tip=,
 
 [A0LT]
 Animnames=spell,channel
@@ -6237,7 +6186,6 @@ Name=Slithereen Crush
 Order=thunderclap
 ResearchArt=ReplaceableTextures\CommandButtons\BTNThunderclap.blp
 Researchhotkey=C
-Tip=,
 
 [A0MB]
 Art=ReplaceableTextures\PassiveButtons\BTNRikiINV.blp
@@ -6247,7 +6195,6 @@ Tip=Permanent Invisibility - [|cffffcc00Level 1|r],Permanent Invisibility - [|cf
 Ubertip=Rikimaru becomes permanently invisible when not attacking.  Takes 3 seconds to re-cloak.,Rikimaru becomes permanently invisible when not attacking.  Takes 2 seconds to re-cloak.,Rikimaru becomes permanently invisible when not attacking.  Takes 1 second to re-cloak.
 
 [A0MD]
-Art=,
 Name=Soul Assumption FX Level 6
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs1.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs6.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs2.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs3.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs4.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs5.mdl
 Targetattach=chest
@@ -6317,7 +6264,6 @@ Orderon=bloodluston
 ResearchArt=ReplaceableTextures\CommandButtons\BTNBloodLust.blp
 Researchbuttonpos=2
 Researchhotkey=B
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNBloodLustOff.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -6335,7 +6281,6 @@ Researchhotkey=R
 TargetArt=Abilities\Spells\Undead\DeathCoil\DeathCoilSpecialArt.mdl
 Targetattach=origin
 Targetattachcount=1
-Tip=,
 
 [A0MM]
 Art=ReplaceableTextures\PassiveButtons\PASBTNMagicImmunity.blp
@@ -6572,7 +6517,6 @@ Tip=|cffffcc00E|rnsnare
 Ubertip=Causes a target enemy unit to be bound to the ground so that it cannot move for 12 seconds. Air units that are ensnared can be attacked as though they were land units.
 
 [A0ND]
-Art=,
 Name=Inventory
 
 [A0NE]
@@ -6596,7 +6540,6 @@ Untip=Deactivate |cffffcc00V|roodoo Restoration
 Unubertip=Deactivate Voodoo Restoration to stop draining mana.
 
 [A0NF]
-Art=,
 Name=Soul Assumption FX Level 5
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs1.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs6.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs2.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs3.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs4.mdl
 Targetattach=chest
@@ -6614,7 +6557,6 @@ Name=Blowdart
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -6630,7 +6572,6 @@ Name=BlowDart
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0NL]
 Animnames=spell,throw
@@ -6742,11 +6683,9 @@ Tip=|cffffcc00D|reath Ward - [|cffffcc00Level 1|r],|cffffcc00D|reath Ward - [|cf
 Ubertip=Summons a deadly ward to kill enemy heroes. Deals 60 Chaos Damage. |n|c00ff0303Channeling|r |n|n|cff99ccffCooldown: |r 80. |n|n|c00fffc01Scepter Upgradeable: Extra bounces and more damage.|r,Summons a deadly ward to kill enemy heroes. Deals 90 Chaos Damage. |n|c00ff0303Channeling|r |n|n|cff99ccffCooldown: |r 80. |n|n|c00fffc01Scepter Upgradeable: Extra bounces and more damage.|r,Summons a deadly ward to kill enemy heroes. Deals 120 Chaos Damage. Bounces once. |n|c00ff0303Channeling|r |n|n|cff99ccffCooldown: |r 80. |n|n|c00fffc01Scepter Upgradeable: Extra bounces and more damage.|r
 
 [A0NU]
-Art=,
 Name=NEWABILITY
 
 [A0NW]
-Art=,
 Name=NEWABILITY
 
 [A0NX]
@@ -6910,7 +6849,6 @@ Ubertip="Straight from the belly of the beast, Jakiro slowly harnesses Liquid Fi
 
 [A0OA]
 Animnames=spell,slam
-Art=,
 Buttonpos=,2
 Hotkey=N
 Name=Dual Breath Slow
@@ -6919,7 +6857,6 @@ Tip=Frost |cffffcc00N|rova
 Ubertip="Blasts enemy units with a wave of frost that deals 50 damage to the target, and 50 nova damage. Cold damage slows units' movement and attack rate for 4 seconds."
 
 [A0OB]
-Art=,
 Buttonpos=,2
 Missileart=Abilities\Spells\Other\BreathOfFrost\BreathOfFrostMissile.mdl
 Missilespeed=1050
@@ -6932,17 +6869,14 @@ Tip=Dual Breath - Level 1,Dual Breath - Level 2,Dual Breath - Level 3,Dual Breat
 Ubertip="Jakira breathes out a wave of frost, folowed closely by a wave of fire. The wave of frost deals 15 damage and slows by 100 for 2 seconds. Then the wave of fire deals 0 and <A003,DataE1> damage per second for 2 seconds.","Jakira breathes out a wave of frost, folowed closely by a wave of fire. The wave of frost deals 15 damage and slows by 0 for 0 seconds. Then the wave of fire deals 0 and <A003,DataE2> damage per second for 2 seconds.","Jakira breathes out a wave of frost, folowed closely by a wave of fire. The wave of frost deals 15 damage and slows by 0 for 0 seconds. Then the wave of fire deals 0 and <A003,DataE3> damage per second for 2 seconds.","Jakira breathes out a wave of frost, folowed closely by a wave of fire. The wave of frost deals 15 damage and slows by 0 for 0 seconds. Then the wave of fire deals 0 and <A003,DataE4> damage per second for 0 seconds."
 
 [A0OC]
-Art=,
 Buttonpos=,2
 Missileart=Abilities\Spells\Other\BreathOfFire\BreathOfFireMissile.mdl
 Missilespeed=850
 Name=Dual Breath Fire
 Order=breathoffire
 ResearchArt=ReplaceableTextures\CommandButtons\BTNDualBreath.blp
-Tip=,
 
 [A0OE]
-Art=,
 Buttonpos=,2
 EffectArt=effects\FlameStrike1.mdx
 Hotkey=F
@@ -6956,7 +6890,6 @@ Tip=|cffffcc00F|rlame Strike - [|cffffcc00Level 1|r],|cffffcc00F|rlame Strike - 
 Ubertip="Conjures a pillar of flame that burns ground units for 45 damage a second for 3 seconds. As the pillar of flame subsides, units within the fire continue to take minor damage.","Conjures a pillar of flame that burns ground units for 80 damage a second for 3 seconds. As the pillar of flame subsides, units within the fire continue to take light damage.","Conjures a pillar of flame that burns ground units for 110 damage a second for 3 seconds. As the pillar of flame subsides, units within the fire continue to take moderate damage."
 
 [A0OG]
-Art=,
 Name=Soul Assumption FX Level 3
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs1.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs6.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs2.mdl
 Targetattach=chest
@@ -6965,7 +6898,6 @@ Targetattach2=chest
 Targetattachcount=3
 
 [A0OH]
-Art=,
 Name=Essence Aura
 
 [A0OI]
@@ -7024,15 +6956,12 @@ Tip=Sanity's E|cffffcc00c|rlipse - [|cffffcc00Level 1|r],Sanity's E|cffffcc00c|r
 Ubertip="Deals damage to enemy heroes in a 375 AOE equal to the difference between their intelligence and the Destroyer’s intelligence, multiplied by 8. All enemy heroes that take less than 100 damage lose 75% of their remaining mana. Heroes with more intelligence than the Destroyer are unaffected. |n|n|cff99ccffCooldown: |r 160 seconds. |n|n|c00fffc01Scepter Upgradeable: Improves Int multiplier and cast range.|r","Deals damage to enemy heroes in a 475 AOE equal to the difference between their intelligence and the Destroyer’s intelligence, multiplied by 9. All enemy heroes that take less than 300 damage lose 75% of their remaining mana. Heroes with more intelligence than the Destroyer are unaffected. |n|n|cff99ccffCooldown: |r 160 seconds. |n|n|c00fffc01Scepter Upgradeable: Improves Int multiplier and cast range.|r","Deals damage to enemy heroes in a 575 AOE equal to the difference between their intelligence and the Destroyer’s intelligence, multiplied by 10. All enemy heroes that take less than 500 damage lose 75% of their remaining mana. Heroes with more intelligence than the Destroyer are unaffected. |n|n|cff99ccffCooldown: |r 160 seconds. |n|n|c00fffc01Scepter Upgradeable: Improves Int multiplier and cast range.|r"
 
 [A0OL]
-Art=,
 Name=Essence Aura
 
 [A0OM]
-Art=,
 Name=Essence Aura
 
 [A0ON]
-Art=,
 Name=Essence Aura
 
 [A0OO]
@@ -7101,27 +7030,21 @@ Art=ReplaceableTextures\CommandButtons\BTNAnkh.blp
 Name=Shallow Grave
 
 [A0OW]
-Art=,
 Name=Blow Dart
 
 [A0OX]
-Art=,
 Name=Weave
 
 [A0OY]
-Art=,
 Name=Weave
 
 [A0P0]
-Art=,
 Name=Shadow Word
 
 [A0P2]
-Art=,
 Name=Fatal Bonds
 
 [A0P4]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Marker Allow Neutral Spawn
@@ -7142,7 +7065,6 @@ Tip=Sil|cffffcc00e|rnce - [|cffffcc00Level 1|r],Sil|cffffcc00e|rnce - [|cffffcc0
 Ubertip=Stops all enemies in a target area from casting spells for 3 seconds.|n|n|cff99ccffCooldown: |r 15 seconds.,Stops all enemies in a target area from casting spells for 4 seconds.|n|n|cff99ccffCooldown: |r 15 seconds.,Stops all enemies in a target area from casting spells for 5 seconds.|n|n|cff99ccffCooldown: |r 15 seconds.,Stops all enemies in a target area from casting spells for 6 seconds.|n|n|cff99ccffCooldown: |r 15 seconds.
 
 [A0P7]
-Art=,
 Name=Scepter (QOP)
 TargetArt=Abilities\Weapons\AvengerMissile\AvengerMissile.mdl
 Targetattach=left,hand
@@ -7150,7 +7072,6 @@ Targetattach1=right,hand
 Targetattachcount=2
 
 [A0P8]
-Art=,
 Name=Scepter (Rhasta)
 TargetArt=Abilities\Weapons\ProcMissile\ProcMissile.mdl
 Targetattach=right,hand
@@ -7158,21 +7079,18 @@ Targetattach1=left,hand
 Targetattachcount=2
 
 [A0P9]
-Art=,
 Name=Scepter (Ogre Magi)
 TargetArt=Environment\LargeBuildingFire\LargeBuildingFire2.mdl
 Targetattach=weapon
 Targetattachcount=1
 
 [A0PA]
-Art=,
 Name=Scepter (Lion)
 TargetArt=Abilities\Weapons\VengeanceMissile\VengeanceMissile.mdl
 Targetattach=weapon
 Targetattachcount=1
 
 [A0PB]
-Art=,
 Name=Scepter (Pugna)
 TargetArt=Abilities\Weapons\IllidanMissile\IllidanMissile.mdl
 Targetattach=left,hand
@@ -7180,7 +7098,6 @@ Targetattach1=right,hand
 Targetattachcount=2
 
 [A0PC]
-Art=,
 Name=Scepter (Lina)
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceBirthMissile.mdl
 Targetattach=hand,left
@@ -7188,14 +7105,12 @@ Targetattach1=hand,right
 Targetattachcount=2
 
 [A0PD]
-Art=,
 Name=Scepter (KOTL)
 TargetArt=Abilities\Weapons\FaerieDragonMissile\FaerieDragonMissile.mdl
 Targetattach=weapon
 Targetattachcount=1
 
 [A0PF]
-Art=,
 Name=Scepter (Zeus)
 TargetArt=Abilities\Spells\Orc\Purge\PurgeBuffTarget.mdl
 Targetattach=origin
@@ -7278,7 +7193,6 @@ Name=Ministun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0Q0]
 Art=ReplaceableTextures\CommandButtons\BTNCloakOfFlames.blp
@@ -7351,14 +7265,12 @@ Tip=Sha|cffffcc00d|row Strike - [|cffffcc00Level 1|r],Sha|cffffcc00d|row Strike 
 Ubertip="Hurls a poisoned dagger at a target enemy unit, dealing 50 initial damage, and 30 damage every 3 seconds for 15 seconds. The poison slows the movement speed of the targeted unit for a short duration.  |n|n|cff99ccffCooldown: |r 20","Hurls a poisoned dagger at a target enemy unit, dealing 75 initial damage, and 40 damage every 3 seconds for 15 seconds. The poison slows the movement speed of the targeted unit for a short duration. |n|n|cff99ccffCooldown: |r 16","Hurls a poisoned dagger at a target enemy unit, dealing 100 initial damage, and 50 damage every 3 seconds for 15 seconds. The poison slows the movement speed of the targeted unit for a short duration.  |n|n|cff99ccffCooldown: |r 12","Hurls a poisoned dagger at a target enemy unit, dealing 125 initial damage, and 60 damage every 3 seconds for 15 seconds. The poison slows the movement speed of the targeted unit for a short duration.  |n|n|cff99ccffCooldown: |r 8"
 
 [A0Q8]
-Art=,
 Name=Scepter (CM1)
 TargetArt=Abilities\Weapons\LichMissile\LichMissile.mdl
 Targetattach=weapon
 Targetattachcount=1
 
 [A0Q9]
-Art=,
 Name=Scepter (CM2)
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceBirthMissile.mdl
 Targetattach=hand,left
@@ -7366,7 +7278,6 @@ Targetattach1=hand,right
 Targetattachcount=2
 
 [A0QA]
-Art=,
 Name=Scepter (CM3)
 TargetArt=Abilities\Spells\Human\ManaFlare\ManaFlareMissile.mdl
 Targetattach=hand,left
@@ -7388,7 +7299,6 @@ Tip=Sil|cffffcc00e|rnce - [|cffffcc00Level 1|r],Sil|cffffcc00e|rnce - [|cffffcc0
 Ubertip=Stops all enemies in a target area from casting spells for 3 seconds. |n|n|cff99ccffCooldown: |r 13,Stops all enemies in a target area from casting spells for 4 seconds. |n|n|cff99ccffCooldown: |r 13,Stops all enemies in a target area from casting spells for 5 seconds. |n|n|cff99ccffCooldown: |r 13,Stops all enemies in a target area from casting spells for 6 seconds. |n|n|cff99ccffCooldown: |r 13
 
 [A0QD]
-Art=,
 Buttonpos=,2
 Name=Detector
 
@@ -7475,7 +7385,6 @@ Untip=|cffc3dbffRight-click to activate auto-casting.|r
 Unubertip=|cffc3dbffRight-click to deactivate auto-casting.|r
 
 [A0QO]
-Art=,
 Name=Inner Vitality
 
 [A0QP]
@@ -7529,7 +7438,6 @@ Order=slow
 Orderoff=slowoff
 Orderon=slowon
 ResearchArt=ReplaceableTextures\CommandButtons\BTNSoulEater.blp
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSoulEater.blp
 UnButtonpos=,2
 
@@ -7635,7 +7543,6 @@ Ubertip="A deadly pit is conjured at target location. Any unit that enters it be
 UnButtonpos=1
 
 [A0RC]
-Art=,
 Name=Insta
 
 [A0RF]
@@ -7671,14 +7578,11 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn |cffffcc00E|rnsnare - [|cffffcc00Level %d|r]
 Researchubertip="Entraps an enemy unit in a net, rendering the unit unable to move.|n|n|cffffcc00Level 1|r - Lasts 2 seconds. |n|cffffcc00Level 2|r - Lasts 3 seconds.|n|cffffcc00Level 3|r - Lasts 4 seconds.|n|cffffcc00Level 4|r - Lasts 5 seconds. |n|n|cff99ccffCooldown: |r 14 seconds."
-Tip=,
 
 [A0RM]
-Art=,
 Name=Refraction Damage
 
 [A0RN]
-Art=,
 Name=Refraction Prevention
 
 [A0RO]
@@ -7739,7 +7643,6 @@ Name=Psionic Trap Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNWellSpring.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -7790,7 +7693,6 @@ Tip=Voo|cffffcc00d|roo - [|cffffcc00Level 1|r],Voo|cffffcc00d|roo - [|cffffcc00L
 Ubertip=Transforms an enemy unit into a random critter for 1.25 seconds. |n|n|cff99ccffCooldown: |r 13 seconds.,Transforms an enemy unit into a random critter for 2 seconds. |n|n|cff99ccffCooldown: |r 13 seconds.,Transforms an enemy unit into a random critter for 2.75 seconds. |n|n|cff99ccffCooldown: |r 13 seconds.,Transforms an enemy unit into a random critter for 3.5 seconds. |n|n|cff99ccffCooldown: |r 13 seconds.
 
 [A0S0]
-Art=,
 Name=Battle Hunger
 
 [A0S1]
@@ -7819,7 +7721,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn R|cffffcc00e|rpel - [|cffffcc00Level %d|r]
 Researchubertip=Creates a powerful divine ward that blocks all magic from affecting a target unit. |n|n|cffffcc00Level 1|r - Lasts 5 seconds. |n|cffffcc00Level 2|r - Lasts 10 seconds. |n|cffffcc00Level 3|r - Lasts 15 seconds.|n|cffffcc00Level 4|r - Lasts 20 seconds. |n|n|cff99ccffCooldown: |r 20 seconds.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
 
 [A0S3]
@@ -7841,7 +7742,6 @@ Order=slow
 Orderoff=slowoff
 Orderon=slowon
 ResearchArt=ReplaceableTextures\PassiveButtons\PASBTNOverload.blp
-Tip=,
 Unart=ReplaceableTextures\PassiveButtons\PASBTNOverload.blp
 UnButtonpos=,2
 
@@ -7861,7 +7761,6 @@ Order=manaburn
 ResearchArt=ReplaceableTextures\CommandButtons\BTNManaBurn.blp
 Researchhotkey=B
 TargetArt=Abilities\Spells\NightElf\ManaBurn\ManaBurnTarget.mdl
-Tip=,
 
 [A0S8]
 Animnames=spell
@@ -7952,7 +7851,6 @@ Order=silence
 ResearchArt=ReplaceableTextures\CommandButtons\BTNSilence.blp
 Researchbuttonpos=1
 Researchhotkey=E
-Tip=,
 
 [A0SF]
 Animnames=spell,throw
@@ -7965,7 +7863,6 @@ Name=PrismaticPrison_Ministun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0SJ]
 Animnames=spell,throw
@@ -7978,7 +7875,6 @@ Name=Fissure_Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0SK]
 Animnames=slam
@@ -8069,7 +7965,6 @@ Tip=Degen Aura - [|cffffcc00Level 1|r]
 Ubertip=Decreases nearby enemy units' movement speed by 7%.
 
 [A0SZ]
-Art=,
 Name=Item Armor Bonus
 
 [A0T0]
@@ -8080,7 +7975,6 @@ Order=slow
 Orderoff=slowoff
 Orderon=slowon
 ResearchArt=ReplaceableTextures\PassiveButtons\PASBTNOverload.blp
-Tip=,
 Unart=ReplaceableTextures\PassiveButtons\PASBTNOverload.blp
 UnButtonpos=,2
 
@@ -8145,7 +8039,6 @@ Name=Wound
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSoulBurn.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -8425,7 +8318,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Aghanim's Scepter (Lucifer)
 
 [A0UK]
-Art=,
 Name=Armlet Effect
 TargetArt=Abilities\Spells\Items\OrbDarkness\OrbDarkness.mdl
 Targetattach=hand,right
@@ -8512,7 +8404,6 @@ Tip=Sun Strike [|cffff0000E|r|cffff0000E|r|cffff0000E|r] - [|cffffcc00T|r]
 Ubertip="Sends a catastrophic ray of fiery energy from the sun at any targeted location after a 1.7 second delay, incinerating all enemies standing beneath it. Deals 100-475 damage based on Exort which is spread over all enemy units within its 200 AoE. |n|n|cff99ccffCooldown: |r 30"
 
 [A0VH]
-Art=,
 Name=Ghostwalk Slow
 
 [A0VI]
@@ -8526,7 +8417,6 @@ Name=Cold Snap ministun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0VJ]
 Art=ReplaceableTextures\CommandButtons\BTNEnchantedBears.blp
@@ -8546,7 +8436,6 @@ Tip=Tornado [|cff00ffffW|r|cff00ffffW|r|cff0000ffQ|r] - [|cffffcc00X|r]
 Ubertip="Unleashes a fast moving tornado that picks up enemy units in its path, suspending them helplessly in the air shortly before allowing them to plummet to their doom. Deals 385 damage based on Wex and Quas, with distance up to 3200 based on Wex. Holds enemies in the air for up to 2.5 seconds based on Quas. |n|n|cff99ccffCooldown: |r 30"
 
 [A0VL]
-Art=,
 Name=Healing Well
 
 [A0VM]
@@ -8651,10 +8540,8 @@ Researchbuttonpos=1
 Researchhotkey=D
 Researchtip=Learn |cffffcc00D|rrunken Haze - [|cffffcc00Level %d|r]
 Researchubertip="Drenches enemy units in alcohol, causing their movement speed to be reduced, and have a chance to miss on attacks. When units with Drunken Haze cast on them are hit by Breath of Fire, they will ignite and take burn damage over time. |nLasts 12 seconds |n|n|cffffcc00Level 1|r - 15% movement speed reduction, 45% miss chance. |n|cffffcc00Level 2|r - 30% movement speed reduction, 65% miss chance. |n|cffffcc00Level 3|r - 50% movement speed reduction, 80% miss chance."
-Tip=,
 
 [A0VU]
-Art=,
 Name=Item Mana Bonus (400)
 
 [A0VV]
@@ -8683,7 +8570,6 @@ Untip=|cffc3dbffRight-click to activate auto-casting.|r
 Unubertip=|cffc3dbffRight-click to deactivate auto-casting.|r
 
 [A0VW]
-Art=,
 Name=Melting Strike - Armor Reduction
 
 [A0VX]
@@ -9070,7 +8956,6 @@ Buttonpos=1,2
 Hotkey=C
 Name=Blackhole effect - sent
 Order=cloudoffog
-Tip=,
 
 [A0X4]
 Animnames=stand,channel
@@ -9079,7 +8964,6 @@ Buttonpos=1,2
 Hotkey=C
 Name=Blackhole effect - scourge
 Order=cloudoffog
-Tip=,
 
 [A0X5]
 Art=ReplaceableTextures\CommandButtons\BTNImpale.blp
@@ -9105,7 +8989,6 @@ Name=Generic_Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0X7]
 Art=ReplaceableTextures\CommandButtons\BTNImpaleNA
@@ -9125,7 +9008,6 @@ Art=ReplaceableTextures\CommandButtons\BTNHelmutPurple.blp
 Name=Guinsoo Stat Bonus
 
 [A0XB]
-Art=,
 Name=Permanent Invisibility
 
 [A0XD]
@@ -9164,7 +9046,6 @@ TargetArt=Abilities\Weapons\PhoenixMissile\Phoenix_Missile_mini.mdl
 Targetattach=hand,left
 Targetattach1=hand,left
 Targetattachcount=2
-Tip=,
 
 [A0XG]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCommand.blp
@@ -9178,7 +9059,6 @@ TargetArt=Abilities\Weapons\PhoenixMissile\Phoenix_Missile_mini.mdl
 Targetattach=hand,left
 Targetattach1=hand,left
 Targetattachcount=2
-Tip=,
 
 [A0XH]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCommand.blp
@@ -9192,10 +9072,8 @@ TargetArt=Abilities\Weapons\PhoenixMissile\Phoenix_Missile_mini.mdl
 Targetattach=hand,left
 Targetattach1=hand,left
 Targetattachcount=2
-Tip=,
 
 [A0XJ]
-Art=,
 Name=Rampage Effect
 TargetArt=Abilities\Weapons\PhoenixMissile\Phoenix_Missile_mini.mdl
 Targetattach=hand,left
@@ -9227,7 +9105,6 @@ Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
 Name=Soul Assumption - Effect
 
 [A0XN]
-Art=,
 Name=Invoke Icy Path
 Targetattach=origin
 
@@ -9335,7 +9212,6 @@ Name=Stifling Knife Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSoulBurn.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -9355,7 +9231,6 @@ Tip=Stifling |cffffcc00D|ragger - [|cffffcc00Level 1|r],Stifling |cffffcc00D|rag
 Ubertip=Hurls a dagger which deals 50 pure damage and slows the unit's movement speed by 50% for 1 second. Deals half damage to heroes.  |n|n|cff99ccffCooldown: |r 8,Hurls a dagger which deals 100 pure damage and slows the unit's movement speed by 50% for 2 seconds. Deals half damage to heroes.  |n|n|cff99ccffCooldown: |r 8,Hurls a dagger which deals 150 pure damage and slows the unit's movement speed by 50% for 3 seconds. Deals half damage to heroes.  |n|n|cff99ccffCooldown: |r 8,Hurls a dagger which deals 200 pure damage and slows the unit's movement speed by 50% for 4 seconds. Deals half damage to heroes.  |n|n|cff99ccffCooldown: |r 8
 
 [A0YO]
-Art=,
 Name=Soul Assumption FX Level 4
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs1.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs6.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs2.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs3.mdl
 Targetattach=chest
@@ -9365,7 +9240,6 @@ Targetattach3=chest
 Targetattachcount=4
 
 [A0YP]
-Art=,
 Name=Soul Assumption FX Level 2
 TargetArt=Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs1.mdl,Abilities\Spells\NightElf\SpiritOfVengeance\SpiritOfVengeanceOrbs6.mdl
 Targetattach=chest
@@ -9474,7 +9348,6 @@ Name=Battery Assault
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0Z8]
 Animnames=Attack
@@ -9504,7 +9377,6 @@ Name=Hookshot Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A0ZA]
 Art=ReplaceableTextures\PassiveButtons\PASBTNHardenedSkin.blp
@@ -9529,7 +9401,6 @@ Tip=Wolf Form
 Ubertip=Lycanthrope and his units move at maximum speed.
 
 [A0ZD]
-Art=,
 Name=Permanent Invisibility Wolves
 
 [A0ZF]
@@ -9589,7 +9460,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNTinyGrow.blp
 Researchbuttonpos=3
 Researchhotkey=W
 Targetattach=origin
-Tip=,
 
 [A0ZT]
 Art=ReplaceableTextures\CommandButtons\BTNTomeRed.blp
@@ -9635,7 +9505,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNTinyGrow.blp
 Researchbuttonpos=3
 Researchhotkey=W
 Targetattach=origin
-Tip=,
 
 [A10B]
 Art=ReplaceableTextures\PassiveButtons\BTNTinyGrow.blp
@@ -9645,7 +9514,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNTinyGrow.blp
 Researchbuttonpos=3
 Researchhotkey=W
 Targetattach=origin
-Tip=,
 
 [A10C]
 Art=ReplaceableTextures\CommandButtons\BTNCripple.blp
@@ -9654,7 +9522,6 @@ Hotkey=C
 Name=Spirit Lance Slow
 Order=cripple
 Requiresamount=2
-Tip=,
 
 [A10D]
 Animnames=spell
@@ -9711,7 +9578,6 @@ Buttonpos=1,2
 Hotkey=T
 Name=Avalanche Stomp
 Order=stomp
-Tip=,
 
 [A10L]
 Animnames=spell,channel
@@ -9750,15 +9616,12 @@ Tip=A|cffffcc00v|ralanche - [|cffffcc00Level 1|r],A|cffffcc00v|ralanche - [|cfff
 Ubertip="Bombards an area with rocks, dealing 100 damage and stunning for 2 second.","Bombards an area with rocks, dealing 180 damage and stunning for 2 second.","Bombards an area with rocks, dealing 260 damage and stunning for 2 second.","Bombards an area with rocks, dealing 300 damage and stunning for 2 second."
 
 [A10N]
-Art=,
 Name=Battle Hunger
 
 [A10O]
-Art=,
 Name=Battle Hunger
 
 [A10P]
-Art=,
 Name=Battle Hunger
 
 [A10Q]
@@ -9811,7 +9674,6 @@ Name=Freezing Field Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTN_CMFF.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -9856,7 +9718,6 @@ Researchbuttonpos=1
 Researchhotkey=D
 Researchtip=Learn |cffffcc00D|rrunken Haze - [|cffffcc00Level %d|r]
 Researchubertip="Drenches enemy units in alcohol, causing their movement speed to be reduced, and have a chance to miss on attacks. When units with Drunken Haze cast on them are hit by Breath of Fire, they will ignite and take burn damage over time. |nLasts 12 seconds |n|n|cffffcc00Level 1|r - 15% movement speed reduction, 45% miss chance. |n|cffffcc00Level 2|r - 30% movement speed reduction, 65% miss chance. |n|cffffcc00Level 3|r - 50% movement speed reduction, 80% miss chance."
-Tip=,
 
 [A10X]
 Art=ReplaceableTextures\CommandButtons\BTNCharm.blp
@@ -9873,19 +9734,15 @@ Tip=Mana L|cffffcc00e|rak - [|cffffcc00Level 1|r],Mana L|cffffcc00e|rak - [|cfff
 Ubertip="Weakens the bond between the physical and magical essences of an enemy. The magical and physical essences will be divided if the target moves, causing the enemy to lose some of their mana. If the enemy loses all its mana, it gets stunned for 1.3 seconds while it repairs the bond. Lasts 4 seconds, 3.5% of their manapool per 100 units. |n|n|cff99ccffCooldown: |r 16","Weakens the bond between the physical and magical essences of an enemy. The magical and physical essences will be divided if the target moves, causing the enemy to lose some of their mana. If the enemy loses all its mana, it gets stunned for 1.6 seconds while it repairs the bond. Lasts 5 seconds, 4% of their manapool per 100 units. |n|n|cff99ccffCooldown: |r 16","Weakens the bond between the physical and magical essences of an enemy. The magical and physical essences will be divided if the target moves, causing the enemy to lose some of their mana. If the enemy loses all its mana, it gets stunned for 1.9 seconds while it repairs the bond. Lasts 6 seconds, 4.5% of their manapool per 100 units. |n|n|cff99ccffCooldown: |r 16","Weakens the bond between the physical and magical essences of an enemy. The magical and physical essences will be divided if the target moves, causing the enemy to lose some of their mana. If the enemy loses all its mana, it gets stunned for 2.2 seconds while it repairs the bond. Lasts 7 seconds, 5% of their manapool per 100 units. |n|n|cff99ccffCooldown: |r 16"
 
 [A10Y]
-Art=,
 Name=Mana Leak
 
 [A10Z]
-Art=,
 Name=Mana Leak
 
 [A110]
-Art=,
 Name=Mana Leak
 
 [A111]
-Art=,
 Name=Mana Leak
 
 [A112]
@@ -9931,11 +9788,9 @@ Tip=|cffffcc00B|rlinding Light
 Ubertip="Blinds nearby units, causing them to miss 80% of the time for 4 seconds. |n|n|cff99ccffCooldown: |r 20"
 
 [A115]
-Art=,
 Name=Track Speed
 
 [A116]
-Art=,
 Name=Night Stalker FX 1
 TargetArt=Abilities\Spells\Undead\DevourMagic\DevourMagicBirthMissile.mdl
 Targetattach=hand,left
@@ -9943,7 +9798,6 @@ Targetattach1=hand,right
 Targetattachcount=2
 
 [A117]
-Art=,
 Name=Night Stalker FX 2
 TargetArt=Abilities\Weapons\AvengerMissile\AvengerMissile.mdl
 Targetattach=hand,left
@@ -9961,7 +9815,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn R|cffffcc00e|rpel - [|cffffcc00Level %d|r]
 Researchubertip=Creates a powerful divine ward that blocks all magic from affecting a target unit. |n|n|cffffcc00Level 1|r - Lasts 5 seconds. |n|cffffcc00Level 2|r - Lasts 10 seconds. |n|cffffcc00Level 3|r - Lasts 15 seconds.|n|cffffcc00Level 4|r - Lasts 20 seconds. |n|n|cff99ccffCooldown: |r 20 seconds.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
 
 [A119]
@@ -9975,7 +9828,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn R|cffffcc00e|rpel - [|cffffcc00Level %d|r]
 Researchubertip=Creates a powerful divine ward that blocks all magic from affecting a target unit. |n|n|cffffcc00Level 1|r - Lasts 5 seconds. |n|cffffcc00Level 2|r - Lasts 10 seconds. |n|cffffcc00Level 3|r - Lasts 15 seconds.|n|cffffcc00Level 4|r - Lasts 20 seconds. |n|n|cff99ccffCooldown: |r 20 seconds.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
 
 [A11A]
@@ -9989,7 +9841,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn R|cffffcc00e|rpel - [|cffffcc00Level %d|r]
 Researchubertip=Creates a powerful divine ward that blocks all magic from affecting a target unit. |n|n|cffffcc00Level 1|r - Lasts 5 seconds. |n|cffffcc00Level 2|r - Lasts 10 seconds. |n|cffffcc00Level 3|r - Lasts 15 seconds.|n|cffffcc00Level 4|r - Lasts 20 seconds. |n|n|cff99ccffCooldown: |r 20 seconds.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
 
 [A11B]
@@ -10003,7 +9854,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn R|cffffcc00e|rpel - [|cffffcc00Level %d|r]
 Researchubertip=Creates a powerful divine ward that blocks all magic from affecting a target unit. |n|n|cffffcc00Level 1|r - Lasts 5 seconds. |n|cffffcc00Level 2|r - Lasts 10 seconds. |n|cffffcc00Level 3|r - Lasts 15 seconds.|n|cffffcc00Level 4|r - Lasts 20 seconds. |n|n|cff99ccffCooldown: |r 20 seconds.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
 
 [A11C]
@@ -10017,7 +9867,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn R|cffffcc00e|rpel - [|cffffcc00Level %d|r]
 Researchubertip=Creates a powerful divine ward that blocks all magic from affecting a target unit. |n|n|cffffcc00Level 1|r - Lasts 5 seconds. |n|cffffcc00Level 2|r - Lasts 10 seconds. |n|cffffcc00Level 3|r - Lasts 15 seconds.|n|cffffcc00Level 4|r - Lasts 20 seconds. |n|n|cff99ccffCooldown: |r 20 seconds.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
 
 [A11D]
@@ -10076,7 +9925,6 @@ Tip=Summon Sea |cffffcc00E|rlemental
 Ubertip=Summons a powerful Sea Elemental with 550 hit points that does 28 - 37 damage. |nLasts 65 seconds.
 
 [A11I]
-Art=,
 Name=Undead Crown
 TargetArt=effects\my_crown.mdx
 Targetattach=head
@@ -10105,7 +9953,6 @@ Name=Ghost Ship Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNUndeadDestroyer.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -10129,7 +9976,6 @@ Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
 Name=Water Sword Damage
 
 [A11R]
-Art=,
 Name=Water Sword FX
 TargetArt=effects\WaterHands.mdx
 Targetattach=hand,right
@@ -10145,7 +9991,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Weapons\WaterElementalMissile\WaterElementalMissile.mdl
 Specialattach=chest
-Tip=,
 
 [A11T]
 Art=ReplaceableTextures\CommandButtons\BTNGhostMage.blp
@@ -10252,7 +10097,6 @@ Tip=Discharge Illumina|cffffcc00t|re
 Ubertip=Discharges Illuminate.
 
 [A125]
-Art=,
 Name=Captain CoCo's Rum FX
 TargetArt=Abilities\Spells\Other\StrongDrink\BrewmasterTarget.mdl
 Targetattach=overhead
@@ -10265,7 +10109,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Captain CoCo's Rum Container
 
 [A12D]
-Art=,
 Name=Captain Coco's Rum - MS
 
 [A12F]
@@ -10281,11 +10124,9 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNSpell_Shadow_Teleport.blp
 Researchhotkey=C
 Researchtip=Learn Va|cffffcc00c|ruum - |cffffcc00Level %d|r
 Researchubertip="Creates an abyss upon a chosen parameter, pulling in and damaging foes in the area. |n|n|cffffcc00Level 1|r - 60 Damage. 300 AOE. |n|cffffcc00Level 2|r - 120 Damage. 400 AOE. |n|cffffcc00Level 3|r - 180 Damage. 500 AOE. |n|cffffcc00Level 4|r - 240 Damage. 600 AOE. |n|n|cff99ccffCooldown: |r 16 |n|cff99ccffManacost: |r 100/130/160/190 "
-Tip=,
 UnButtonpos=1
 
 [A12G]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Marker - Dispellable
@@ -10304,7 +10145,6 @@ Researchbuttonpos=2
 Researchhotkey=T
 Researchtip=Learn S|cffffcc00t|rorm Bolt - [|cffffcc00Level %d|r]
 Researchubertip="A magical hammer that is thrown at an enemy unit, causing damage and stunning the target. |n|n|cffffcc00Level 1|r - 100 damage, 5 second stun. |n|cffffcc00Level 2|r - 200 damage, 7 second stun. |n|cffffcc00Level 3|r - 300 damage, 9 second stun. |n|cffffcc00Level 4|r - 450 damage, 12 second stun."
-Tip=,
 
 [A12J]
 Animnames=spell
@@ -10337,7 +10177,6 @@ Tip=Powe|cffffcc00r|rshot - [|cffffcc00Level 1|r],Powe|cffffcc00r|rshot - [|cfff
 Ubertip="Windrunner winds up her bow for up to 1 second to perform a single powerful shot. The arrow travels 1700 distance, dealing 120 damage and destroying trees in its path. The damage dealt is greatest to the first target it hits and is reduced by 10% with each other it passes through. |n|n|cff99ccffCooldown: |r 9","Windrunner winds up her bow for up to 1 second to perform a single powerful shot. The arrow travels 1700 distance, dealing 200 damage and destroying trees in its path. The damage dealt is greatest to the first target it hits and is reduced by 10% with each other it passes through. |n|n|cff99ccffCooldown: |r 9","Windrunner winds up her bow for up to 1 second to perform a single powerful shot. The arrow travels 1700 distance, dealing 280 damage and destroying trees in its path. The damage dealt is greatest to the first target it hits and is reduced by 10% with each other it passes through. |n|n|cff99ccffCooldown: |r 9","Windrunner winds up her bow for up to 1 second to perform a single powerful shot. The arrow travels 1700 distance, dealing 360 damage and destroying trees in its path. The damage dealt is greatest to the first target it hits and is reduced by 10% with each other it passes through. |n|n|cff99ccffCooldown: |r 9"
 
 [A12M]
-Art=,
 Name=Windrunner MS
 
 [A12O]
@@ -10360,7 +10199,6 @@ Tip=|cffffcc00F|rocus Fire - [|cffffcc00Level 1|r],|cffffcc00F|rocus Fire - [|cf
 Ubertip="Alleria channels wind throughout her body to surge an excess of adrenaline, giving her maximum attack speed on one target. Damage is reduced by 50% in this state. |n|n|cff99ccffCooldown: |r 60 |n|n|c00fffc01Scepter Upgradeable: Does not reduce secondary item effects. Improves cooldown.|r","Alleria channels wind throughout her body to surge an excess of adrenaline, giving her maximum attack speed on one target. Damage is reduced by 40% in this state. |n|n|cff99ccffCooldown: |r 60 |n|n|c00fffc01Scepter Upgradeable: Does not reduce secondary item effects. Improves cooldown.|r","Alleria channels wind throughout her body to surge an excess of adrenaline, giving her maximum attack speed on one target. Damage is reduced by 30% in this state. |n|n|cff99ccffCooldown: |r 60 |n|n|c00fffc01Scepter Upgradeable: Does not reduce secondary item effects. Improves cooldown.|r"
 
 [A12Q]
-Art=,
 Name=Focus Fire AS
 
 [A12R]
@@ -10368,7 +10206,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Focus Fire Container
 
 [A12S]
-Art=,
 Name=Focus Fire FX
 TargetArt=Abilities\Spells\Other\Tornado\Tornado_Target.mdl
 Targetattach=hand,left
@@ -10376,7 +10213,6 @@ Targetattach1=hand,right
 Targetattachcount=2
 
 [A12U]
-Art=,
 Name=Wind Arrow FX
 TargetArt=Abilities\Spells\Other\Tornado\Tornado_Target.mdl
 Targetattach=overhead
@@ -10398,7 +10234,6 @@ Tip=|cffffcc00W|rind Walk
 Ubertip=Allows you to turn invisible and move 25% faster for a time.  An attack to break out of the invisibility deals 50 bonus damage.  Lasts 20 seconds.
 
 [A12X]
-Art=,
 Name=Item Armor Bonus
 
 [A12Z]
@@ -10416,15 +10251,12 @@ Unhotkey=H
 Untip=Deselect |cffffcc00H|rero
 
 [A131]
-Art=,
 Name=Windrunner Slow - 2
 
 [A132]
-Art=,
 Name=Windrunner Slow - 3
 
 [A133]
-Art=,
 Name=Windrunner Slow - 1
 
 [A134]
@@ -10472,7 +10304,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Windrunner Container - 4
 
 [A13A]
-Art=,
 Name=Windrunner Slow - 4
 
 [A13C]
@@ -10492,7 +10323,6 @@ Tip=|cffffcc00X|r Marks The Spot Return
 Ubertip=Returns the target to the X.
 
 [A13F]
-Art=,
 Name=Blur
 
 [A13O]
@@ -10526,7 +10356,6 @@ Tip=In|cffffcc00v|risibility
 Ubertip=Your hawk becomes invisible for 6 seconds.  Has 1 second fade time. |n|n|cff99ccffCooldown: |r 30
 
 [A140]
-Art=,
 Name=Permanent Invisibility (rexxar)
 
 [A141]
@@ -10548,7 +10377,6 @@ Researchhotkey=V
 Researchtip=Learn De|cffffcc00v|rotion Aura - [|cffffcc00Level %d|r]
 Researchubertip=Gives additional armor to nearby friendly units. |n|n|cffffcc00Level 1|r - Increases base armor by 1. |n|cffffcc00Level 2|r - Increases base armor by 3. |n|cffffcc00Level 3|r - Increases base armor by 4.
 Targetattach=origin
-Tip=,
 
 [A144]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCleavingAttack.blp
@@ -10559,7 +10387,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Weapons\WaterElementalMissile\WaterElementalMissile.mdl
 Specialattach=chest
-Tip=,
 
 [A145]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCleavingAttack.blp
@@ -10570,7 +10397,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Weapons\WaterElementalMissile\WaterElementalMissile.mdl
 Specialattach=chest
-Tip=,
 
 [A146]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCleavingAttack.blp
@@ -10581,7 +10407,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Weapons\WaterElementalMissile\WaterElementalMissile.mdl
 Specialattach=chest
-Tip=,
 
 [A147]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -10608,7 +10433,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A14B]
 Art=ReplaceableTextures\PassiveButtons\PASBTNBash.blp
@@ -10657,7 +10481,6 @@ Name=Blank
 ResearchArt=ReplaceableTextures\CommandButtons\BTNEvasion.blp
 Researchbuttonpos=1
 Researchhotkey=V
-Tip=,
 
 [A14F]
 Art=ReplaceableTextures\CommandButtons\BTNNothing.blp
@@ -10667,7 +10490,6 @@ Name=Blank
 ResearchArt=ReplaceableTextures\CommandButtons\BTNEvasion.blp
 Researchbuttonpos=1
 Researchhotkey=V
-Tip=,
 
 [A14H]
 Art=ReplaceableTextures\CommandButtons\BTNNothing.blp
@@ -10677,7 +10499,6 @@ Name=Blank
 ResearchArt=ReplaceableTextures\CommandButtons\BTNEvasion.blp
 Researchbuttonpos=1
 Researchhotkey=V
-Tip=,
 
 [A14I]
 Animnames=spell
@@ -10697,11 +10518,9 @@ Tip=|cffffcc00W|rindrunner - [|cffffcc00Level 1|r],|cffffcc00W|rindrunner - [|cf
 Ubertip="Imbues her body with the essence of wind, increasing her movement speed by 50% and giving her the ability to evade all physical attacks for a short period of time. Additionally, the gusts of wind around her impairs the movement of nearby enemies, slowing their movement speed by 8% in a 300 AoE around her. Lasts 2.75 seconds. |n|n|cff99ccffCooldown: |r 15","Imbues her body with the essence of wind, increasing her movement speed by 50% and giving her the ability to evade all physical attacks for a short period of time. Additionally, the gusts of wind around her impairs the movement of nearby enemies, slowing their movement speed by 16% in a 300 AoE around her. Lasts 3.5 seconds. |n|n|cff99ccffCooldown: |r 15","Imbues her body with the essence of wind, increasing her movement speed by 50% and giving her the ability to evade all physical attacks for a short period of time. Additionally, the gusts of wind around her impairs the movement of nearby enemies, slowing their movement speed by 24% in a 300 AoE around her. Lasts 4.25 seconds. |n|n|cff99ccffCooldown: |r 15","Imbues her body with the essence of wind, increasing her movement speed by 50% and giving her the ability to evade all physical attacks for a short period of time. Additionally, the gusts of wind around her impairs the movement of nearby enemies, slowing their movement speed by 30% in a 300 AoE around her. Lasts 5 seconds. |n|n|cff99ccffCooldown: |r 15"
 
 [A14J]
-Art=,
 Name=CoP Mana Degen
 
 [A14K]
-Art=,
 Buttonpos=,2
 Name=Detector
 
@@ -10763,7 +10582,6 @@ Order=magicleash
 ResearchArt=ReplaceableTextures\CommandButtons\BTNManaFlare.blp
 Researchbuttonpos=2
 Researchhotkey=E
-Tip=,
 
 [A14R]
 Animnames=spell
@@ -10789,7 +10607,6 @@ Order=slow
 Orderoff=slowoff
 Orderon=slowon
 ResearchArt=ReplaceableTextures\CommandButtons\BTNManaFlare.blp
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNManaFlare.blp
 UnButtonpos=,2
 
@@ -10867,7 +10684,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A15Y]
 Art=ReplaceableTextures\CommandButtons\BTNHealingWard.blp
@@ -10916,7 +10732,6 @@ Name=Tombstone Bonus
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNBloodLustOff.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -10936,7 +10751,6 @@ Name=Epicenter Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -10974,7 +10788,6 @@ Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
 Name=Damage Bonus System - 64
 
 [A17K]
-Art=,
 Name=Shadow Word
 
 [A17L]
@@ -11006,7 +10819,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNShadowStrike.blp
 Researchhotkey=D
 Researchtip=Learn Sha|cffffcc00d|row Strike - [|cffffcc00Level %d|r]
 Researchubertip="Hurls a poisoned dagger which deals large initial damage, and then deals damage over time. The poisoned unit has its movement speed slowed for a short duration. |n|n|cffffcc00Level 1|r - 50 strike damage, 10 duration damage. |n|cffffcc00Level 2|r - 70 strike damage, 20 duration damage. |n|cffffcc00Level 3|r - 70 strike damage, 40 duration damage.|n|cffffcc00Level 4|r - 100 strike damage, 50 duration damage. |n|n|cff99ccffCooldown: |r 22 seconds."
-Tip=,
 
 [A17O]
 Animnames=attack
@@ -11028,11 +10840,9 @@ Art=ReplaceableTextures\CommandButtons\BTNArcaniteRanged.blp
 Name=Item Agility Bonus
 
 [A17R]
-Art=,
 Name=Fortification Armor Bonus
 
 [A17S]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=SiegeUnit
@@ -11048,7 +10858,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNDalaranMutant.blp
 Researchhotkey=D
 Researchtip=Learn Raise |cffffcc00D|read - |cffffcc00Level %d|r
 Researchubertip="Calls the Undying’s fellow zombies out of the earth to fight. Once a zombie attacks six times, another one will rise alongside it. When a zombie dies, its reanimating life force returns to Dirge, healing him by 50 hp. They have 33% magic resistance.  Lasts 30 seconds.  |n|n|cffffcc00Level 1|r - 1 Zombie |n|cffffcc00Level 2|r - 2 Zombies  |n|cffffcc00Level 3|r - 3 Zombies  |n|cffffcc00Level 4|r - 4 Zombies |n|n|cff99ccffCooldown: |r 30  |n|cff99ccffManacost: |r 100/120/140/160"
-Tip=,
 
 [A180]
 Animnames=attack
@@ -11073,7 +10882,6 @@ Hotkey=G
 Name=Shock
 Order=purge
 SpecialArt=Abilities\Spells\Orc\Purge\PurgeBuffTarget.mdl
-Tip=,
 
 [A18X]
 Art=ReplaceableTextures\PassiveButtons\BTNDisenchant.blp
@@ -11095,7 +10903,6 @@ Name=Fiery Soul Bonus - 1a
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11108,7 +10915,6 @@ Name=Fiery Soul Bonus - 1b
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11165,7 +10971,6 @@ Name=Fiery Soul Bonus - 4c
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11178,7 +10983,6 @@ Name=Fiery Soul Bonus - 4b
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11191,7 +10995,6 @@ Name=Fiery Soul Bonus - 3c
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11204,7 +11007,6 @@ Name=Fiery Soul Bonus - 3b
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11217,7 +11019,6 @@ Name=Shrapnel Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNFragmentationBombs.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -11230,7 +11031,6 @@ Name=Fiery Soul Bonus - 2c
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11243,7 +11043,6 @@ Name=Fiery Soul Bonus - 2b
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11256,7 +11055,6 @@ Name=Fiery Soul Bonus - 2a
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11269,7 +11067,6 @@ Name=Fiery Soul Bonus - 1c
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11282,7 +11079,6 @@ Name=Fiery Soul Bonus - 3a
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11295,7 +11091,6 @@ Name=Fiery Soul Bonus - 4a
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -11309,7 +11104,6 @@ Hotkey=C
 Name=Force Staff
 Order=channel
 Targetattach=origin
-Tip=,
 
 [A19N]
 Animnames=spell,looping
@@ -11322,7 +11116,6 @@ Order=magicleash
 ResearchArt=ReplaceableTextures\CommandButtons\BTNMagicLariet.blp
 Researchbuttonpos=2
 Researchhotkey=E
-Tip=,
 
 [A19O]
 Animnames=spell,channel
@@ -11374,7 +11167,6 @@ Name=Firefly Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -11456,7 +11248,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A1A8]
 Animnames=attack,2
@@ -11481,7 +11272,6 @@ Name=Great Stomp Effect
 Order=stomp
 ResearchArt=ReplaceableTextures\CommandButtons\BTNGreatStomp.blp
 Researchhotkey=F
-Tip=,
 
 [A1AA]
 Art=ReplaceableTextures\CommandButtons\BTNGreatStomp.blp
@@ -11518,7 +11308,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A1AD]
 Art=ReplaceableTextures\PassiveButtons\PASBTNDemolish.blp
@@ -11543,7 +11332,6 @@ Researchhotkey=C
 Researchtip=Learn |cffffcc00C|rhain Lightning - [|cffffcc00Level %d|r]
 Researchubertip="Hurls a bolt of damaging lightning at a target enemy that jumps to nearby enemies. Each jump deals less damage. |n|n|cffffcc00Level 1|r - 85 damage, jumps 4 times. |n|cffffcc00Level 2|r - 125 damage, jumps 6 times. |n|cffffcc00Level 3|r - 180 damage, jumps 8 times."
 TargetArt=Abilities\Weapons\Bolt\BoltImpact.mdl
-Tip=,
 
 [A1AO]
 Animnames=spell,looping
@@ -11675,7 +11463,6 @@ Tip=Mac|cffffcc00r|ropyre - [|cffffcc00Level 1|r],Mac|cffffcc00r|ropyre - [|cfff
 Ubertip="Jakiro unleashes a line of pulsing flame strikes in front of him. Each flame strike deals 125 damage per second for 7 seconds, and has a 225 AOE radius. |n|n|cff99ccffCooldown: |r 60","Jakiro unleashes a line of pulsing flame strikes in front of him. Each flame strike deals 175 damage per second for 7 seconds, and has a 225 AOE radius. |n|n|cff99ccffCooldown: |r 60","Jakiro unleashes a line of pulsing flame strikes in front of him. Each flame strike deals 225 damage per second for 7 seconds, and has a 225 AOE radius. |n|n|cff99ccffCooldown: |r 60"
 
 [A1B2]
-Art=,
 Buttonpos=,2
 EffectArt=effects\FlameStrike1.mdx
 Hotkey=F
@@ -12050,25 +11837,20 @@ Name=Earthsplitter Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
 
 [A1CF]
-Art=,
 Name=Negative Armor System -4
 
 [A1CG]
-Art=,
 Name=Negative Armor System -16
 
 [A1CH]
-Art=,
 Name=Negative Armor System -32
 
 [A1CI]
-Art=,
 Name=Negative Armor System -8
 
 [A1CJ]
@@ -12076,7 +11858,6 @@ Art=ReplaceableTextures\CommandButtons\BTNArcaniteRanged.blp
 Name=Item Agility Bonus
 
 [A1CK]
-Art=,
 Name=Negative Armor System -2
 
 [A1CL]
@@ -12084,10 +11865,8 @@ Art=ReplaceableTextures\PassiveButtons\PASBTNFeedBack.blp
 Buttonpos=3,2
 Name=Diffusal Burn Level 2
 SpecialArt=Abilities\Spells\Human\Feedback\SpellBreakerAttack.mdl
-Tip=,
 
 [A1CM]
-Art=,
 Name=Negative Armor System -1
 
 [A1CN]
@@ -12101,7 +11880,6 @@ Art=ReplaceableTextures\CommandButtons\BTNGlove.blp
 Name=Phantom Strike
 
 [A1CQ]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Natural Order Aura Art
@@ -12457,26 +12235,20 @@ Researchhotkey=C
 Researchtip=Learn |cffffcc00C|rhain Lightning - [|cffffcc00Level %d|r]
 Researchubertip="Hurls a bolt of damaging lightning at a target enemy that jumps to nearby enemies. Each jump deals less damage. |n|n|cffffcc00Level 1|r - 85 damage, jumps 4 times. |n|cffffcc00Level 2|r - 125 damage, jumps 6 times. |n|cffffcc00Level 3|r - 180 damage, jumps 8 times."
 TargetArt=Abilities\Weapons\Bolt\BoltImpact.mdl
-Tip=,
 
 [A1DK]
-Art=,
 Name=Eye Of The Storm Negative Armor System -1
 
 [A1DL]
-Art=,
 Name=Eye Of The Storm Negative Armor System -2
 
 [A1DM]
-Art=,
 Name=Eye Of The Storm Negative Armor System -8
 
 [A1DN]
-Art=,
 Name=Eye Of The Storm Negative Armor System -4
 
 [A1DO]
-Art=,
 Name=Eye Of The Storm Negative Armor System -16
 
 [A1DP]
@@ -12818,7 +12590,6 @@ Order=antimagicshell
 ResearchArt=ReplaceableTextures\CommandButtons\BTNManaRecharge.blp
 Researchbuttonpos=1
 Researchhotkey=R
-Tip=,
 
 [A1EW]
 Animnames=spell,slam
@@ -12833,14 +12604,12 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A1F3]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Warcry Container - Level 3
 
 [A1F4]
-Art=,
 Name=Warcry - MS
 
 [A1F5]
@@ -12856,7 +12625,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Warcry Container - Level 2
 
 [A1FC]
-Art=,
 Name=Autofire FX
 TargetArt=Abilities\Spells\Items\AIfb\AIfbTarget.mdl
 Targetattach=head
@@ -12874,7 +12642,6 @@ Tip=|cffffcc00E|rat Tree
 Ubertip=Consume a tree to restore 0 hit points over 0 seconds.
 
 [A1FE]
-Art=,
 Name=Warcry FX
 TargetArt=Abilities\Spells\Orc\Bloodlust\BloodlustTarget.mdl
 Targetattach=chest
@@ -13082,13 +12849,11 @@ Name=Ancestral Charge
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
 
 [A1GA]
-Art=,
 Name=Permanent Invisibility
 
 [A1GB]
@@ -13113,7 +12878,6 @@ Name=Scarab Silence
 Order=soulburn
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStaffOfSilence.blp
 Researchhotkey=B
-Tip=,
 
 [A1GI]
 Art=ReplaceableTextures\CommandButtons\BTNGlove.blp
@@ -13261,7 +13025,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpiritWalkerMasterTraining.blp
 Name=Item Strength Bonus
 
 [A1HN]
-Art=,
 Name=Chilling Touch
 
 [A1HQ]
@@ -13310,11 +13073,9 @@ Tip=Ic|cffffcc00e|r Vortex - [|cffffcc00Level 1|r],Ic|cffffcc00e|r Vortex - [|cf
 Ubertip="Gathers ancient frost energy into one area to create a small, immobile ice vortex at a location. Reduces enemy movement speed by 18% and magical resistance by 10%. Lasts 12 seconds. |n|n|cff99ccffCooldown: |r 5","Gathers ancient frost energy into one area to create a small, immobile ice vortex at a location. Reduces enemy movement speed by 22% and magical resistance by 15%. Lasts 12 seconds. |n|n|cff99ccffCooldown: |r 5","Gathers ancient frost energy into one area to create a small, immobile ice vortex at a location. Reduces enemy movement speed by 26% and magical resistance by 20%. Lasts 12 seconds. |n|n|cff99ccffCooldown: |r 5","Gathers ancient frost energy into one area to create a small, immobile ice vortex at a location. Reduces enemy movement speed by 30% and magical resistance by 25%. Lasts 12 seconds. |n|n|cff99ccffCooldown: |r 5"
 
 [A1HW]
-Art=,
 Name=Shadow Dance 1
 
 [A1HX]
-Art=,
 Name=Shadow Dance 2
 
 [A1HZ]
@@ -13334,22 +13095,18 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Ice Vortex 4
 
 [A1I7]
-Art=,
 Name=Nightcrawler FX
 TargetArt=war3mapImported\SmokescreenBlack2.mdx
 Targetattach=origin
 Targetattachcount=1
 
 [A1I8]
-Art=,
 Name=Nightcrawler MS - 1
 
 [A1I9]
-Art=,
 Name=Nightcrawler MS - 2
 
 [A1IA]
-Art=,
 Name=Nightcrawler MS - 3
 
 [A1IB]
@@ -13377,19 +13134,15 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Nightcrawler Container - 3
 
 [A1II]
-Art=,
 Name=Tornado MS - 1
 
 [A1IJ]
-Art=,
 Name=Tornado MS - 3
 
 [A1IK]
-Art=,
 Name=Tornado MS - 4
 
 [A1IL]
-Art=,
 Name=Tornado MS - 2
 
 [A1IM]
@@ -13455,7 +13208,6 @@ Tip=Jinada - [|cffffcc00Level 1|r],Jinada - [|cffffcc00Level 2|r],Jinada - [|cff
 Ubertip="Mastering the ancient art of Jinada, Gondar hits with precision and maims his targets so they cant run. Next time Gondar hits an enemy he lands an automatic 1.5x critical strike and maims the target for 3 seconds, slowing its movespeed and attackspeed by 25%.|nThis skill is passive. |n|n|cff99ccffCooldown: |r 12","Mastering the ancient art of Jinada, Gondar hits with precision and maims his targets so they cant run. Next time Gondar hits an enemy he lands an automatic 1.75x critical strike and maims the target for 3 seconds, slowing its movespeed and attackspeed by 25%.|nThis skill is passive. |n|n|cff99ccffCooldown: |r 10","Mastering the ancient art of Jinada, Gondar hits with precision and maims his targets so they cant run. Next time Gondar hits an enemy he lands an automatic 2.0x critical strike and maims the target for 3 seconds, slowing its movespeed and attackspeed by 25%.|nThis skill is passive. |n|n|cff99ccffCooldown: |r 8","Mastering the ancient art of Jinada, Gondar hits with precision and maims his targets so they cant run. Next time Gondar hits an enemy he lands an automatic 2.25x critical strike and maims the target for 3 seconds, slowing its movespeed and attackspeed by 25%.|nThis skill is passive. |n|n|cff99ccffCooldown: |r 6"
 
 [A1IS]
-Art=,
 Name=Jinada FX
 TargetArt=war3mapImported\JinadaFX.mdx
 Targetattach=weapon
@@ -13465,7 +13217,6 @@ Targetattachcount=1
 Art=ReplaceableTextures\PassiveButtons\PASBTNCriticalStrike.blp
 Buttonpos=2,2
 Name=Jinada Critical - 2
-Tip=,
 
 [A1IU]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -13476,26 +13227,22 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Jinada Maim
 
 [A1IX]
-Art=,
 Name=Jinada MS
 
 [A1J0]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCriticalStrike.blp
 Buttonpos=2,2
 Name=Jinada Critical - 4
-Tip=,
 
 [A1J1]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCriticalStrike.blp
 Buttonpos=2,2
 Name=Jinada Critical - 3
-Tip=,
 
 [A1J2]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCriticalStrike.blp
 Buttonpos=2,2
 Name=Jinada Critical - 1
-Tip=,
 
 [A1J3]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -13510,7 +13257,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Jinada Container - 3
 
 [A1J6]
-Art=,
 Name=Pounce FX
 TargetArt=war3mapImported\PounceFX.mdx
 Targetattach=left,hand
@@ -13535,111 +13281,84 @@ Tip=Pounc|cffffcc00e|r - [|cffffcc00Level 1|r],Pounc|cffffcc00e|r - [|cffffcc00L
 Ubertip=Surges directly forward and latches on to the first enemy hero he hits binding it with chains of darkness. The enemy is unable to move more than 275 distance away from the point of impact for 3.5 seconds. Deals 70 damage with a maximum range of 700. |n|n|cff99ccffCooldown: |r 20,Surges directly forward and latches on to the first enemy hero he hits binding it with chains of darkness. The enemy is unable to move more than 275 distance away from the point of impact for 3.5 seconds. Deals 140 damage with a maximum range of 700. |n|n|cff99ccffCooldown: |r 16,Surges directly forward and latches on to the first enemy hero he hits binding it with chains of darkness. The enemy is unable to move more than 275 distance away from the point of impact for 3.5 seconds. Deals 210 damage with a maximum range of 700. |n|n|cff99ccffCooldown: |r 12,Surges directly forward and latches on to the first enemy hero he hits binding it with chains of darkness. The enemy is unable to move more than 275 distance away from the point of impact for 3.5 seconds. Deals 280 damage with a maximum range of 700. |n|n|cff99ccffCooldown: |r 8
 
 [A1J9]
-Art=,
 Name=Cold Feet
 
 [A1JA]
-Art=,
 Name=Ice Blast
 
 [A1JC]
-Art=,
 Name="IceShell - 1,4"
 
 [A1JD]
-Art=,
 Name="IceShell - 1,5"
 
 [A1JE]
-Art=,
 Name="IceShell - 1,6"
 
 [A1JF]
-Art=,
 Name="IceShell - 2,1"
 
 [A1JG]
-Art=,
 Name="IceShell - 2,2"
 
 [A1JH]
-Art=,
 Name="IceShell - 2,3"
 
 [A1JI]
-Art=,
 Name="IceShell - 2,4"
 
 [A1JJ]
-Art=,
 Name="IceShell - 3,1"
 
 [A1JK]
-Art=,
 Name="IceShell - 2,6"
 
 [A1JL]
-Art=,
 Name="IceShell - 3,2"
 
 [A1JM]
-Art=,
 Name="IceShell - 3,3"
 
 [A1JN]
-Art=,
 Name="IceShell - 3,4"
 
 [A1JO]
-Art=,
 Name="IceShell - 3,5"
 
 [A1JP]
-Art=,
 Name="IceShell - 3,6"
 
 [A1JQ]
-Art=,
 Name="IceShell - 4,1"
 
 [A1JR]
-Art=,
 Name="IceShell - 4,2"
 
 [A1JS]
-Art=,
 Name="IceShell - 4,6"
 
 [A1JT]
-Art=,
 Name="IceShell - 1,1"
 
 [A1JU]
-Art=,
 Name="IceShell - 1,2"
 
 [A1JV]
-Art=,
 Name="IceShell - 1,3"
 
 [A1JW]
-Art=,
 Name="IceShell - 2,5"
 
 [A1JX]
-Art=,
 Name="IceShell - 4,3"
 
 [A1JY]
-Art=,
 Name="IceShell - 4,4"
 
 [A1JZ]
-Art=,
 Name="IceShell - 4,5"
 
 [A1K0]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 4,3"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13647,14 +13366,12 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K1]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name="IceShell Book - 2,1"
 
 [A1K2]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 4,6"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13662,10 +13379,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K3]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 4,4"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13673,10 +13388,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K4]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 3,2"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13684,10 +13397,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K5]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 2,4"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13695,10 +13406,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K6]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 1,1"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13706,10 +13415,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K7]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 1,2"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13717,10 +13424,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K8]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 1,3"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13728,10 +13433,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1K9]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 1,4"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13739,10 +13442,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KA]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 1,6"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13750,10 +13451,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KB]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 2,1"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13761,10 +13460,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KC]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 2,2"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13772,10 +13469,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KD]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 2,3"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13783,10 +13478,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KE]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 4,5"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13794,10 +13487,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KF]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 2,5"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13805,10 +13496,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KG]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 2,6"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13816,10 +13505,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KH]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 3,1"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13827,10 +13514,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KI]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 3,3"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13838,10 +13523,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KJ]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 3,4"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13849,10 +13532,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KK]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 3,5"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13860,10 +13541,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KL]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 3,6"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13871,10 +13550,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KM]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 4,1"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13882,10 +13559,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KN]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 4,2"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13893,10 +13568,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KO]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 1,5"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -13904,7 +13577,6 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1KP]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -14003,14 +13675,12 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Gust Container
 
 [A1LE]
-Art=,
 Name=Ice Blast FX
 TargetArt=war3mapImported\PlasmaShot.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A1LF]
-Art=,
 Buttonpos=2,2
 Name="IceShell Magic 4,7"
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -14018,10 +13688,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A1LG]
-Art=,
 Name="IceShell - 4,7"
 
 [A1LH]
@@ -14029,43 +13697,33 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name="IceShell Book - 4,7"
 
 [A1LJ]
-Art=,
 Name=IceShellEnemy - Armor 2
 
 [A1LK]
-Art=,
 Name=IceShellEnemy - Armor 3
 
 [A1LL]
-Art=,
 Name=IceShellEnemy - Armor 6
 
 [A1LM]
-Art=,
 Name=IceShellEnemy - Armor 8
 
 [A1LN]
-Art=,
 Name=IceShellEnemy - Armor 10
 
 [A1LO]
-Art=,
 Name=IceShellEnemy - Armor 4
 
 [A1LP]
-Art=,
 Name=IceShellEnemy - Armor 5
 
 [A1LQ]
-Art=,
 Name=IceShellEnemy - Armor 9
 
 [A1LR]
-Art=,
 Name=IceShellEnemy - Armor 7
 
 [A1LS]
-Art=,
 Name=IceShellEnemy - Armor 1
 
 [A1LT]
@@ -14186,7 +13844,6 @@ Name=Cold Feed Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A1ML]
 Art=ReplaceableTextures\CommandButtons\BTNWand.blp
@@ -14332,7 +13989,6 @@ Art=ReplaceableTextures\CommandButtons\BTNEnchantedBears.blp
 Name=Overpower
 
 [A1N5]
-Art=,
 Name=Overpower FX
 TargetArt=Abilities\Spells\Orc\TrollBerserk\HeadhunterWEAPONSLeft.mdl
 Targetattach=overhead
@@ -14343,7 +13999,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Overpower Container
 
 [A1N7]
-Art=,
 Name=Overpower
 
 [A1N9]
@@ -14447,7 +14102,6 @@ CasterArt=Abilities\Spells\Orc\WarStomp\WarStompCaster.mdl
 Hotkey=T
 Name=Stone Form Stun
 Order=stomp
-Tip=,
 
 [A1NH]
 Animnames=stand
@@ -14486,7 +14140,6 @@ Tip=Unstabl|cffffcc00e|r Concoction - [|cffffcc00Level 1|r],Unstabl|cffffcc00e|r
 Ubertip="Razzil brews up an unstable concoction that he can throw at an enemy hero, to stun and deal damage. Once Razzil starts brewing, he can continue for up to 5 seconds. Each second of brewing will increase the potency of the concoction and make Razzil more red. After the 5 seconds, there is a small buffer window. If Razzil does not throw the concoction soon after it will blow up and Razzil himself will suffer as if he was hit by the concoction. Concoction can blow up mid air if fired too late. Deals up to 150 damage and stuns for up to 1.75 seconds. Can only target heroes. |n|n|cff99ccffCooldown: |r 16","Razzil brews up an unstable concoction that he can throw at an enemy hero, to stun and deal damage. Once Razzil starts brewing, he can continue for up to 5 seconds. Each second of brewing will increase the potency of the concoction and make Razzil more red. After the 5 seconds, there is a small buffer window. If Razzil does not throw the concoction soon after it will blow up and Razzil himself will suffer as if he was hit by the concoction. Concoction can blow up mid air if fired too late. Deals up to 220 damage and stuns for up to 2.5 seconds. Can only target heroes. |n|n|cff99ccffCooldown: |r 16","Razzil brews up an unstable concoction that he can throw at an enemy hero, to stun and deal damage. Once Razzil starts brewing, he can continue for up to 5 seconds. Each second of brewing will increase the potency of the concoction and make Razzil more red. After the 5 seconds, there is a small buffer window. If Razzil does not throw the concoction soon after it will blow up and Razzil himself will suffer as if he was hit by the concoction. Concoction can blow up mid air if fired too late. Deals up to 290 damage and stuns for up to 3.25 seconds. Can only target heroes. |n|n|cff99ccffCooldown: |r 16","Razzil brews up an unstable concoction that he can throw at an enemy hero, to stun and deal damage. Once Razzil starts brewing, he can continue for up to 5 seconds. Each second of brewing will increase the potency of the concoction and make Razzil more red. After the 5 seconds, there is a small buffer window. If Razzil does not throw the concoction soon after it will blow up and Razzil himself will suffer as if he was hit by the concoction. Concoction can blow up mid air if fired too late. Deals up to 360 damage and stuns for up to 4 seconds. Can only target heroes. |n|n|cff99ccffCooldown: |r 16"
 
 [A1NJ]
-Art=,
 Name=Soul Assumption FX Level Final
 TargetArt=Abilities\Spells\Items\OrbDarkness\OrbDarkness.mdl
 Targetattach=hand,right
@@ -14551,7 +14204,6 @@ Tip=Hardened Skin
 Ubertip=Reduces all attacks on the Mountain Giant by 12 damage. Attacks cannot be reduced below 3 damage.
 
 [A1NS]
-Art=,
 Name=Scepter (Huskar)
 TargetArt=Environment\LargeBuildingFire\LargeBuildingFire2.mdl
 Targetattach=left,hand
@@ -14563,7 +14215,6 @@ Art=ReplaceableTextures\CommandButtons\BTNRunedBracers.blp
 Name=Spell Damage Reduction FULL
 
 [A1NW]
-Art=,
 Name=Scepter (Leshrac)
 TargetArt=Abilities\Spells\Undead\ThornyShield\ThornyShieldTargetChestLeft.mdl,Abilities\Spells\Undead\ThornyShield\ThornyShieldTargetChestRight.mdl,Abilities\Spells\Undead\ThornyShield\ThornyShieldTargetChestMountLeft.mdl,Abilities\Spells\Undead\ThornyShield\ThornyShieldTargetChestMountRight.mdl
 Targetattach=chest,left
@@ -14645,7 +14296,6 @@ Tip=Soul Assumption
 Ubertip=Charges: 6
 
 [A1O4]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Santa Hat Small
@@ -14698,25 +14348,21 @@ Tip=E|cffffcc00c|rho Slam - [|cffffcc00Level 1|r],E|cffffcc00c|rho Slam - [|cfff
 Ubertip="Smashes the ground, sending shockwaves to every nearby opponent dealing 200 damage.  Each opponent that is hit will then emit an additional wave to each nearby enemy that will deal a further 40 damage. Echos two times on enemy heroes.  |n|n|cff99ccffCooldown: |r 150 seconds. ","Smashes the ground, sending shockwaves to every nearby opponent dealing 265 damage.  Each opponent that is hit will then emit an additional wave to each nearby enemy that will deal a further 55 damage. Echos two times on enemy heroes.  |n|n|cff99ccffCooldown: |r 130 seconds. ","Smashes the ground, sending shockwaves to every nearby opponent dealing 340 damage.  Each opponent that is hit will then emit an additional wave to each nearby enemy that will deal a further 70 damage. Echos two times on enemy heroes.  |n|n|cff99ccffCooldown: |r 110 seconds. "
 
 [A1OD]
-Art=,
 Name=Scorched Earth Damage - 4
 TargetArt=Abilities\Spells\Other\ImmolationRed\ImmolationRedDamage.mdl
 Targetattach=origin
 
 [A1OE]
-Art=,
 Name=Scorched Earth Damage - 1
 TargetArt=Abilities\Spells\Other\ImmolationRed\ImmolationRedDamage.mdl
 Targetattach=origin
 
 [A1OF]
-Art=,
 Name=Scorched Earth Damage - 2
 TargetArt=Abilities\Spells\Other\ImmolationRed\ImmolationRedDamage.mdl
 Targetattach=origin
 
 [A1OG]
-Art=,
 Name=Scorched Earth Damage - 3
 TargetArt=Abilities\Spells\Other\ImmolationRed\ImmolationRedDamage.mdl
 Targetattach=origin
@@ -14732,7 +14378,6 @@ Researchtip=Learn |cffffcc00U|rnholy Aura - [|cffffcc00Level %d|r]
 Researchubertip="Increases the movement speed and life regeneration rate of nearby friendly units. |n|n|cffffcc00Level 1|r - 10% movement, minor regeneration bonus. |n|cffffcc00Level 2|r - 20% movement, moderate regeneration bonus. |n|cffffcc00Level 3|r - 30% movement, greater regeneration bonus."
 TargetArt=war3mapImported\aura_luci.mdx
 Targetattach=origin
-Tip=,
 
 [A1OJ]
 Art=ReplaceableTextures\PassiveButtons\PASBTNUnholyAura.blp
@@ -14745,7 +14390,6 @@ Researchtip=Learn |cffffcc00U|rnholy Aura - [|cffffcc00Level %d|r]
 Researchubertip="Increases the movement speed and life regeneration rate of nearby friendly units. |n|n|cffffcc00Level 1|r - 10% movement, minor regeneration bonus. |n|cffffcc00Level 2|r - 20% movement, moderate regeneration bonus. |n|cffffcc00Level 3|r - 30% movement, greater regeneration bonus."
 TargetArt=war3mapImported\aura_luci.mdx
 Targetattach=origin
-Tip=,
 
 [A1OK]
 Art=ReplaceableTextures\PassiveButtons\PASBTNUnholyAura.blp
@@ -14758,7 +14402,6 @@ Researchtip=Learn |cffffcc00U|rnholy Aura - [|cffffcc00Level %d|r]
 Researchubertip="Increases the movement speed and life regeneration rate of nearby friendly units. |n|n|cffffcc00Level 1|r - 10% movement, minor regeneration bonus. |n|cffffcc00Level 2|r - 20% movement, moderate regeneration bonus. |n|cffffcc00Level 3|r - 30% movement, greater regeneration bonus."
 TargetArt=war3mapImported\aura_luci.mdx
 Targetattach=origin
-Tip=,
 
 [A1OL]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -15110,7 +14753,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Spells\Other\Cleave\CleaveDamageTarget.mdl
 Specialattach=chest
-Tip=,
 
 [A1PN]
 Art=ReplaceableTextures\PassiveButtons\PASBTNDevotion.blp
@@ -15146,7 +14788,6 @@ Buttonpos=,2
 Name=Capture Point
 
 [A1PS]
-Art=,
 Name=Curse of the Silent
 
 [A1PV]
@@ -15162,7 +14803,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Spells\Other\Cleave\CleaveDamageTarget.mdl
 Specialattach=chest
-Tip=,
 
 [A1PY]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCleavingAttack.blp
@@ -15173,7 +14813,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Spells\Other\Cleave\CleaveDamageTarget.mdl
 Specialattach=chest
-Tip=,
 
 [A1PZ]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCleavingAttack.blp
@@ -15184,7 +14823,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Spells\Other\Cleave\CleaveDamageTarget.mdl
 Specialattach=chest
-Tip=,
 
 [A1Q0]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -15203,7 +14841,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Empower Cleave Container 4
 
 [A1Q5]
-Art=,
 Name=Skewer MS
 
 [A1Q6]
@@ -15223,7 +14860,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A1QA]
 Art=ReplaceableTextures\CommandButtons\BTNHelmutPurple.blp
@@ -15281,7 +14917,6 @@ Art=ReplaceableTextures\CommandButtons\BTNPeriapt1.blp
 Name=HP Bonus System - 8
 
 [A1QL]
-Art=,
 Name=Scepter (Jugg)
 TargetArt=war3mapImported\JuggernautAghanims.mdx
 Targetattach=weapon
@@ -15373,15 +15008,12 @@ Tip=Hardened Skin
 Ubertip=Reduces all attacks to 1 damage.
 
 [A1QZ]
-Art=,
 Name=Swarm - Armor Reduction
 
 [A1R0]
-Art=,
 Name=Death Pact
 
 [A1R3]
-Art=,
 Name=Scepter (Void)
 TargetArt=war3mapImported\FV_Agha_V4.mdx
 Targetattach=left,hand
@@ -15435,7 +15067,6 @@ Tip=|cffffcc00E|rnd Soulsteal
 Ubertip=Ends Soulsteal.
 
 [A1RB]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Marker - No Hook
@@ -15480,7 +15111,6 @@ Tip=Disassem|cffffcc00b|rle
 Ubertip="Disassembles the items in this inventory. (Only works for Perseverance, Mjollnir, Ring of Basilius, Helm of the Dominator, Manta Style, Ethereal Blade, Arcane Boots, Ring of Aquila, Sange and Yasha, Tranquil Boots, Abyssal Blade, and Shiva's Guard)"
 
 [A1RG]
-Art=,
 Name=Puck Effect
 TargetArt=Abilities\Spells\Undead\DevourMagic\DevourMagicBirthMissile.mdl
 Targetattach=hand,left
@@ -15488,7 +15118,6 @@ Targetattach1=hand,right
 Targetattachcount=2
 
 [A1RH]
-Art=,
 Name=Puck Effect
 TargetArt=Abilities\Weapons\ProcMissile\ProcMissile.mdl
 Targetattach=hand,left
@@ -15653,7 +15282,6 @@ Missileart=war3mapImported\TinkerRocketMissile_2.mdx
 MissileHoming=1
 Missilespeed=900
 Name=Rocket Barrage Spray
-Tip=,
 
 [A1SQ]
 Animnames=spell
@@ -15748,7 +15376,6 @@ Hotkey=C
 Name=Eul Cyclone
 Order=channel
 Targetattach=origin
-Tip=,
 
 [A1T8]
 Animnames=spell,slam
@@ -15816,19 +15443,15 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Tether Container - Level 4
 
 [A1TK]
-Art=,
 Name=Tether - MS 3
 
 [A1TL]
-Art=,
 Name=Tether - MS 2
 
 [A1TM]
-Art=,
 Name=Tether - MS 1
 
 [A1TN]
-Art=,
 Name=Tether - MS 4
 
 [A1TO]
@@ -15840,7 +15463,6 @@ Name=Wisp Spirits Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -15850,7 +15472,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Overcharge Container - 4
 
 [A1TQ]
-Art=,
 Name=Overcharge FX
 TargetArt=Abilities\Spells\Human\ManaFlare\ManaFlareMissile.mdl,war3mapImported\WispShellBlue_2.mdx
 Targetattach=hand,left
@@ -15967,7 +15588,6 @@ Buttonpos=1,2
 Hotkey=C
 Name=Staticstorm effect - sent
 Order=cloudoffog
-Tip=,
 
 [A1U5]
 Animnames=stand,channel
@@ -15976,7 +15596,6 @@ Buttonpos=1,2
 Hotkey=C
 Name=Staticstorm effect - scourge
 Order=cloudoffog
-Tip=,
 
 [A1U6]
 Animnames=attack,two
@@ -16008,7 +15627,6 @@ Researchhotkey=C
 Researchtip=Learn C|cffffcc00h|rain Lightning - [|cffffcc00Level %d|r]
 Researchubertip=Hurls a bolt of damaging lightning at a target enemy. |n|n|cffffcc00Level 1|r - 100 damage. |n|cffffcc00Level 2|r - 200 damage. |n|cffffcc00Level 3|r - 300 damage.
 TargetArt=Abilities\Weapons\Bolt\BoltImpact.mdl
-Tip=,
 
 [A1UH]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -16022,13 +15640,11 @@ Name=Walrus Punch Container - 2
 Art=ReplaceableTextures\PassiveButtons\PASBTNCriticalStrike.blp
 Buttonpos=2,2
 Name=Walrus Critical 1
-Tip=,
 
 [A1UM]
 Art=ReplaceableTextures\PassiveButtons\PASBTNCriticalStrike.blp
 Buttonpos=2,2
 Name=Walrus Critical 2
-Tip=,
 
 [A1UP]
 Animnames=spell,throw
@@ -16041,7 +15657,6 @@ Name=Walrus Punch Stun 2
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A1US]
 Art=ReplaceableTextures\CommandButtons\BTNHumanMissileUpThree.blp
@@ -16096,14 +15711,12 @@ Tip=Rifle Upgrade - [|cffffcc00Level 1|r]
 Ubertip="Decreases the mana cost on Undermine by 10 and decreases its casting time by .67 seconds; Grants 3 bonus damage on successful Headshots, and adds 10 damage to Assassinate."
 
 [A1UX]
-Art=,
 Name=Scepter (Razor)
 TargetArt=war3mapImported\Razor_Aghanim_14.mdx
 Targetattach=weapon
 Targetattachcount=1
 
 [A1UY]
-Art=,
 Name=Scepter (Warlock)
 TargetArt=war3mapImported\Warlock_Aghanim.mdx
 Targetattach=weapon
@@ -16149,7 +15762,6 @@ Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
 Name=Item Damage Bonus (+81)
 
 [A1V3]
-Art=,
 Name=Scepter (VS)
 TargetArt=war3mapImported\Vengeful_Aghanims_9.mdx
 Targetattach=hand,right
@@ -16165,7 +15777,6 @@ Order=blink
 SpecialArt=Abilities\Spells\NightElf\Blink\BlinkCaster.mdl
 
 [A1V5]
-Art=,
 Name=Scepter (Witch Doctor)
 TargetArt=war3mapImported\Witchdoctor_Aghanims.mdx
 Targetattach=weapon
@@ -16210,7 +15821,6 @@ Tip=Poison Sting - [|cffffcc00Level 1|r]
 Ubertip=Deals 5 poison damage per second for 7 seconds and slows speed slightly.  Does not stack.|n|n|cff99ccffBuff placers do not stack|r
 
 [A1V9]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Axe Aghanim Effect
@@ -16220,7 +15830,6 @@ Targetattach1=weapon
 Targetattachcount=2
 
 [A1VA]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Balanar Aghanim Effect
@@ -16230,7 +15839,6 @@ Targetattach1=right,hand
 Targetattachcount=2
 
 [A1VB]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Butcher Aghanim Effect
@@ -16242,7 +15850,6 @@ Targetattach3=weapon
 Targetattachcount=4
 
 [A1VC]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Earthshaker Aghanim Effect
@@ -16253,7 +15860,6 @@ Targetattach2=weapon
 Targetattachcount=3
 
 [A1VD]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=SandKing Aghanim Effect
@@ -16264,7 +15870,6 @@ Targetattach2=right,hand
 Targetattachcount=3
 
 [A1VE]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Spiritbreaker Aghanim Effect
@@ -16274,7 +15879,6 @@ Targetattach1=chest
 Targetattachcount=2
 
 [A1VF]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Twin Head Dragon Aghanim Effect
@@ -16326,7 +15930,6 @@ Art=ReplaceableTextures\CommandButtons\BTNGlove.blp
 Name=Item Attack Speed 35%
 
 [A1VQ]
-Art=,
 Name=Item Mana Bonus +250
 
 [A1VR]
@@ -16392,7 +15995,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Aghanim's Scepter (Obsidian Destroyer)
 
 [A1VZ]
-Art=,
 Name=Scepter (Destroyer)
 TargetArt=war3mapImported\ObsidianDestroyer_Aghanims.mdx
 Targetattach=weapon
@@ -16407,7 +16009,6 @@ Researchbuttonpos=2
 Researchhotkey=C
 SpecialArt=Abilities\Spells\Other\Cleave\CleaveDamageTarget.mdl
 Specialattach=chest
-Tip=,
 
 [A1W1]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -16543,7 +16144,6 @@ Tip=|cffffcc00F|rocused Detonate - [|cffffcc00Level 1|r]
 Ubertip=Detonates all remote mines in 700 aoe around target area.
 
 [A1WG]
-Art=,
 Name=Permanent Invisibility (hawk)
 
 [A1WH]
@@ -16593,10 +16193,8 @@ Name=Greater Bash Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A1X2]
-Art=,
 Name=Scepter (Enchantress 2)
 TargetArt=war3mapImported\EnchantressAghanims08.mdx
 Targetattach=hand,left
@@ -16608,163 +16206,123 @@ Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
 Name=Item Damage Bonus (+88)
 
 [A1X4]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 3
 
 [A1X5]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 4
 
 [A1X6]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 5
 
 [A1X7]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 6
 
 [A1X8]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 8
 
 [A1X9]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 9
 
 [A1XA]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 7
 
 [A1XB]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 2
 
 [A1XC]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 1
 
 [A1XD]
-Art=,
 Name=Sticky Napalm Slow - Level 1 - Stack 10
 
 [A1XE]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 2
 
 [A1XF]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 3
 
 [A1XG]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 4
 
 [A1XH]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 5
 
 [A1XI]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 6
 
 [A1XJ]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 7
 
 [A1XK]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 8
 
 [A1XL]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 10
 
 [A1XM]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 1
 
 [A1XN]
-Art=,
 Name=Sticky Napalm Slow - Level 2 - Stack 9
 
 [A1XO]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 1
 
 [A1XP]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 10
 
 [A1XQ]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 4
 
 [A1XR]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 5
 
 [A1XS]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 6
 
 [A1XT]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 8
 
 [A1XU]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 9
 
 [A1XV]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 2
 
 [A1XW]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 3
 
 [A1XX]
-Art=,
 Name=Sticky Napalm Slow - Level 3 - Stack 7
 
 [A1XY]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 1
 
 [A1XZ]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 2
 
 [A1Y0]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 10
 
 [A1Y1]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 6
 
 [A1Y2]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 7
 
 [A1Y3]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 8
 
 [A1Y4]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 9
 
 [A1Y5]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 3
 
 [A1Y6]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 4
 
 [A1Y7]
-Art=,
 Name=Sticky Napalm Slow - Level 4 - Stack 5
 
 [A1Y8]
@@ -16805,7 +16363,6 @@ Art=ReplaceableTextures\CommandButtons\BTNStaffOfNegation.blp
 Name=Item Int Bonus
 
 [A1YM]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Santa Hat Large
@@ -16980,19 +16537,15 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Sun Ray Maim - 1
 
 [A1Z5]
-Art=,
 Name=Sun Ray MS - 4
 
 [A1Z6]
-Art=,
 Name=Sun Ray MS - 3
 
 [A1Z7]
-Art=,
 Name=Sun Ray MS - 2
 
 [A1Z8]
-Art=,
 Name=Sun Ray MS - 1
 
 [A1Z9]
@@ -17051,11 +16604,9 @@ Tip=Shadow |cffffcc00W|rord - [|cffffcc00Level 1|r]
 Ubertip="Casts a basic life-force magic on a unit.  If that unit is friendly, Shadow Word heals it for 10 hit points per second.  Otherwise, that unit loses 9 hit points per second.|nLasts 8 seconds."
 
 [A1ZJ]
-Art=,
 Name=Item Armor Bonus
 
 [A1ZK]
-Art=,
 Name=Item Armor Bonus
 
 [A1ZL]
@@ -17107,7 +16658,6 @@ Tip=Poison Sting - [|cffffcc00Level 1|r]
 Ubertip=Deals 5 poison damage per second for 7 seconds and slows speed slightly.  Does not stack.|n|n|cff99ccffBuff placers do not stack|r
 
 [A1ZP]
-Art=,
 Name=Permanent Invisibility Poison Treants
 
 [A1ZQ]
@@ -17126,7 +16676,6 @@ CasterArt=Abilities\Spells\Orc\WarStomp\WarStompCaster.mdl
 Hotkey=T
 Name=Supernova Stun
 Order=stomp
-Tip=,
 
 [A1ZU]
 Art=ReplaceableTextures\CommandButtons\BTNHelmutPurple.blp
@@ -17150,14 +16699,12 @@ Art=ReplaceableTextures\CommandButtons\BTNGhostBlade.blp
 Name=Ancient Jangoo Bonus
 
 [A1ZZ]
-Art=,
 Name=Ancient Jangoo FX
 TargetArt=Abilities\Spells\Items\AIsp\SpeedTarget.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A203]
-Art=,
 Name=Walrus Punch
 
 [A204]
@@ -17203,11 +16750,9 @@ Researchbuttonpos=3
 Researchhotkey=E
 Researchtip=Learn P|cffffcc00e|rrmanent Invisibility - [|cffffcc00Level %d|r]
 Researchubertip=Rikimaru becomes permanently invisible when not attacking.|n|n|cffffcc00Level 1|r - 3 second fade time.|n|cffffcc00Level 2|r - 2.25 second fade time.  |n|cffffcc00Level 3|r - 1.5 second fade time.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRikiINV.blp
 
 [A20M]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Furion Aghanim Effect
@@ -17231,7 +16776,6 @@ Tip=Icarus |cffffcc00D|rive - [|cffffcc00Level 1|r]
 Ubertip=End the current dive.
 
 [A20O]
-Art=,
 Name=Smoke of Deceit MS
 
 [A20Q]
@@ -17253,26 +16797,21 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Smoke of Deceit Container
 
 [A20V]
-Art=,
 Name=Scepter (Chen)
 TargetArt=war3mapImported\Aghanims_Chen_1.mdx
 Targetattach=weapon
 Targetattachcount=1
 
 [A20W]
-Art=,
 Name=Thirst MS - 1
 
 [A20X]
-Art=,
 Name=Thirst MS - 3
 
 [A20Y]
-Art=,
 Name=Thirst MS - 4
 
 [A20Z]
-Art=,
 Name=Thirst MS - 2
 
 [A210]
@@ -17292,7 +16831,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Thirst Book 4
 
 [A214]
-Art=,
 Name=Thirst FX
 TargetArt=Abilities\Spells\Orc\TrollBerserk\HeadhunterWEAPONSLeft.mdl
 Targetattach=overhead
@@ -17355,11 +16893,9 @@ Tip=Deactivate Pulse No|cffffcc00v|ra
 Ubertip=Deactivate Pulse Nova to stop draining mana.
 
 [A21I]
-Art=,
 Name=Shallow Grave
 
 [A21K]
-Art=,
 Buttonpos=,2
 Name=Detector
 
@@ -17374,7 +16910,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn Whirling Ax|cffffcc00e|rs - [|cffffcc00Level %d|r]
 Researchubertip="Troll is a master of the axe, learning axe skills in all forms of combat. When in melee form, summons magical axes to whirl around him in a circle, damaging enemies and causing them to have a 60% chance to miss attacks. When in ranged form, Troll hurls a fistful of axes in cone formation. Enemy units hit by the axes are slowed by 30% and take 75 damage. |n|n|cffffcc00Level 1|r - 125 melee damage and 4 seconds miss. 3 second slow. |n|cffffcc00Level 2|r - 175 melee damage and 5 seconds miss. 3.75 second slow.|n|cffffcc00Level 3|r - 225 melee damage and 6 seconds miss. 4.5 second slow.|n|cffffcc00Level 4|r - 275 melee damage and 7 seconds miss. 5.25 second slow. |n|n|cff99ccffMelee Cooldown: |r 12 |n|cff99ccffRanged Cooldown: |r 20 |n|cff99ccffManacost: |r 50 "
-Tip=,
 
 [A21M]
 Animnames=spell
@@ -17419,7 +16954,6 @@ Researchbuttonpos=1
 Researchhotkey=D
 Researchtip=Learn Blin|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="A searing light blinds the vision of a target enemy unit, making it miss on some attacks.|nLasts 15 seconds.|n|n|cffffcc00Level 1|r - Misses on 20% of attacks.|n|cffffcc00Level 2|r - Misses on 28% of attacks.  |n|cffffcc00Level 3|r - Misses on 36% of attacks.|n|cffffcc00Level 4|r - Misses on 44% of attacks. |n|n|cff99ccffCooldown: |r 15/12/9/6"
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNWhirlingAxesMelee.blp
 UnButtonpos=1,2
 Unhotkey=D
@@ -17433,7 +16967,6 @@ Name=Whirling Axes Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -17482,7 +17015,6 @@ Name=Fire Spirits Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -17557,14 +17089,12 @@ Unart=ReplaceableTextures\CommandButtons\BTNSorceressMaster.blp
 Unhotkey=R
 
 [A21Z]
-Art=,
 Name=Scepter (Dark Seer)
 TargetArt=war3mapImported\DarkSeerAghanims_V2_2.mdx
 Targetattach=chest
 Targetattachcount=1
 
 [A220]
-Art=,
 Name=Scepter (Clockwerk)
 TargetArt=war3mapImported\ClockwerkAgha.mdx
 Targetattach=hand,right
@@ -17621,7 +17151,6 @@ Buttonpos=3,2
 Hotkey=F
 Name=Flak Cannon In
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
@@ -17633,14 +17162,12 @@ Buttonpos=3,2
 Hotkey=F
 Name=Flak Cannon Out
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
 Unorder=unbearform
 
 [A22C]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17649,7 +17176,6 @@ Targetattach=sprite,first
 Targetattachcount=1
 
 [A22D]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17658,7 +17184,6 @@ Targetattach=sprite,second
 Targetattachcount=1
 
 [A22E]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17667,7 +17192,6 @@ Targetattach=sprite,third
 Targetattachcount=1
 
 [A22F]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17676,7 +17200,6 @@ Targetattach=sprite,first
 Targetattachcount=1
 
 [A22G]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17685,7 +17208,6 @@ Targetattach=sprite,second
 Targetattachcount=1
 
 [A22H]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17694,7 +17216,6 @@ Targetattach=sprite,third
 Targetattachcount=1
 
 [A22I]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17703,7 +17224,6 @@ Targetattach=sprite,first
 Targetattachcount=1
 
 [A22J]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17712,7 +17232,6 @@ Targetattach=sprite,second
 Targetattachcount=1
 
 [A22K]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Sphere upgrade
@@ -17721,7 +17240,6 @@ Targetattach=sprite,third
 Targetattachcount=1
 
 [A22L]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Morph Agi FX
@@ -17730,7 +17248,6 @@ Targetattach=origin
 Targetattachcount=1
 
 [A22T]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Morph Str FX
@@ -17739,49 +17256,42 @@ Targetattach=origin
 Targetattachcount=1
 
 [A22U]
-Art=,
 Name=Ice Wall MS - 4
 TargetArt=Abilities\Spells\Undead\FreezingBreath\FreezingBreathTargetArt.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A22V]
-Art=,
 Name=Ice Wall MS - 5
 TargetArt=Abilities\Spells\Undead\FreezingBreath\FreezingBreathTargetArt.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A22W]
-Art=,
 Name=Ice Wall MS - 6
 TargetArt=Abilities\Spells\Undead\FreezingBreath\FreezingBreathTargetArt.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A22X]
-Art=,
 Name=Ice Wall MS - 7
 TargetArt=Abilities\Spells\Undead\FreezingBreath\FreezingBreathTargetArt.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A22Y]
-Art=,
 Name=Ice Wall MS - 3
 TargetArt=Abilities\Spells\Undead\FreezingBreath\FreezingBreathTargetArt.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A22Z]
-Art=,
 Name=Ice Wall MS - 2
 TargetArt=Abilities\Spells\Undead\FreezingBreath\FreezingBreathTargetArt.mdl
 Targetattach=origin
 Targetattachcount=1
 
 [A230]
-Art=,
 Name=Ice Wall MS - 1
 TargetArt=Abilities\Spells\Undead\FreezingBreath\FreezingBreathTargetArt.mdl
 Targetattach=origin
@@ -17836,7 +17346,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Aghanim's Scepter (Gyrocopter)
 
 [A23E]
-Art=,
 Name=Scepter (Gyrocopter)
 TargetArt=war3mapImported\GyroAghanims_3.mdx
 Targetattach=right,hand
@@ -17860,31 +17369,24 @@ Tip=Wither - [|cffffcc00Level 1|r],Wither - [|cffffcc00Level 2|r],Wither - [|cff
 Ubertip=description.
 
 [A23H]
-Art=,
 Name=Wither Armor - 1
 
 [A23I]
-Art=,
 Name=Wither Armor - 16
 
 [A23J]
-Art=,
 Name=Wither Armor - 8
 
 [A23K]
-Art=,
 Name=Wither Armor - 2
 
 [A23L]
-Art=,
 Name=Wither Armor - 4
 
 [A23M]
-Art=,
 Name=Wither Armor - 32
 
 [A23N]
-Art=,
 Name=Nature's Guise - MS
 
 [A23O]
@@ -17892,23 +17394,18 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Nature's Guise Spell Book
 
 [A23P]
-Art=,
 Name=Corrosive Skin - 2
 
 [A23Q]
-Art=,
 Name=Corrosive Skin - 3
 
 [A23R]
-Art=,
 Name=Corrosive Skin - 4
 
 [A23S]
-Art=,
 Name=Corrosive Skin - 1
 
 [A23T]
-Art=,
 Name=Corrosive Skin FX
 TargetArt=Abilities\Weapons\PoisonSting\PoisonStingTarget.mdl
 Targetattach=chest
@@ -17931,26 +17428,21 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Corrosive Skin Container - Level 4
 
 [A23Z]
-Art=,
 Name=Water Spray FX
 TargetArt=war3mapImported\WaterBreathDamage.mdx
 Targetattach=origin
 Targetattachcount=1
 
 [A240]
-Art=,
 Name=Water Spray Armor - 1
 
 [A241]
-Art=,
 Name=Water Spray Armor - 2
 
 [A242]
-Art=,
 Name=Water Spray Armor - 3
 
 [A243]
-Art=,
 Name=Water Spray Armor - 4
 
 [A244]
@@ -18028,7 +17520,6 @@ Art=ReplaceableTextures\CommandButtons\BTNRunedBracers.blp
 Name=Fortify Spell Damage Reduction
 
 [A24G]
-Art=,
 Name=Spiritbash - MS
 
 [A24H]
@@ -18050,7 +17541,6 @@ Tip=|cffffcc00C|ronjure Image - [|cffffcc00Level 1|r],|cffffcc00C|ronjure Image 
 Ubertip=Creates a copy of Terrorblade which deals 25% damage.  The images take 300% damage.|nLasts 30 seconds.,Creates a copy of Terrorblade which deals 35% damage.  The images take 300% damage.|nLasts 30 seconds.,Creates a copy of Terrorblade which deals 45% damage.  The images take 300% damage.|nLasts 30 seconds.,Creates a copy of Terrorblade which deals 55% damage.  The images take 300% damage.|nLasts 30 seconds.
 
 [A24L]
-Art=,
 Name=Charge of Darkness
 
 [A24P]
@@ -18074,27 +17564,21 @@ Tip=Demonic |cffffcc00C|rlutch - [|cffffcc00Level 1|r],Demonic |cffffcc00C|rlutc
 Ubertip=Text. |n|n|cff99ccffCooldown: |r 14
 
 [A24R]
-Art=,
 Name=Sentinel - MS
 
 [A24S]
-Art=,
 Name=Demonic Clutch MS - 5
 
 [A24T]
-Art=,
 Name=Demonic Clutch MS - 1
 
 [A24U]
-Art=,
 Name=Demonic Clutch MS - 4
 
 [A24V]
-Art=,
 Name=Demonic Clutch MS - 3
 
 [A24W]
-Art=,
 Name=Demonic Clutch MS - 2
 
 [A24X]
@@ -18121,7 +17605,6 @@ Name=Demonic Clutch Container 4
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_06.blp
 Buttonpos=2,1
 Name=Corpse Collector - 6
-Tip=,
 
 [A257]
 Art=ReplaceableTextures\CommandButtons\BTNRingSkull.blp
@@ -18229,14 +17712,11 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFire.blp
 Researchhotkey=Z
 Researchtip=Learn Firestorm [|cff99ccffZ|r] - |cffffcc00Level %d|r
 Researchubertip="Calls down 6 waves of fire that damage all units  in an area. Each wave deals initial damage and then burns enemies for 2 seconds. Deals 50% damage to structures. |n|n|cffffcc00Level 1|r - 25 wave damage, 5 dps |n|cffffcc00Level 2|r - 40 wave damage, 10 dps |n|cffffcc00Level 3|r - 55 wave damage, 15 dps|n|cffffcc00Level 4|r - 70 wave damage, 20 dps |n|n|cff99ccffCooldown: |r 12 |n|cff99ccffManacost: |r 100 "
-Tip=,
 
 [A263]
-Art=,
 Name=Sange and Yasha - Slow
 
 [A264]
-Art=,
 Name=Sange - Slow
 
 [A265]
@@ -18260,23 +17740,19 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A26A]
-Art=,
 Name=Gem Visual Real
 TargetArt=Abilities\Spells\Human\MagicSentry\MagicSentryCaster.mdl
 Targetattach=overhead
 Targetattachcount=1
 
 [A26B]
-Art=,
 Name=Gem Visual Fake
 Targetattach=overhead
 Targetattachcount=1
 
 [A26C]
-Art=,
 Name=Sange Visual Effect
 TargetArt=Objects\Spawnmodels\Human\HumanBlood\HumanBloodKnight.mdl
 Targetattach=chest
@@ -18286,61 +17762,51 @@ Targetattachcount=1
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_10.blp
 Buttonpos=2,1
 Name=Corpse Collector - 10
-Tip=,
 
 [A26E]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_05.blp
 Buttonpos=2,1
 Name=Corpse Collector - 5
-Tip=,
 
 [A26F]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_04.blp
 Buttonpos=2,1
 Name=Corpse Collector - 4
-Tip=,
 
 [A26G]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_02.blp
 Buttonpos=2,1
 Name=Corpse Collector - 2
-Tip=,
 
 [A26H]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_03.blp
 Buttonpos=2,1
 Name=Corpse Collector - 3
-Tip=,
 
 [A26I]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_07.blp
 Buttonpos=2,1
 Name=Corpse Collector - 7
-Tip=,
 
 [A26J]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_08.blp
 Buttonpos=2,1
 Name=Corpse Collector - 8
-Tip=,
 
 [A26K]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_09.blp
 Buttonpos=2,1
 Name=Corpse Collector - 9
-Tip=,
 
 [A26L]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_01.blp
 Buttonpos=2,1
 Name=Corpse Collector - 1
-Tip=,
 
 [A26M]
 Art=ReplaceableTextures\CommandButtons\BTNPitlordCorpses_00.blp
 Buttonpos=2,1
 Name=Corpse Collector - 0
-Tip=,
 
 [A26N]
 Animnames=spell
@@ -18359,11 +17825,9 @@ Tip=L|cffffcc00e|rech Seed - [|cffffcc00Level 1|r],L|cffffcc00e|rech Seed - [|cf
 Ubertip="Rooftrellen plants a life-sapping seed in his enemy, causing it to be slowed by 28% and have its life force drained over the next 3 seconds. Nearby allied units are healed by the same amount. Pulses 4 times. 30 HP per pulse. |n|n|cff99ccffCooldown: |r 16","Rooftrellen plants a life-sapping seed in his enemy, causing it to be slowed by 28% and have its life force drained over the next 3 seconds. Nearby allied units are healed by the same amount. Pulses 4 times. 45 HP per pulse. |n|n|cff99ccffCooldown: |r 14","Rooftrellen plants a life-sapping seed in his enemy, causing it to be slowed by 28% and have its life force drained over the next 3 seconds. Nearby allied units are healed by the same amount. Pulses 4 times. 60 HP per pulse. |n|n|cff99ccffCooldown: |r 12","Rooftrellen plants a life-sapping seed in his enemy, causing it to be slowed by 28% and have its life force drained over the next 3 seconds. Nearby allied units are healed by the same amount. Pulses 4 times. 75 HP per pulse. |n|n|cff99ccffCooldown: |r 10"
 
 [A26T]
-Art=,
 Name=Soulsteal - MS 4
 
 [A26U]
-Art=,
 Name=Soul Steal FX
 TargetArt=war3mapImported\UnholyPresence.mdx
 Targetattach=overhead
@@ -18374,7 +17838,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Soulsteal Container - Level 4
 
 [A26Z]
-Art=,
 Name=Crippling Wave - MS
 
 [A270]
@@ -18397,7 +17860,6 @@ Tip=Sweeping |cffffcc00F|rlame - [|cffffcc00Level 1|r],Sweeping |cffffcc00F|rlam
 Ubertip=text. |n|n|cff99ccffCooldown: |r 13
 
 [A272]
-Art=,
 Name=Leech Seed - MS
 
 [A273]
@@ -18417,7 +17879,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNThunderclap.blp
 Researchhotkey=C
 Researchtip=Learn Thunder |cffffcc00C|rlap - [|cffffcc00Level %d|r]
 Researchubertip="Slams the ground, dealing damage and slowing the movement speed and attack rate of nearby enemy land units. |n|n|cffffcc00Level 1|r - 100 damage, 25% movement and attack speed reductions.|n|cffffcc00Level 2|r - 175 damage, 35% movement and attack speed reductions.|n|cffffcc00Level 3|r - 250 damage, 45% movement and attack speed reductions.  |n|cffffcc00Level 4|r - 300 damage, 55% movement and attack speed reductions.   |n|n|cff99ccffCooldown: |r 12 seconds."
-Tip=,
 UnButtonpos=1,1
 
 [A275]
@@ -18545,20 +18006,17 @@ Ubertip="Rubick studies the trace magical essence of one enemy hero, learning th
 Art=ReplaceableTextures\CommandButtons\BTNNothing.blp
 Buttonpos=,2
 Name=Spell Steal Dummy Ability 1
-Tip=,
 
 [A27J]
 Art=ReplaceableTextures\CommandButtons\BTNNothing.blp
 Buttonpos=2,2
 Name=Spell Steal Dummy Ability 3
-Tip=,
 UnButtonpos=2
 
 [A27K]
 Art=ReplaceableTextures\CommandButtons\BTNNothing.blp
 Buttonpos=1,2
 Name=Spell Steal Dummy Ability 2
-Tip=,
 UnButtonpos=1
 
 [A27M]
@@ -18649,10 +18107,8 @@ Name=Telekinesis Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A283]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Expulsion Aura Art
@@ -18778,7 +18234,6 @@ Art=ReplaceableTextures\CommandButtons\BTNGhostBlade.blp
 Name=Veil of Discord Icon
 
 [A28H]
-Art=,
 Name=Veil of Discord FX
 TargetArt=war3mapImported\ShadowBuff_5.mdx
 Targetattach=chest
@@ -18927,7 +18382,6 @@ Order=acidbomb
 ResearchArt=ReplaceableTextures\CommandButtons\BTNGoldGloves.BLP
 Researchbuttonpos=2
 Researchhotkey=B
-Tip=,
 
 [A28Z]
 Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
@@ -18946,19 +18400,15 @@ Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
 Name=Fade Bolt Damage Creeps - 3
 
 [A294]
-Art=,
 Name=Timewalk Slow - 1
 
 [A295]
-Art=,
 Name=Timewalk Slow - 2
 
 [A296]
-Art=,
 Name=Timewalk Slow - 3
 
 [A297]
-Art=,
 Name=Timewalk Slow - 4
 
 [A298]
@@ -18978,11 +18428,9 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Timewalk Container - 3
 
 [A29C]
-Art=,
 Name=Permanent Invisibility
 
 [A29E]
-Art=,
 Name=Beastmaster Aghanim Effect
 TargetArt=war3mapImported\BeastmasterAghanims_Left.mdx,war3mapImported\BeastmasterAghanims_Right.mdx
 Targetattach=left,hand
@@ -19096,7 +18544,6 @@ Researchbuttonpos=3
 Researchhotkey=R
 Researchtip=Learn |cffffcc00R|reincarnation - [|cffffcc00Level %d|r]
 Researchubertip=When killed the Skeleton King will come back to life and slow enemies in a 700 aoe by 30% for 3 seconds.  |n|n|cffffcc00Level 1|r - 300 second cooldown. |n|cffffcc00Level 2|r - 220 second cooldown.|n|cffffcc00Level 3|r - 140 second cooldown. |n|n|cff99ccffManacost: |r 140
-Tip=,
 
 [A29N]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -19138,7 +18585,6 @@ Name=Thirst Vision
 Order=faeriefire
 Orderoff=faeriefireoff
 Orderon=faeriefireon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNFaerieFireOff.blp
 UnButtonpos=,2
 Unhotkey=R
@@ -19153,7 +18599,6 @@ Researchbuttonpos=1
 Researchhotkey=T
 Researchtip=Learn Dragon |cffffcc00T|rail - [|cffffcc00Level %d|r]
 Researchubertip="Knight Davion bashes a melee-range enemy target with the fury of a dragon's tail swipe.  Stuns the target and deals minor damage. |n|n|cffffcc00Level 1|r - Deals 25 damage, stuns for 2.5 seconds. |n|cffffcc00Level 2|r - Deals 50 damage, stuns for 2.75 seconds. |n|cffffcc00Level 3|r - Deals 75 damage, stuns for 3 seconds. |n|cffffcc00Level 4|r - Deals 100 damage, stuns for 3.25 seconds. |n|n|cff99ccffCooldown: |r 9 seconds."
-Tip=,
 
 [A2AJ]
 Art=ReplaceableTextures\CommandButtons\BTNGhostBlade.blp
@@ -19264,67 +18709,51 @@ Tip=|cffffcc00D|ruel - [|cffffcc00Level 1|r],|cffffcc00D|ruel - [|cffffcc00Level
 Ubertip=Calls the targeted enemy for a duel. Both you and the enemy will be forced to attack each other for 4 seconds and will both be unable to use items or abilities. The victor gains 10 permanent bonus damage. |n|n|cff99ccffCooldown: |r 50,Calls the targeted enemy for a duel. Both you and the enemy will be forced to attack each other for 4.75 seconds and will both be unable to use items or abilities. The victor gains 14 permanent bonus damage. |n|n|cff99ccffCooldown: |r 50,Calls the targeted enemy for a duel. Both you and the enemy will be forced to attack each other for 5.5 seconds and will both be unable to use items or abilities. The victor gains 18 permanent bonus damage. |n|n|cff99ccffCooldown: |r 50
 
 [A2CJ]
-Art=,
 Name=Reactive Armor Bonus - 15
 
 [A2CK]
-Art=,
 Name=Reactive Armor Bonus - 13
 
 [A2CL]
-Art=,
 Name=Reactive Armor Bonus - 7
 
 [A2CM]
-Art=,
 Name=Reactive Armor Bonus - 12
 
 [A2CN]
-Art=,
 Name=Reactive Armor Bonus - 14
 
 [A2CO]
-Art=,
 Name=Reactive Armor Bonus - 11
 
 [A2CP]
-Art=,
 Name=Reactive Armor Bonus - 10
 
 [A2CQ]
-Art=,
 Name=Reactive Armor Bonus - 5
 
 [A2CR]
-Art=,
 Name=Reactive Armor Bonus - 6
 
 [A2CS]
-Art=,
 Name=Reactive Armor Bonus - 8
 
 [A2CT]
-Art=,
 Name=Reactive Armor Bonus - 16
 
 [A2CU]
-Art=,
 Name=Reactive Armor Bonus - 9
 
 [A2CV]
-Art=,
 Name=Reactive Armor Bonus - 3
 
 [A2CW]
-Art=,
 Name=Reactive Armor Bonus - 1
 
 [A2CX]
-Art=,
 Name=Reactive Armor Bonus - 2
 
 [A2CY]
-Art=,
 Name=Reactive Armor Bonus - 4
 
 [A2CZ]
@@ -19525,7 +18954,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNConjure.blp
 Researchbuttonpos=1
 Researchhotkey=C
 TargetArt=Abilities\Spells\NightElf\ManaBurn\ManaBurnTarget.mdl
-Tip=,
 
 [A2E9]
 Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
@@ -19601,7 +19029,6 @@ Untip=Return |cffffcc00C|rhakram
 Unubertip=Return Chakram
 
 [A2G4]
-Art=,
 Name=Reactive Armor FX
 TargetArt=war3mapImported\ReactiveArmor.mdx
 Targetattach=chest
@@ -19694,7 +19121,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Moment of Courage Container - 3
 
 [A2GG]
-Art=,
 Name=Moment of Courage FX
 TargetArt=Abilities\Spells\Orc\Bloodlust\BloodlustTarget.mdl
 Targetattach=weapon
@@ -19763,7 +19189,6 @@ Buttonpos=3,2
 Hotkey=F
 Name=Slight of Fist In
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
@@ -19775,7 +19200,6 @@ Buttonpos=3,2
 Hotkey=F
 Name=Slight of Fist Out
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
@@ -19810,7 +19234,6 @@ Order=ensnare
 ResearchArt=ReplaceableTextures\CommandButtons\BTNEnsnare.blp
 Researchbuttonpos=1
 Researchhotkey=E
-Tip=,
 
 [A2H5]
 Art=ReplaceableTextures\CommandButtons\BTNWallOfFire.blp
@@ -19821,7 +19244,6 @@ Order=antimagicshell
 ResearchArt=ReplaceableTextures\CommandButtons\BTNWallOfFire.blp
 Researchbuttonpos=2
 Researchhotkey=E
-Tip=,
 
 [A2H6]
 Art=ReplaceableTextures\CommandButtons\BTNGhostBlade.blp
@@ -19930,7 +19352,6 @@ Order=drunkenhaze
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStrongDrink.blp
 Researchbuttonpos=1
 Researchhotkey=D
-Tip=,
 
 [A2HQ]
 Animnames=spell,channel
@@ -20105,7 +19526,6 @@ Name=Concussive Shot Slow NEW
 Order=thunderclap
 ResearchArt=ReplaceableTextures\CommandButtons\BTNThunderClapPanda.blp
 Researchhotkey=C
-Tip=,
 
 [A2IV]
 Art=ReplaceableTextures\CommandButtons\BTNClawsOfAttack.blp
@@ -20254,7 +19674,6 @@ Name=Cleanse MS Bonus
 Order=bloodlust
 Orderoff=bloodlustoff
 Orderon=bloodluston
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDisenchant.blp
 UnButtonpos=2,2
 Unhotkey=B
@@ -20294,7 +19713,6 @@ Researchbuttonpos=3
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|rire Remnant - [|cffffcc00Level %d|r]
 Researchubertip="Xin charges himself with the energy to create a Fire Remnant every 35 seconds, with a max of 3 charges. Releasing a charge, sends a Fire Remnant that runs to the targeted point at 2.5X your speed. Xin can use his secondary ability to dash out to each remnant's location, detonating them for AoE damage, and arriving at the one he targeted last. Remnants last 45 seconds or until you fuse with them. The remnant placing ability is limited by charges and not cooldown or manacost.  |n|n|cffffcc00Level 1|r - 100 Damage. |n|cffffcc00Level 2|r - 150 Damage. |n|cffffcc00Level 3|r - 200 Damage. |n|n|cff99ccffActivate Cooldown: |r 0 |n|cff99ccffActivate Manacost: |r 150"
-Tip=,
 
 [A2JL]
 Art=ReplaceableTextures\CommandButtons\BTNFireRemnantTarget.blp
@@ -20395,7 +19813,6 @@ Name=Crippling Staff Slow
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNSlowOff.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -20432,7 +19849,6 @@ Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchbuttonpos=2
 Researchhotkey=T
-Tip=,
 
 [A2K8]
 Art=ReplaceableTextures\CommandButtons\BTNSpiritWalkerMasterTraining.blp
@@ -20483,7 +19899,6 @@ Untip=Night Elf |cffffcc00F|rorm
 Unubertip=Transforms the Druid into a Night Elf.
 
 [A2KD]
-Art=,
 Name=Culling Blade Haste FX
 TargetArt=war3mapImported\AxeUltiMSBuff.mdx
 Targetattach=overhead
@@ -20510,7 +19925,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNFanOfKnives.blp
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|ran of Knives - [|cffffcc00Level %d|r]
 Researchubertip="The Warden hurls a flurry of knives, damaging nearby enemies. |n|n|cffffcc00Level 1|r - 125 damage per target. |n|cffffcc00Level 2|r - 200 damage per target. |n|cffffcc00Level 3|r - 275 damage per target."
-Tip=,
 
 [A2KH]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -20521,7 +19935,6 @@ Art=ReplaceableTextures\CommandButtons\BTNStaffOfNegation.blp
 Name=Item Int Bonus
 
 [A2KJ]
-Art=,
 Name=Santa Hat FIXED for heroes
 Targetattach=head
 Targetattachcount=1
@@ -20554,7 +19967,6 @@ Tip=Spike|cffffcc00d|r Carapace - [|cffffcc00Level 1|r],Spike|cffffcc00d|r Carap
 Ubertip="Temporarily enhances the Assassin's chitinous armor with organic barbs, causing him to prevent and reflect one damage instance from each unit, reflecting that damage and stunning the target for 0.6 seconds. Lasts 2.25 seconds.  |n|n|cff99ccffCooldown: |r 23","Temporarily enhances the Assassin's chitinous armor with organic barbs, causing him to prevent and reflect one damage instance from each unit, reflecting that damage and stunning the target for 1.2 seconds. Lasts 2.25 seconds.  |n|n|cff99ccffCooldown: |r 20","Temporarily enhances the Assassin's chitinous armor with organic barbs, causing him to prevent and reflect one damage instance from each unit, reflecting that damage and stunning the target for 1.8 seconds. Lasts 2.25 seconds.  |n|n|cff99ccffCooldown: |r 17","Temporarily enhances the Assassin's chitinous armor with organic barbs, causing him to prevent and reflect one damage instance from each unit, reflecting that damage and stunning the target for 2.4 seconds. Lasts 2.25 seconds.  |n|n|cff99ccffCooldown: |r 14"
 
 [A2KP]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Spiked Carapace Effect
@@ -20594,7 +20006,6 @@ Researchhotkey=F
 Researchtip=Learn |cffffcc00F|rireblast - [|cffffcc00Level %d|r]
 Researchubertip=Blasts an enemy unit with a wave of fire.  Deals intense damage and stuns for 1.5 seconds. |n|n|cffffcc00Level 1|r - Deals 80 damage. |n|cffffcc00Level 2|r - Deals 145 damage. |n|cffffcc00Level 3|r - Deals 210 damage. |n|cffffcc00Level 4|r - Deals 275 damage. |n|n|cff99ccffCooldown: |r 12
 TargetArt=Abilities\Spells\Other\Incinerate\FireLordDeathExplode.mdl
-Tip=,
 
 [A2KS]
 Animnames=spell,channel
@@ -20661,7 +20072,6 @@ Buttonpos=3,2
 Hotkey=F
 Name=Metamorph In
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
@@ -20702,7 +20112,6 @@ Art=ReplaceableTextures\CommandButtons\BTNRunedBracers.blp
 Name=Treant Spell Damage Reduction
 
 [A2L4]
-Art=,
 Name=Permanent Invisibility
 
 [A2L5]
@@ -20786,7 +20195,6 @@ Tip=Cold Embrac|cffffcc00e|r - [|cffffcc00Level 1|r],Cold Embrac|cffffcc00e|r - 
 Ubertip="Reduces an allied hero's body temperature by encasing him in ice, sending him into a deep sleep and regenerating 20 + 3% max HP per second for 4 seconds, in addition to blocking all physical damage for its duration. |n|n|cff99ccffCooldown: |r 17","Reduces an allied hero's body temperature by encasing him in ice, sending him into a deep sleep and regenerating 20 + 4% max HP per second for 4 seconds, in addition to blocking all physical damage for its duration. |n|n|cff99ccffCooldown: |r 16","Reduces an allied hero's body temperature by encasing him in ice, sending him into a deep sleep and regenerating 20 + 5% max HP per second for 4 seconds, in addition to blocking all physical damage for its duration. |n|n|cff99ccffCooldown: |r 15","Reduces an allied hero's body temperature by encasing him in ice, sending him into a deep sleep and regenerating 20 + 6% max HP per second for 4 seconds, in addition to blocking all physical damage for its duration. |n|n|cff99ccffCooldown: |r 14"
 
 [A2LD]
-Art=,
 Name=Frostwyrm Shield Armor
 
 [A2LE]
@@ -20808,7 +20216,6 @@ Name=Frostwyrm Trap Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A2LH]
 Art=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
@@ -20821,7 +20228,6 @@ Researchbuttonpos=1
 Researchhotkey=E
 Researchtip=Learn R|cffffcc00e|rpel - [|cffffcc00Level %d|r]
 Researchubertip=Creates a powerful divine ward that blocks all magic from affecting a target unit. |n|n|cffffcc00Level 1|r - Lasts 5 seconds. |n|cffffcc00Level 2|r - Lasts 10 seconds. |n|cffffcc00Level 3|r - Lasts 15 seconds.|n|cffffcc00Level 4|r - Lasts 20 seconds. |n|n|cff99ccffCooldown: |r 20 seconds.
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNRodOfNecromancy.blp
 
 [A2LI]
@@ -20904,7 +20310,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Nural Shock Slow Container 2
 
 [A2LZ]
-Art=,
 Name=Inventory
 
 [A2M0]
@@ -20997,25 +20402,20 @@ Tip=Test of |cffffcc00F|raith - [|cffffcc00Level 1|r],Test of |cffffcc00F|raith 
 Ubertip=Teleports an allied hero home after 6 seconds. Instant teleport for persuaded creeps.   |n|n|cff99ccffCooldown: |r 24,Teleports an allied hero home after 5 seconds. Instant teleport for persuaded creeps.   |n|n|cff99ccffCooldown: |r 24,Teleports an allied hero home after 4 seconds. Instant teleport for persuaded creeps.   |n|n|cff99ccffCooldown: |r 24,Teleports an allied hero home after 3 seconds. Instant teleport for persuaded creeps.   |n|n|cff99ccffCooldown: |r 24
 
 [A2ME]
-Art=,
 Name=Ether Essence FX
 Targetattach=chest
 Targetattachcount=1
 
 [A2MF]
-Art=,
 Name=Warcry Armor - 1
 
 [A2MG]
-Art=,
 Name=Warcry Armor - 3
 
 [A2MH]
-Art=,
 Name=Warcry Armor - 2
 
 [A2MI]
-Art=,
 Name=Warcry Armor - 4
 
 [A2MJ]
@@ -21058,7 +20458,6 @@ Art=ReplaceableTextures\CommandButtons\BTNRingSkull.blp
 Name=Living Armor Regen 3
 
 [A2MU]
-Art=,
 Name=Living Armor Target FX
 TargetArt=Abilities\Spells\NightElf\EntanglingRoots\EntanglingRootsTarget.mdl
 Targetattach=chest
@@ -21081,7 +20480,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Living Armor Container - 2
 
 [A2MZ]
-Art=,
 Name=Living Armor
 
 [A2N1]
@@ -21129,7 +20527,6 @@ Name=Waveform Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A2N5]
 Art=ReplaceableTextures\CommandButtons\BTNNaturesGuise.blp
@@ -21141,7 +20538,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNNaturesGuise.blp
 Researchhotkey=T
 TargetArt=Abilities\Spells\Human\Invisibility\InvisibilityTarget.mdl
 Targetattach=chest
-Tip=,
 
 [A2N6]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -21189,7 +20585,6 @@ Tip=A|cffffcc00r|rctic Burn - [|cffffcc00Level 1|r],A|cffffcc00r|rctic Burn - [|
 Ubertip="Imbues you with a deathly chill, causing you to gain 700 attack range and flying movement for 9 seconds. Your attacks place an arctic burn on enemies that slows them by 25% and burns 6% of their current health away per second for 5 seconds. |n|n|cff99ccffCooldown: |r 50","Imbues you with a deathly chill, causing you to gain 800 attack range and flying movement for 9 seconds. Your attacks place an arctic burn on enemies that slows them by 30% and burns 6% of their current health away per second for 5 seconds. |n|n|cff99ccffCooldown: |r 40","Imbues you with a deathly chill, causing you to gain 900 attack range and flying movement for 9 seconds. Your attacks place an arctic burn on enemies that slows them by 35% and burns 6% of their current health away per second for 5 seconds. |n|n|cff99ccffCooldown: |r 30","Imbues you with a deathly chill, causing you to gain 1000 attack range and flying movement for 9 seconds. Your attacks place an arctic burn on enemies that slows them by 40% and burns 6% of their current health away per second for 5 seconds. |n|n|cff99ccffCooldown: |r 20"
 
 [A2NF]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Arctic Siege FX
@@ -21206,7 +20601,6 @@ Researchbuttonpos=3
 Researchhotkey=R
 Researchtip=Learn |cffffcc00R|reincarnation - [|cffffcc00Level %d|r]
 Researchubertip=When killed the Skeleton King will come back to life and slow enemies in a 700 aoe by 30% for 3 seconds.  |n|n|cffffcc00Level 1|r - 300 second cooldown. |n|cffffcc00Level 2|r - 220 second cooldown.|n|cffffcc00Level 3|r - 140 second cooldown. |n|n|cff99ccffManacost: |r 140
-Tip=,
 
 [A2NH]
 Art=ReplaceableTextures\CommandButtons\BTNPeriapt1.blp
@@ -21241,10 +20635,8 @@ Name=Winter's Curse Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A2NK]
-Art=,
 Name=Frost Wyrm Split FX
 TargetArt=Abilities\Spells\Other\FrostDamage\FrostDamage.mdl
 Targetattach=chest
@@ -21317,7 +20709,6 @@ Order=drunkenhaze
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStrongDrink.blp
 Researchbuttonpos=1
 Researchhotkey=D
-Tip=,
 
 [A2NX]
 Art=ReplaceableTextures\PassiveButtons\BTNMarksmanship.blp
@@ -21327,7 +20718,6 @@ Order=attributemodskill
 ResearchArt=ReplaceableTextures\CommandButtons\BTNMarksmanship.blp
 Researchbuttonpos=3
 Researchhotkey=M
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNMarksmanship.blp
 
 [A2NY]
@@ -21340,7 +20730,6 @@ Researchhotkey=T
 Researchtip=Learn |cffffcc00T|rrueshot Aura - [|cffffcc00Level %d|r]
 Researchubertip=An aura that gives friendly nearby units bonus damage to their ranged attacks. |n|n|cffffcc00Level 1|r - Increases base ranged damage by 8%. |n|cffffcc00Level 2|r - Increases base ranged damage by 16%. |n|cffffcc00Level 3|r - Increases base ranged damage by 24%.|n|cffffcc00Level 4|r - Increases base ranged damage by 32%.
 Targetattach=origin
-Tip=,
 
 [A2O3]
 Art=ReplaceableTextures\PassiveButtons\PASBTNTrueShot.blp
@@ -21352,7 +20741,6 @@ Researchhotkey=T
 Researchtip=Learn |cffffcc00T|rrueshot Aura - [|cffffcc00Level %d|r]
 Researchubertip=An aura that gives friendly nearby units bonus damage to their ranged attacks. |n|n|cffffcc00Level 1|r - Increases base ranged damage by 8%. |n|cffffcc00Level 2|r - Increases base ranged damage by 16%. |n|cffffcc00Level 3|r - Increases base ranged damage by 24%.|n|cffffcc00Level 4|r - Increases base ranged damage by 32%.
 Targetattach=origin
-Tip=,
 
 [A2O4]
 Art=ReplaceableTextures\CommandButtons\BTNGhostBlade.blp
@@ -21377,7 +20765,6 @@ Tip=S|cffffcc00t|rampede - [|cffffcc00Level 1|r],S|cffffcc00t|rampede - [|cffffc
 Ubertip=Grants you and all allied player units max movement speed and zero collision for 3.75 seconds. Any units you or your allies come into collision with take 1x str damage and get slowed for 1.25 seconds. Enemies can only be affected by stampede impact once.  |n|n|cff99ccffCooldown: |r 120,Grants you and all allied player units max movement speed and zero collision for 3.75 seconds. Any units you or your allies come into collision with take 2x str damage and get slowed for 1.25 seconds. Enemies can only be affected by stampede impact once.  |n|n|cff99ccffCooldown: |r 90,Grants you and all allied player units max movement speed and zero collision for 3.75 seconds. Any units you or your allies come into collision with take 3x str damage and get slowed for 1.25 seconds. Enemies can only be affected by stampede impact once.  |n|n|cff99ccffCooldown: |r 60
 
 [A2O7]
-Art=,
 Name=Icarus Dive MS
 
 [A2O9]
@@ -21427,7 +20814,6 @@ Ubertip=Greatly decreases an enemy unit's ability to attack by reducing its dama
 Unart=ReplaceableTextures\CommandButtons\BTNCurse.blp
 
 [A2OJ]
-Art=,
 Name=Enfeeble FX
 TargetArt=Abilities\Spells\Undead\Curse\CurseTarget.mdl
 Targetattach=overhead
@@ -21457,19 +20843,15 @@ Tip=|cffffcc00D|rouble Edge - [|cffffcc00Level 1|r],|cffffcc00D|rouble Edge - [|
 Ubertip=The Warchief reaches inward and expends a tremendous amount of energy in a powerful attack.  It deals 175 damage around his enemy and to himself. |n|n|cff99ccffCooldown: |r 8,The Warchief reaches inward and expends a tremendous amount of energy in a powerful attack.  It deals 250 damage around his enemy and to himself. |n|n|cff99ccffCooldown: |r 8,The Warchief reaches inward and expends a tremendous amount of energy in a powerful attack.  It deals 325 damage around his enemy and to himself. |n|n|cff99ccffCooldown: |r 8,The Warchief reaches inward and expends a tremendous amount of energy in a powerful attack.  It deals 400 damage around his enemy and to himself. |n|n|cff99ccffCooldown: |r 8
 
 [A2OO]
-Art=,
 Name=Reactive Armor Bonus - 19
 
 [A2OP]
-Art=,
 Name=Reactive Armor Bonus - 18
 
 [A2OQ]
-Art=,
 Name=Reactive Armor Bonus - 17
 
 [A2OR]
-Art=,
 Name=Reactive Armor Bonus - 20
 
 [A2OS]
@@ -21489,7 +20871,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
 Name=Reactive Armor Container - 20
 
 [A2OW]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 8
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21497,10 +20878,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2OX]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 9
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21508,10 +20887,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2OY]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 10
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21519,10 +20896,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2OZ]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 19
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21530,10 +20905,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P0]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 11
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21541,10 +20914,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P1]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 12
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21552,10 +20923,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P2]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 13
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21563,10 +20932,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P3]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 18
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21574,10 +20941,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P4]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 17
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21585,10 +20950,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P5]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 16
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21596,10 +20959,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P6]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 15
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21607,10 +20968,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P7]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 14
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21618,10 +20977,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P8]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 4
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21629,10 +20986,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2P9]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 3
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21640,10 +20995,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PA]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 2
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21651,10 +21004,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PB]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 7
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21662,10 +21013,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PC]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 6
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21673,10 +21022,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PD]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 1
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21684,10 +21031,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PE]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 5
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21695,10 +21040,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PF]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 20
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21706,10 +21049,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PG]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 21
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -21717,7 +21058,6 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2PH]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -21828,7 +21168,6 @@ Researchbuttonpos=2
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|rlesh Heap - [|cffffcc00Level %d|r]
 Researchubertip="Pudge is made of innumerable rotting corpses, giving him extra protection against spells as well as the ability add more to his bulk. |n|n|cffffcc00Level 1|r - 4% magic reduction. |n|cffffcc00Level 2|r - 8% magic reduction. |n|cffffcc00Level 3|r - 12% magic reduction. |n|cffffcc00Level 4|r - 16% magic reduction."
-Tip=,
 
 [A2QA]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -21952,7 +21291,6 @@ Buttonpos=3,2
 Hotkey=F
 Name=Rolling Boulder In
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
@@ -21964,7 +21302,6 @@ Buttonpos=3,2
 Hotkey=F
 Name=Rolling Boulder Out
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
@@ -22004,7 +21341,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNNaturesGuise.blp
 Researchhotkey=T
 TargetArt=Abilities\Spells\Human\Invisibility\InvisibilityTarget.mdl
 Targetattach=chest
-Tip=,
 
 [A2R3]
 Art=ReplaceableTextures\CommandButtons\BTNRunedBracers.blp
@@ -22017,7 +21353,6 @@ Name=Critical Strike - 3
 ResearchArt=ReplaceableTextures\CommandButtons\BTNSkeletonCriticalStrike.blp
 Researchbuttonpos=2
 Researchhotkey=C
-Tip=,
 
 [A2RW]
 Art=ReplaceableTextures\PassiveButtons\BTNSkeletonCriticalStrike.blp
@@ -22026,7 +21361,6 @@ Name=Critical Strike - 1
 ResearchArt=ReplaceableTextures\CommandButtons\BTNSkeletonCriticalStrike.blp
 Researchbuttonpos=2
 Researchhotkey=C
-Tip=,
 
 [A2RX]
 Art=ReplaceableTextures\PassiveButtons\BTNSkeletonCriticalStrike.blp
@@ -22035,7 +21369,6 @@ Name=Critical Strike - 2
 ResearchArt=ReplaceableTextures\CommandButtons\BTNSkeletonCriticalStrike.blp
 Researchbuttonpos=2
 Researchhotkey=C
-Tip=,
 
 [A2RY]
 Art=ReplaceableTextures\PassiveButtons\BTNSkeletonCriticalStrike.blp
@@ -22045,7 +21378,6 @@ ResearchArt=ReplaceableTextures\CommandButtons\BTNSkeletonCriticalStrike.blp
 Researchbuttonpos=2
 Researchhotkey=C
 Researchtip=Learn |cffffcc00C|rritical Strike - [|cffffcc00Level %d|r]
-Tip=,
 
 [A2RZ]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -22086,7 +21418,6 @@ Name=Stone Gaze Stun
 Order=thunderbolt
 ResearchArt=ReplaceableTextures\CommandButtons\BTNStormBolt.blp
 Researchhotkey=T
-Tip=,
 
 [A2S5]
 Art=ReplaceableTextures\PassiveButtons\PASBTNExhumeCorpses.blp
@@ -22097,7 +21428,6 @@ Researchbuttonpos=2
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|rlesh Heap - [|cffffcc00Level %d|r]
 Researchubertip="Pudge is made of innumerable rotting corpses, giving him extra protection against spells as well as the ability add more to his bulk. |n|n|cffffcc00Level 1|r - 4% magic reduction. |n|cffffcc00Level 2|r - 8% magic reduction. |n|cffffcc00Level 3|r - 12% magic reduction. |n|cffffcc00Level 4|r - 16% magic reduction."
-Tip=,
 
 [A2S6]
 Art=ReplaceableTextures\CommandButtons\BTN_CMFF.blp
@@ -22107,7 +21437,6 @@ Name=Freezing Field Slow Aghanim
 Order=slow
 Orderoff=slowoff
 Orderon=slowon
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTN_CMFF.blp
 UnButtonpos=,2
 Unhotkey=W
@@ -22250,19 +21579,15 @@ Art=ReplaceableTextures\CommandButtons\BTNGhostBlade.blp
 Name=Dust Of Appearance Slow
 
 [A2SK]
-Art=,
 Name=Thirst Armor - 4
 
 [A2SL]
-Art=,
 Name=Thirst Armor - 3
 
 [A2SM]
-Art=,
 Name=Thirst Armor - 2
 
 [A2SN]
-Art=,
 Name=Thirst Armor - 1
 
 [A2SO]
@@ -22301,18 +21626,15 @@ Buttonpos=3,2
 Hotkey=F
 Name=Rift Walk Out
 Order=bearform
-Tip=,
 Unart=ReplaceableTextures\CommandButtons\BTNDruidOfTheClaw.blp
 UnButtonpos=3,2
 Unhotkey=F
 Unorder=unbearform
 
 [A2SZ]
-Art=,
 Name=Divine Field Invis 1
 
 [A2T0]
-Art=,
 Name=Divine Field Invis 2
 
 [A2T2]
@@ -22322,7 +21644,6 @@ Hotkey=G
 Name=Cleanse
 Order=purge
 SpecialArt=Abilities\Spells\Orc\Purge\PurgeBuffTarget.mdl
-Tip=,
 
 [A2T4]
 Art=ReplaceableTextures\PassiveButtons\PASBTNExhumeCorpses.blp
@@ -22333,7 +21654,6 @@ Researchbuttonpos=2
 Researchhotkey=F
 Researchtip=Learn |cffffcc00F|rlesh Heap - [|cffffcc00Level %d|r]
 Researchubertip="Pudge is made of innumerable rotting corpses, giving him extra protection against spells as well as the ability add more to his bulk. |n|n|cffffcc00Level 1|r - 4% magic reduction. |n|cffffcc00Level 2|r - 8% magic reduction. |n|cffffcc00Level 3|r - 12% magic reduction. |n|cffffcc00Level 4|r - 16% magic reduction."
-Tip=,
 
 [A2T5]
 Animnames=spell
@@ -22352,7 +21672,6 @@ Tip=|cffffcc00F|rate's Edict - [|cffffcc00Level 1|r],|cffffcc00F|rate's Edict - 
 Ubertip="Nerif enraptures the target, rendering them unable to attack, granting them 100% spell resistance, and increasing the damage they take from other sources by 50%. Can be cast on both allies and enemies. Lasts 3 seconds. |n|n|cff99ccffCooldown: |r 12","Nerif enraptures the target, rendering them unable to attack, granting them 100% spell resistance, and increasing the damage they take from other sources by 50%. Can be cast on both allies and enemies. Lasts 4 seconds. |n|n|cff99ccffCooldown: |r 12","Nerif enraptures the target, rendering them unable to attack, granting them 100% spell resistance, and increasing the damage they take from other sources by 50%. Can be cast on both allies and enemies. Lasts 5 seconds. |n|n|cff99ccffCooldown: |r 12","Nerif enraptures the target, rendering them unable to attack, granting them 100% spell resistance, and increasing the damage they take from other sources by 50%. Can be cast on both allies and enemies. Lasts 6 seconds. |n|n|cff99ccffCooldown: |r 12"
 
 [A2T7]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 24
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -22360,10 +21679,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2T8]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 22
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -22371,10 +21688,8 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2T9]
-Art=,
 Buttonpos=2,2
 Name=Berserker's Blood Magic - 23
 ResearchArt=PassiveButtons\BTNNeutralManaShield.blp
@@ -22382,7 +21697,6 @@ Researchbuttonpos=2
 Researchhotkey=D
 Researchtip=Learn Spell Shiel|cffffcc00d|r - [|cffffcc00Level %d|r]
 Researchubertip="Magina channels a powerful warding magic, damping the negative effects of spells. |n|n|cffffcc00Level 1|r - Reduces magic damage by 10%.|n|cffffcc00Level 2|r - Reduces magic damage by 20%.|n|cffffcc00Level 3|r - Reduces magic damage by 30%.|n|cffffcc00Level 4|r - Reduces magic damage by 40%."
-Tip=,
 
 [A2TA]
 Art=ReplaceableTextures\CommandButtons\BTNSpellBookBLS.blp
@@ -22447,7 +21761,6 @@ Name=Rolling Boulder Silence
 Order=soulburn
 ResearchArt=ReplaceableTextures\CommandButtons\BTNSoulBurn.blp
 Researchhotkey=B
-Tip=,
 
 [A2TH]
 Animnames=spell
@@ -22510,10 +21823,8 @@ Researchbuttonpos=1
 Researchhotkey=R
 Researchtip=Learn Elune's A|cffffcc00r|rrow - [|cffffcc00Level %d|r]
 Researchubertip="Fires an arrow to a location with deadly precision, dealing large damage and stunning the first unit it strikes. Stun duration and damage increases based on how far the target is, ranging from 0.5 to 5 seconds. |n|n|cffffcc00Level 1|r - Deals 90 damage. |n|cffffcc00Level 2|r - Deals 180 damage. |n|cffffcc00Level 3|r - Deals 270 damage. |n|cffffcc00Level 4|r - Deals 360 damage. |n|n|cff99ccffCooldown: |r 17"
-Tip=,
 
 [A2TL]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Stone Gaze Stun FX
@@ -22527,7 +21838,6 @@ Targetattach5=chest
 Targetattachcount=6
 
 [A2TM]
-Art=,
 Missilearc=0.05
 Missilespeed=1400
 Name=Stone Gaze Slow FX
@@ -22569,7 +21879,6 @@ Buttonpos=1,2
 Name=Battle Fury
 SpecialArt=Abilities\Spells\Other\Cleave\CleaveDamageTarget.mdl
 Specialattach=chest
-Tip=,
 
 [ACch]
 Art=ReplaceableTextures\CommandButtons\BTNCharm.blp
@@ -22579,7 +21888,6 @@ Name=Helm of the Dominator
 Order=charm
 TargetArt=Abilities\Spells\Other\Charm\CharmTarget.mdl
 Targetattach=overhead
-Tip=,
 
 [ACcl]
 Animnames=spell,throw
@@ -22679,7 +21987,6 @@ Hotkey=X
 Name=Guinsoo's Scythe
 Order=hex
 SpecialArt=Abilities\Spells\Human\Polymorph\PolyMorphDoneGround.mdl
-Tip=,
 
 [ACmi]
 Art=ReplaceableTextures\PassiveButtons\PASBTNGenericSpellImmunity.blp
@@ -22804,7 +22111,6 @@ Casterattach=origin
 Hotkey=L
 Name=Slam
 Order=creepthunderclap
-Tip=,
 
 [ACua]
 Art=ReplaceableTextures\PassiveButtons\PASBTNUnholyAura.blp
@@ -22936,7 +22242,6 @@ Name=Build (Human)
 Order=humanbuild
 
 [AHer]
-Art=,
 CasterArt=Abilities\Spells\Other\Levelup\LevelupCaster.mdl
 Name=Hero
 
@@ -22986,11 +22291,9 @@ Art=ReplaceableTextures\CommandButtons\BTNRingPurple.blp
 Name=Item Hero Stat Bonus
 
 [AIa3]
-Art=,
 Name=Item Hero Stat Bonus
 
 [AIa4]
-Art=,
 Name=Item Hero Stat Bonus
 
 [AIa6]
@@ -23051,7 +22354,6 @@ Order=blink
 SpecialArt=Abilities\Spells\NightElf\Blink\BlinkCaster.mdl
 
 [AIbm]
-Art=,
 Name=Item Mana Bonus
 
 [AIcb]
@@ -23092,11 +22394,9 @@ Tip=|cffffcc00C|ryclone
 Ubertip="Tosses a target non-mechanical enemy unit into the air, rendering it unable to move, attack or cast spells, and stopping others from attacking or casting on it. |nLasts 2 seconds."
 
 [AId0]
-Art=,
 Name=Item Armor Bonus
 
 [AId1]
-Art=,
 Name=Item Armor Bonus
 
 [AId2]
@@ -23112,7 +22412,6 @@ Art=ReplaceableTextures\CommandButtons\BTNRingGreen.blp
 Name=Item Armor Bonus
 
 [AId5]
-Art=,
 Name=Item Armor Bonus
 
 [AIda]
@@ -23213,11 +22512,9 @@ Art=ReplaceableTextures\CommandButtons\BTNShadowPact.blp
 Name=Item Hero Stat Bonus
 
 [AIi3]
-Art=,
 Name=Item Hero Stat Bonus
 
 [AIi4]
-Art=,
 Name=Item Hero Stat Bonus
 
 [AIi6]
@@ -23247,7 +22544,6 @@ Name=Item Ice Revenant Summon
 TargetArt=Abilities\Spells\Orc\FeralSpirit\feralspiritdone.mdl
 
 [AIl1]
-Art=,
 Name=Item Life Bonus
 
 [AIl2]
@@ -23255,7 +22551,6 @@ Art=ReplaceableTextures\CommandButtons\BTNPeriapt1.blp
 Name=Item Life Bonus
 
 [AIlf]
-Art=,
 Name=Item Life Bonus
 
 [AIlm]
@@ -23271,7 +22566,6 @@ Order=lightningshield
 Ubertip="Forms a shield of electricity around a target unit, dealing 20 damage per second to units around it. |nLasts 20 seconds."
 
 [AIlz]
-Art=,
 Name=Item Life Bonus
 
 [AIm2]
@@ -23281,7 +22575,6 @@ Casterattach=origin
 Name=Item Mana Regain
 
 [AImb]
-Art=,
 Name=Item Mana Bonus
 
 [AImh]
@@ -23302,7 +22595,6 @@ Name=Staff of Teleportation
 SpecialArt=Abilities\Spells\Human\MassTeleport\MassTeleportTarget.mdl
 
 [AImz]
-Art=,
 Name=Item Mana Bonus (100)
 
 [AInm]
@@ -23312,7 +22604,6 @@ TargetArt=Abilities\Spells\Items\AIsm\AIsmTarget.mdl
 Targetattach=origin
 
 [AInv]
-Art=,
 Name=Inventory
 
 [AIob]
@@ -23366,7 +22657,6 @@ Art=ReplaceableTextures\CommandButtons\BTNSobiMask.blp
 Name=Item Mana Regeneration
 
 [AIrn]
-Art=,
 
 [AIrr]
 Art=ReplaceableTextures\CommandButtons\BTNBattleRoar.blp
@@ -23393,11 +22683,9 @@ Art=ReplaceableTextures\CommandButtons\BTNHammer.blp
 Name=Item Hero Stat Bonus
 
 [AIs3]
-Art=,
 Name=Item Hero Stat Bonus
 
 [AIs4]
-Art=,
 Name=Item Hero Stat Bonus
 
 [AIs6]
@@ -23974,7 +23262,6 @@ Name=Build (Undead)
 Order=undeadbuild
 
 [Aalr]
-Art=,
 Name=Alarm
 
 [Aamk]
@@ -23991,29 +23278,23 @@ Tip=Attribute Bonus - [|cffffcc00Level 1|r],Attribute Bonus - [|cffffcc00Level 2
 Ubertip="Gives a total of 2 points to Agility, Intelligence and Strength.","Gives a total of 4 points to Agility, Intelligence and Strength.","Gives a total of 6 points to Agility, Intelligence and Strength.","Gives a total of 8 points to Agility, Intelligence and Strength.","Gives a total of 10 points to Agility, Intelligence and Strength.","Gives a total of 12 points to Agility, Intelligence and Strength.","Gives a total of 14 points to Agility, Intelligence and Strength.","Gives a total of 16 points to Agility, Intelligence and Strength.","Gives a total of 18 points to Agility, Intelligence and Strength.","Gives a total of 20 points to Agility, Intelligence and Strength."
 
 [Aasl]
-Art=,
 Name=Slow Aura
 
 [Aatk]
-Art=,
 Name=Attack
 
 [Aawa]
-Art=,
 Name=Revive Hero Instantly
 Order=awaken
 TargetArt=Abilities\Spells\Other\Awaken\Awaken.mdl
 
 [Abds]
-Art=,
 Name=Blight Dispel Small
 
 [Abdt]
-Art=,
 Name=Burrow Detection
 
 [Abun]
-Art=,
 Effectsound=LoadUnload
 Name=Cargo Hold (Orc Burrow)
 
@@ -24046,7 +23327,6 @@ Tip=|cffffcc00C|ryclone
 Ubertip="Tosses a target non-mechanical enemy unit into the air, rendering it unable to move, attack or cast spells, and stopping others from attacking or casting on it. |nLasts 20 seconds."
 
 [Adda]
-Art=,
 Name=AOE damage upon death
 
 [Adsm]
@@ -24061,7 +23341,6 @@ Tip=|cffffcc00D|rispel Magic
 Ubertip=Removes all buffs from units in a target area. |n|cffffcc00Deals 200 damage to summoned units.|r
 
 [Adt1]
-Art=,
 Buttonpos=,2
 Name=Detector
 
@@ -24071,7 +23350,6 @@ Buttonpos=2,1
 CasterArt=Abilities\Spells\Human\MagicSentry\MagicSentryCaster.mdl
 Casterattach=overhead
 Name=Tower Truesight
-Tip=,
 
 [Aeat]
 Art=ReplaceableTextures\CommandButtons\BTNEatTree.blp
@@ -24085,7 +23363,6 @@ Tip=|cffffcc00E|rat Tree
 Ubertip=Consume a tree to restore 0 hit points over 0 seconds.
 
 [Aeth]
-Art=,
 Name=Ghost
 
 [Aetl]
@@ -24134,26 +23411,20 @@ Art=ReplaceableTextures\PassiveButtons\PASBTNFeedBack.blp
 Buttonpos=3,2
 Name=Diffusal Blade
 SpecialArt=Abilities\Spells\Human\Feedback\ArcaneTowerAttack.mdl
-Tip=,
 
 [Afih]
-Art=,
 Name=On Fire (Human)
 
 [Afin]
-Art=,
 Name=On Fire (Night Elf)
 
 [Afio]
-Art=,
 Name=On Fire (Orc)
 
 [Afir]
-Art=,
 Name=On Fire
 
 [Afiu]
-Art=,
 Name=On Fire (Undead)
 
 [Afr2]
@@ -24161,15 +23432,12 @@ Art=ReplaceableTextures\PassiveButtons\PASBTNFrost.blp
 Buttonpos=1,2
 Missileart=Abilities\Weapons\ZigguratFrostMissile\ZigguratFrostMissile.mdl
 Name=Skadi Ranged
-Tip=,
 
 [Afrb]
-Art=,
 Missileart=Abilities\Weapons\FrostWyrmMissile\FrostWyrmMissile.mdl
 Name=Frost Breath
 
 [Agho]
-Art=,
 Name=Ghost
 
 [Aien]
@@ -24180,7 +23448,6 @@ Tip=Unit Inventory
 Ubertip=The Spirit Bear may carry and use items as any hero could.
 
 [Alit]
-Art=,
 LightningEffect=CHIM
 Missileart=Abilities\Weapons\ChimaeraLightningMissile\ChimaeraLightningMissile.mdl
 Missilespeed=1500
@@ -24188,7 +23455,6 @@ Name=Lightning Attack
 TargetArt=Abilities\Weapons\Bolt\BoltImpact.mdl
 
 [Aloc]
-Art=,
 Name=Locust
 
 [Ambb]
@@ -24238,15 +23504,12 @@ Tip=Spell Immunity
 Ubertip=Renders this unit immune to all spells.
 
 [Amin]
-Art=,
 Name=Mine - exploding
 
 [Amnz]
-Art=,
 Name=AOE damage upon death
 
 [Amov]
-Art=,
 Name=Move
 SpecialArt=Abilities\Spells\Human\MassTeleport\MassTeleportTarget.mdl
 Specialattach=origin
@@ -24316,12 +23579,10 @@ Art=ReplaceableTextures\CommandButtons\BTNHealingWard.blp
 Name=Healing Ward Aura
 
 [Apit]
-Art=,
 Effectsound=ReceiveGold
 Name=Shop Purchase Item
 
 [Apiv]
-Art=,
 Name=Permanent Invisibility
 
 [Apsh]
@@ -24363,13 +23624,11 @@ Art=ReplaceableTextures\CommandButtons\BTNRingSkull.blp
 Name=Item Life Regeneration
 
 [Arev]
-Art=,
 Name=Revive Hero
 Order=revive
 TargetArt=Abilities\Spells\Human\ReviveHuman\ReviveHuman.mdl,Abilities\Spells\Orc\ReviveOrc\ReviveOrc.mdl,Abilities\Spells\Undead\ReviveUndead\ReviveUndead.mdl,Abilities\Spells\NightElf\ReviveNightElf\ReviveNightElf.mdl,Abilities\Spells\Demon\ReviveDemon\ReviveDemon.mdl
 
 [Argd]
-Art=,
 Name=Return Gold
 
 [Arll]
@@ -24490,7 +23749,6 @@ Tip=Sell Units
 Ubertip=Permits the sale of units.
 
 [Atdg]
-Art=,
 Name=Building Damage Aura
 
 [Atru]
@@ -24501,16 +23759,13 @@ Tip=True Sight
 Ubertip=Reveals nearby invisible units.
 
 [Ault]
-Art=,
 Name=Ultravision
 Requires=Reuv
 
 [Avul]
-Art=,
 Name=Invulnerable
 
 [Awan]
-Art=,
 Name=Wander
 
 [Awrs]
@@ -24596,7 +23851,6 @@ Art=ReplaceableTextures\PassiveButtons\PASBTNFreezingBreath.blp
 Buttonpos=1,1
 Name=Invoke Icy Path
 Targetattach=origin
-Tip=,
 UnButtonpos=1,1
 
 [S00I]
