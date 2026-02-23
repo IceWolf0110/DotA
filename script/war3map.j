@@ -129,7 +129,7 @@ globals
 	integer integer012 = 0
 	location array locations001
 	unit unit003 = null
-	group group001 = null
+	group tt_group1 = null
 	boolean boolean025 = false
 	boolean boolean026 = false
 	boolean boolean027 = false
@@ -187,7 +187,7 @@ globals
 	rect rect016 = null
 	rect rect017 = null
 	rect rect018 = null
-	rect rect019 = null
+	rect ScourgeAncientCamp_SpawnRect = null
 	rect rect020 = null
 	rect rect021 = null
 	rect rect022 = null
@@ -202,7 +202,7 @@ globals
 	rect rect031 = null
 	rect rect032 = null
 	rect rect033 = null
-	rect rect034 = null
+	rect ScourgeAncientCamp_CheckRect = null
 	rect rect035 = null
 	rect rect036 = null
 	rect rect037 = null
@@ -984,7 +984,7 @@ globals
 	integer integer190
 	integer integer191
 	integer integer192
-	integer integer193
+	integer Aegis
 	integer MantaStyle
 	integer MantaStyle_Ranged
 	integer integer196
@@ -2031,7 +2031,26 @@ globals
 endglobals
 
 function FindRect takes rect r returns rect
-	call PanCameraTo(GetRectCenterX(r), GetRectCenterY(r))
+	local real rndcolor1 = GetRandomReal(0., 1.)
+	local real rndcolor2 = GetRandomReal(0., 1.)
+	local real rndcolor3 = GetRandomReal(0., 1.)
+	local real minx = GetRectMinX(r)
+	local real miny = GetRectMinY(r)
+	local real maxx = GetRectMaxX(r)
+	local real maxy = GetRectMaxY(r)
+
+	local real h = GetLocationZ(GetRectCenter(r))
+
+	local lightning hLighting1 = AddLightningEx("DRAM", false, minx, miny, h, minx, maxy, h)
+	local lightning hLighting2 = AddLightningEx("DRAM", false, minx, miny, h, maxx, miny, h)
+	local lightning hLighting3 = AddLightningEx("DRAM", false, maxx, miny, h, maxx, maxy, h)
+	local lightning hLighting4 = AddLightningEx("DRAM", false, minx, maxy, h, maxx, maxy, h)
+	call SetLightningColor(hLighting1, rndcolor1, rndcolor2, rndcolor3, 1.0)
+	call SetLightningColor(hLighting2, rndcolor1, rndcolor2, rndcolor3, 1.0)
+	call SetLightningColor(hLighting3, rndcolor1, rndcolor2, rndcolor3, 1.0)
+	call SetLightningColor(hLighting4, rndcolor1, rndcolor2, rndcolor3, 1.0)
+
+	call PanCameraToTimed(GetRectCenterX(r), GetRectCenterY(r), 0)
 	return r
 endfunction
 
@@ -2367,7 +2386,7 @@ function Func0007 takes nothing returns nothing
 	call TimerStart(bj_stockUpdateTimer, bj_STOCK_RESTOCK_INTERVAL, true, function Func0006)
 endfunction
 
-function Func0008 takes nothing returns boolean
+function ReturnTrue takes nothing returns boolean
 	return true
 endfunction
 
@@ -2379,14 +2398,6 @@ function Func0010 takes force loc_force01, real loc_real01, string loc_string01 
 	set string026 = loc_string01
 	set real005 = loc_real01
 	call ForForce(loc_force01, function Func0009)
-endfunction
-
-function Func0011 takes nothing returns boolean
-	return true
-endfunction
-
-function Func0013 takes nothing returns string
-	return string025
 endfunction
 
 function Func0014 takes nothing returns nothing
@@ -3462,16 +3473,18 @@ function Func0090 takes boolean loc_boolean01, boolean loc_boolean02 returns int
 	return GetRandomInt(loc_integer01, loc_integer02)
 endfunction
 
-function Func0091 takes unit loc_unit01 returns boolean
-	return GetUnitTypeId(loc_unit01) == 'n00I' or GetUnitTypeId(loc_unit01) == 'n022' or GetUnitTypeId(loc_unit01) == 'n021' or GetUnitTypeId(loc_unit01) == 'n0KY' or GetUnitTypeId(loc_unit01) == 'n0KZ' or GetUnitTypeId(loc_unit01) == 'n0LE' or GetUnitTypeId(loc_unit01) == 'n023' or GetUnitTypeId(loc_unit01) == 'n024' or GetUnitTypeId(loc_unit01) == 'n025' or GetUnitTypeId(loc_unit01) == 'n0L0' or GetUnitTypeId(loc_unit01) == 'n0L1' or GetUnitTypeId(loc_unit01) == 'n0M4' or GetUnitTypeId(loc_unit01) == 'n00M' or GetUnitTypeId(loc_unit01) == 'n0HV' or GetUnitTypeId(loc_unit01) == 'n0LS'
+function IsBasicCourier takes unit u returns boolean
+	local integer id = GetUnitTypeId(u)
+	return id == 'n00I' or id == 'n022' or id == 'n021' or id == 'n0KY' or id == 'n0KZ' or id == 'n0LE' or id == 'n023' or id == 'n024' or id == 'n025' or id == 'n0L0' or id == 'n0L1' or id == 'n0M4' or id == 'n00M' or id == 'n0HV' or id == 'n0LS'
 endfunction
 
-function Func0092 takes unit loc_unit01 returns boolean
-	return GetUnitTypeId(loc_unit01) == 'e01H' or GetUnitTypeId(loc_unit01) == 'e01Z' or GetUnitTypeId(loc_unit01) == 'e02R' or GetUnitTypeId(loc_unit01) == 'e02T' or GetUnitTypeId(loc_unit01) == 'e02S' or GetUnitTypeId(loc_unit01) == 'e030'
+function IsFlyingCourier takes unit u returns boolean
+	local integer id = GetUnitTypeId(u)
+	return id == 'e01H' or id == 'e01Z' or id == 'e02R' or id == 'e02T' or id == 'e02S' or id == 'e030'
 endfunction
 
-function Func0093 takes unit loc_unit01 returns boolean
-	return Func0091(loc_unit01)or Func0092(loc_unit01)
+function IsCourierId takes unit u returns boolean
+	return IsBasicCourier(u) or IsFlyingCourier(u)
 endfunction
 
 function Func0094 takes destructable loc_destructable01 returns boolean
@@ -4131,14 +4144,10 @@ function Func0166 takes player loc_player01, string loc_string01, real loc_real0
 	set loc_texttag01 = null
 endfunction
 
-function Func0167 takes nothing returns boolean
-	return true
-endfunction
-
 function Func0168 takes trigger loc_trigger01, playerunitevent loc_playerunitevent01 returns nothing
 	local integer loc_integer01 = 0
 	loop
-		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Player(loc_integer01), loc_playerunitevent01, Condition(function Func0167))
+		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Player(loc_integer01), loc_playerunitevent01, Condition(function ReturnTrue))
 		set loc_integer01 = loc_integer01 + 1
 		exitwhen loc_integer01 == 16
 	endloop
@@ -4148,8 +4157,8 @@ function Func0169 takes trigger loc_trigger01, playerunitevent loc_playeruniteve
 	local integer loc_integer01 = 1
 	loop
 		exitwhen loc_integer01 > 5
-		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[loc_integer01], loc_playerunitevent01, Condition(function Func0167))
-		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[loc_integer01], loc_playerunitevent01, Condition(function Func0167))
+		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[loc_integer01], loc_playerunitevent01, Condition(function ReturnTrue))
+		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[loc_integer01], loc_playerunitevent01, Condition(function ReturnTrue))
 		set loc_integer01 = loc_integer01 + 1
 	endloop
 endfunction
@@ -4168,7 +4177,7 @@ endfunction
 function Func0172 takes real loc_real01, real loc_real02, real loc_real03 returns integer
 	local rect loc_rect01 = Rect(loc_real01 - loc_real03, loc_real02 - loc_real03, loc_real01 + loc_real03, loc_real02 + loc_real03)
 	set integer021 = 0
-	call EnumDestructablesInRect(loc_rect01, Condition(function Func0011), function Func0171)
+	call EnumDestructablesInRect(loc_rect01, Condition(function ReturnTrue), function Func0171)
 	call RemoveRect(loc_rect01)
 	set loc_rect01 = null
 	return integer021
@@ -4227,7 +4236,7 @@ endfunction
 function Func0179 takes real loc_real01, real loc_real02, real loc_real03 returns boolean
 	local rect loc_rect01 = Rect(loc_real01 - loc_real03, loc_real02 - loc_real03, loc_real01 + loc_real03, loc_real02 + loc_real03)
 	set boolean045 = false
-	call EnumDestructablesInRect(loc_rect01, Condition(function Func0011), function Func0178)
+	call EnumDestructablesInRect(loc_rect01, Condition(function ReturnTrue), function Func0178)
 	call RemoveRect(loc_rect01)
 	set loc_rect01 = null
 	return boolean045
@@ -4239,7 +4248,7 @@ endfunction
 
 function Func0181 takes nothing returns boolean
 	local group loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsInRange(loc_group01, 0, 0, 16000, Condition(function Func0167))
+	call GroupEnumUnitsInRange(loc_group01, 0, 0, 16000, Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func0180)
 	call KillGroup(loc_group01)
 	set loc_group01 = null
@@ -6312,7 +6321,7 @@ function Func0359 takes integer loc_integer01 returns boolean
 endfunction
 
 function Func0360 takes integer loc_integer01 returns boolean
-	return loc_integer01 == integer245 or loc_integer01 == integer129 or loc_integer01 == integer172 or loc_integer01 == integer173 or loc_integer01 == integer229 or loc_integer01 == integer193 or loc_integer01 == integer122 or loc_integer01 == integer239 or loc_integer01 == integer131
+	return loc_integer01 == integer245 or loc_integer01 == integer129 or loc_integer01 == integer172 or loc_integer01 == integer173 or loc_integer01 == integer229 or loc_integer01 == Aegis or loc_integer01 == integer122 or loc_integer01 == integer239 or loc_integer01 == integer131
 endfunction
 
 function Func0361 takes nothing returns boolean
@@ -7472,10 +7481,10 @@ endfunction
 
 function Func0421 takes nothing returns nothing
 	local group loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsOfPlayer(loc_group01, Player(0), Condition(function Func0011))
+	call GroupEnumUnitsOfPlayer(loc_group01, Player(0), Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func0420)
 	call GroupClear(loc_group01)
-	call GroupEnumUnitsOfPlayer(loc_group01, Player(6), Condition(function Func0011))
+	call GroupEnumUnitsOfPlayer(loc_group01, Player(6), Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func0420)
 	call KillGroup(loc_group01)
 endfunction
@@ -11678,7 +11687,7 @@ function Func0491 takes unit loc_unit01 returns boolean
 	local unit loc_unit02 = (LoadUnitHandle(HY, (loc_integer02), (699)))
 	loop
 		exitwhen loc_integer01 > 5
-		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == Item_Real[integer193]and GetItemCharges(UnitItemInSlot(loc_unit02, loc_integer01)) > 0 then
+		if GetItemTypeId(UnitItemInSlot(loc_unit02, loc_integer01)) == Item_Real[Aegis]and GetItemCharges(UnitItemInSlot(loc_unit02, loc_integer01)) > 0 then
 			return true
 		endif
 		set loc_integer01 = loc_integer01 + 1
@@ -12624,7 +12633,7 @@ function Func0530 takes nothing returns boolean
 	endif
 	if loc_integer01 == integer062 - 180 or loc_integer01 == integer062 - 60 then
 		if AegisHolder != null then
-			set loc_item01 = Func0367(AegisHolder, Item_Real[integer193])
+			set loc_item01 = Func0367(AegisHolder, Item_Real[Aegis])
 			if loc_item01 != null then
 				if loc_integer01 == integer062 - 180 then
 					if IsSentinel(GetOwningPlayer(AegisHolder))then
@@ -12673,17 +12682,17 @@ function Func0533 takes nothing returns nothing
 	loop
 		exitwhen i > 5
 		set u = PlayerHeroArray[GetPlayerId(Sentinels[i])]
-		if u != null and Func0367(u, Item_Real[integer193]) != null then
+		if u != null and Func0367(u, Item_Real[Aegis]) != null then
 			call DisableTrigger(Trig_ManipulateItem)
 			call Func0387("AegisOff", GetPlayerId(GetOwningPlayer(u)))
-			call RemoveItem(Func0367(u, Item_Real[integer193]))
+			call RemoveItem(Func0367(u, Item_Real[Aegis]))
 			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		set u = PlayerHeroArray[GetPlayerId(Scourges[i])]
-		if u != null and Func0367(u, Item_Real[integer193]) != null then
+		if u != null and Func0367(u, Item_Real[Aegis]) != null then
 			call DisableTrigger(Trig_ManipulateItem)
 			call Func0387("AegisOff", GetPlayerId(GetOwningPlayer(u)))
-			call RemoveItem(Func0367(u, Item_Real[integer193]))
+			call RemoveItem(Func0367(u, Item_Real[Aegis]))
 			call EnableTrigger(Trig_ManipulateItem)
 		endif
 		set i = i + 1
@@ -12726,7 +12735,7 @@ function Func0537 takes nothing returns boolean
 			call UnitAddAbility(Roshan, 'A0Q6')
 			call UnitAddItem(Roshan, CreateItem(Item_Real[integer146], 0, 0))
 		endif
-		call UnitAddItem(Roshan, CreateItem(Item_Real[integer193], 0, 0))
+		call UnitAddItem(Roshan, CreateItem(Item_Real[Aegis], 0, 0))
 		call CleanTrigger(t)
 	elseif GetTriggerEvalCount(t) == integer062 then
 		call Func0533()
@@ -13017,7 +13026,7 @@ function Func0551 takes unit loc_unit01 returns nothing
 endfunction
 
 function Func0552 takes nothing returns nothing
-	if Func0093(GetTriggerUnit())and IsUnitIllusion(GetTriggerUnit()) == false then
+	if IsCourierId(GetTriggerUnit())and IsUnitIllusion(GetTriggerUnit()) == false then
 		call Func0387("Courier" + I2S(GetPlayerId(GetOwningPlayer(GetTriggerUnit()))), GetPlayerId(GetOwningPlayer(GetKillingUnit())))
 		call Func0144(force003, 10.00, Func0544(GetOwningPlayer(GetTriggerUnit()), GetOwningPlayer(GetKillingUnit())))
 		call PingMinimapEx(GetUnitX(GetTriggerUnit()), GetUnitY(GetTriggerUnit()), 6, 255, 0, 0, false)
@@ -13125,12 +13134,12 @@ function Func0558 takes nothing returns boolean
 	set loc_real05 = GetLocationX(location019)
 	set loc_real06 = GetLocationY(location019)
 	set tt_item1 = null
-	call EnumItemsInRect(rect018, Condition(function Func0011), function Func0556)
+	call EnumItemsInRect(rect018, Condition(function ReturnTrue), function Func0556)
 	if tt_item1 == null then
 		set loc_boolean01 = true
 	endif
 	set tt_item1 = null
-	call EnumItemsInRect(rect015, Condition(function Func0011), function Func0556)
+	call EnumItemsInRect(rect015, Condition(function ReturnTrue), function Func0556)
 	if tt_item1 == null then
 		set loc_boolean02 = true
 	endif
@@ -14111,7 +14120,7 @@ function Func0566 takes nothing returns boolean
 		set player012 = loc_player01
 		set unit243 = loc_unit01
 		set unit244 = loc_unit02
-		call EnumItemsInRect(loc_rect01, Condition(function Func0011), function Func0565)
+		call EnumItemsInRect(loc_rect01, Condition(function ReturnTrue), function Func0565)
 	else
 		if GetTriggerEvalCount(loc_trigger01) > 9 then
 			call FlushChildHashtable(HY, (loc_integer01))
@@ -14119,12 +14128,12 @@ function Func0566 takes nothing returns boolean
 			set player012 = loc_player01
 			set unit243 = loc_unit01
 			set unit244 = loc_unit02
-			call EnumItemsInRect(loc_rect01, Condition(function Func0011), function Func0565)
+			call EnumItemsInRect(loc_rect01, Condition(function ReturnTrue), function Func0565)
 		else
 			set player012 = loc_player01
 			set unit243 = loc_unit01
 			set integer366 = 0
-			call EnumItemsInRect(loc_rect01, Condition(function Func0011), function Func0564)
+			call EnumItemsInRect(loc_rect01, Condition(function ReturnTrue), function Func0564)
 		endif
 	endif
 	call RemoveRect(loc_rect01)
@@ -14305,9 +14314,9 @@ function Func0573 takes nothing returns boolean
 	set unit246 = loc_unit01
 	set unit245 = loc_unit02
 	if IsSentinel(GetOwningPlayer(unit246))then
-		call EnumItemsInRect(rect044, Condition(function Func0011), function Func0572)
+		call EnumItemsInRect(rect044, Condition(function ReturnTrue), function Func0572)
 	else
-		call EnumItemsInRect(rect045, Condition(function Func0011), function Func0572)
+		call EnumItemsInRect(rect045, Condition(function ReturnTrue), function Func0572)
 	endif
 	if GetTriggerEvalCount(loc_trigger01) == 3 then
 		call KillUnit(loc_unit01)
@@ -14343,7 +14352,7 @@ function Func0574 takes unit loc_unit01 returns nothing
 		loop
 			exitwhen loc_integer01 > 5
 			set loc_item01 = UnitItemInSlot(loc_unit03, loc_integer01)
-			if Func0351(Func0353(loc_item01)) == false and Func0353(loc_item01) != integer193 and Func0357(loc_item01) == false then
+			if Func0351(Func0353(loc_item01)) == false and Func0353(loc_item01) != Aegis and Func0357(loc_item01) == false then
 				call UnitRemoveItemFromSlot(loc_unit03, loc_integer01)
 				if IsUnitInRegion(loc_region01, loc_unit03)and IsPlayerAlly(GetItemPlayer(loc_item01), GetOwningPlayer(loc_unit03)) == true then
 					set loc_integer02 = GetPlayerId(GetItemPlayer(loc_item01))
@@ -14685,7 +14694,7 @@ endfunction
 
 function Func0581 takes nothing returns boolean
 	if IsUnitAlly(GetFilterUnit(), GetOwningPlayer(tt_unit1)) == true and GetUnitAbilityLevel(GetFilterUnit(), 'Aloc') == 0 and UnitInventorySize(GetFilterUnit()) > 1 and GetUnitTypeId(GetFilterUnit()) != 'ncop' and GetPlayerAlliance(GetOwningPlayer(GetFilterUnit()), GetOwningPlayer(tt_unit1), ALLIANCE_SHARED_CONTROL)and GetOwningPlayer(tt_unit1) != GetOwningPlayer(GetFilterUnit())and IsUnitIllusion(GetFilterUnit()) == false and IsDead(GetFilterUnit()) == false then
-		if Func0093(GetFilterUnit()) == true then
+		if IsCourierId(GetFilterUnit()) == true then
 			set integer022 = integer022 + 1
 			set unit125 = GetFilterUnit()
 		endif
@@ -15280,19 +15289,19 @@ function Func0598 takes unit loc_unit01, item loc_item01 returns boolean
 		call SetItemPlayer(tt_item1, tt_player1, false)
 		call SetItemUserData(tt_item1, 1)
 	endif
-	if(loc_integer02 == integer193)and(Func0092(loc_unit02)or Func0248(loc_unit02))then
-		if Func0092(loc_unit02)then
+	if(loc_integer02 == Aegis)and(IsFlyingCourier(loc_unit02)or Func0248(loc_unit02))then
+		if IsFlyingCourier(loc_unit02)then
 			call Func0114(GetOwningPlayer(loc_unit02), GetObjectName('n02K'))
 		endif
 		set tt_player1 = GetItemPlayer(loc_item01)
 		set integer022 = GetItemCharges(loc_item01)
 		call RemoveItem(loc_item01)
-		if loc_integer02 == integer193 then
+		if loc_integer02 == Aegis then
 			set tt_item1 = CreateItem(Item_Dummy[loc_integer02], GetRectCenterX(rect033), GetRectCenterY(rect033))
 		endif
 		call SetItemPlayer(tt_item1, tt_player1, false)
 		call SetItemUserData(tt_item1, 1)
-		if loc_integer02 == integer193 then
+		if loc_integer02 == Aegis then
 			call SetItemCharges(tt_item1, integer022)
 		endif
 	endif
@@ -16255,7 +16264,7 @@ function Func0627 takes nothing returns boolean
 endfunction
 
 function Func0628 takes integer loc_integer01 returns boolean
-	return loc_integer01 != integer207 and loc_integer01 != integer229 and loc_integer01 != integer081 and loc_integer01 != integer193
+	return loc_integer01 != integer207 and loc_integer01 != integer229 and loc_integer01 != integer081 and loc_integer01 != Aegis
 endfunction
 
 function Func0629 takes nothing returns nothing
@@ -16267,7 +16276,7 @@ function Func0629 takes nothing returns nothing
 endfunction
 
 function Func0630 takes nothing returns boolean
-	if GetItemType(GetManipulatedItem()) == ITEM_TYPE_PERMANENT and Func0628(Func0372(GetManipulatedItem()))and Func0093(GetTriggerUnit())then
+	if GetItemType(GetManipulatedItem()) == ITEM_TYPE_PERMANENT and Func0628(Func0372(GetManipulatedItem()))and IsCourierId(GetTriggerUnit())then
 		call Func0629()
 	endif
 	return false
@@ -16365,10 +16374,6 @@ function Func0641 takes nothing returns nothing
 	set loc_unit02 = null
 endfunction
 
-function Func0642 takes nothing returns boolean
-	return true
-endfunction
-
 function Func0643 takes unit loc_unit01, unit loc_unit02 returns nothing
 	local integer loc_integer01
 	local item loc_item01
@@ -16398,7 +16403,7 @@ function Func0644 takes nothing returns nothing
 		if IsUnitInRegion(region008, loc_unit01)then
 			call Func0643(loc_unit02, loc_unit01)
 			call RemoveUnit(loc_unit01)
-		elseif Func0093(loc_unit02)then
+		elseif IsCourierId(loc_unit02)then
 			call Func0643(loc_unit02, loc_unit01)
 			call Func0114(GetOwningPlayer(loc_unit01),"Couriers cannot place wards")
 			call RemoveUnit(loc_unit01)
@@ -16451,9 +16456,9 @@ function Func0647 takes nothing returns boolean
 	local unit loc_unit01 = (LoadUnitHandle(HY, (loc_integer01), (53)))
 	set unit246 = loc_unit01
 	if IsSentinel(GetOwningPlayer(unit246))then
-		call EnumItemsInRect(rect044, Condition(function Func0011), function Func0646)
+		call EnumItemsInRect(rect044, Condition(function ReturnTrue), function Func0646)
 	else
-		call EnumItemsInRect(rect045, Condition(function Func0011), function Func0646)
+		call EnumItemsInRect(rect045, Condition(function ReturnTrue), function Func0646)
 	endif
 	if GetTriggerEvalCount(loc_trigger01) == 2 then
 		call FlushChildHashtable(HY, (loc_integer01))
@@ -16465,7 +16470,7 @@ function Func0647 takes nothing returns boolean
 endfunction
 
 function Func0648 takes nothing returns boolean
-	return Func0093(GetFilterUnit())
+	return IsCourierId(GetFilterUnit())
 endfunction
 
 function Func0649 takes nothing returns nothing
@@ -16504,7 +16509,7 @@ function Func0651 takes nothing returns nothing
 	loop
 		exitwhen loc_integer01 > 5
 		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
-		if Func0351(Func0353(loc_item01)) == false and Func0353(loc_item01) != integer193 and Func0357(loc_item01) == false then
+		if Func0351(Func0353(loc_item01)) == false and Func0353(loc_item01) != Aegis and Func0357(loc_item01) == false then
 			call UnitRemoveItemFromSlot(loc_unit01, loc_integer01)
 			if(GetUnitTypeId(loc_unit01) == 'ncop' or IsUnitInRegion(loc_region01, loc_unit01))and IsPlayerAlly(GetItemPlayer(loc_item01), GetOwningPlayer(loc_unit01)) == true then
 				set loc_integer02 = GetPlayerId(GetItemPlayer(loc_item01))
@@ -18194,7 +18199,7 @@ function Func0712 takes nothing returns boolean
 	endif
 	call Func0615(loc_unit01, loc_item01)
 	call Func0616(loc_unit01, loc_item01)
-	if(GetItemTypeId(loc_item01) == Item_Real[integer231]or GetItemTypeId(loc_item01) == Item_Real[integer232])and Func0093(loc_unit01)then
+	if(GetItemTypeId(loc_item01) == Item_Real[integer231]or GetItemTypeId(loc_item01) == Item_Real[integer232])and IsCourierId(loc_unit01)then
 		call UnitRemoveItem(loc_unit01, loc_item01)
 	elseif GetItemTypeId(loc_item01) == Item_Real[integer239]and IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
 		set loc_integer02 = (LoadInteger(HY, (GetHandleId(loc_unit01)), (750)))
@@ -18204,12 +18209,12 @@ function Func0712 takes nothing returns boolean
 				call SetItemCharges(loc_item01, loc_integer02)
 			endif
 		endif
-	elseif GetItemTypeId(loc_item01) == Item_Real[integer193]and GetUnitTypeId(loc_unit01) != 'n00L' and boolean065 == false then
+	elseif GetItemTypeId(loc_item01) == Item_Real[Aegis]and GetUnitTypeId(loc_unit01) != 'n00L' and boolean065 == false then
 		set AegisHolder = loc_unit01
 		set boolean065 = true
 		call Func0387("AegisOn", GetPlayerId(GetOwningPlayer(loc_unit01)))
 		call Func0144(bj_FORCE_ALL_PLAYERS, 10.00, strings001[GetPlayerId(GetOwningPlayer(loc_unit01))] + GetUnitName(loc_unit01) + "|r " + GetObjectName('n0EQ'))
-	elseif GetItemTypeId(loc_item01) == Item_Real[integer288]and Func0091(loc_unit01)then
+	elseif GetItemTypeId(loc_item01) == Item_Real[integer288]and IsBasicCourier(loc_unit01)then
 		call Func0710(loc_unit01)
 	elseif GetItemTypeId(loc_item01) == Item_Real[integer357]and GetUnitTypeId(loc_unit01) == 'Emoo' then
 		call SetPlayerTechResearched(GetOwningPlayer(loc_unit01), 'R00J', 1)
@@ -18719,7 +18724,7 @@ function Func0731 takes nothing returns nothing
 endfunction
 
 function Func0732 takes nothing returns nothing
-	if GetSpellAbilityId() == 'A1R5' and Func0093(GetTriggerUnit()) == false then
+	if GetSpellAbilityId() == 'A1R5' and IsCourierId(GetTriggerUnit()) == false then
 		call Func0730()
 	endif
 	if GetSpellAbilityId() == 'A231' then
@@ -18888,7 +18893,7 @@ function Func0743 takes nothing returns nothing
 	call UnitAddAbility(loc_unit02, Func0740(GetSpellAbilityId()))
 	call IssueTargetOrder(loc_unit02,"antimagicshell", loc_unit01)
 	call Func0344(loc_unit01, 0, 0)
-	if Func0093(loc_unit01)then
+	if IsCourierId(loc_unit01)then
 		call Func0193(loc_unit01, loc_real01, 3)
 	else
 		call Func0193(loc_unit01, loc_real01, 1.4)
@@ -19690,7 +19695,7 @@ function Func0797 takes nothing returns nothing
 	local unit loc_unit01 = GetTriggerUnit()
 	local trigger loc_trigger01
 	local integer loc_integer01
-	if Func0093(loc_unit01) == false then
+	if IsCourierId(loc_unit01) == false then
 		set loc_trigger01 = CreateTrigger()
 		set loc_integer01 = GetHandleId(loc_trigger01)
 		call UnitAddAbility(loc_unit01, 'Aetl')
@@ -21003,7 +21008,7 @@ function Func0879 takes nothing returns nothing
 endfunction
 
 function Func0880 takes nothing returns nothing
-	if Func0372(GetManipulatedItem()) == integer193 then
+	if Func0372(GetManipulatedItem()) == Aegis then
 		call Func0879()
 	endif
 endfunction
@@ -21330,15 +21335,15 @@ function Func0893 takes nothing returns nothing
 	call SaveInteger(HY, (400 + GetPlayerId(GetOwningPlayer(GetKillingUnit()))), (79), ((LoadInteger(HY, (400 + GetPlayerId(GetOwningPlayer(GetKillingUnit()))), (79))) + 1))
 endfunction
 
-function InitNeutralsDots takes nothing returns nothing
+function InitNeutralDots takes nothing returns nothing
 	local location l = GetRectCenter(rect033)
 	set Roshan = CreateUnitAtLoc(Player(12), 'n00L', l, bj_UNIT_FACING)
 	call SetUnitAcquireRange(Roshan, 150)
 	call RoshanCheckLoc(Roshan)
 	call RemoveLocation(l)
-	call UnitAddItem(Roshan, CreateItem(Item_Real[integer193], 0, 0))
+	call UnitAddItem(Roshan, CreateItem(Item_Real[Aegis], 0, 0))
 	call UnitAddAbility(Roshan, 'A142')
-	set l = GetRectCenter(rect019)
+	set l = GetRectCenter(ScourgeAncientCamp_SpawnRect)
 	call RemoveUnit(CreateUnitAtLoc(Neutrals, 'u001', l, 0))
 	call RemoveLocation(l)
 	set l = GetRectCenter(rect020)
@@ -21977,78 +21982,78 @@ endfunction
 // 	set l = null
 // endfunction
 
-function Func0931 takes real x, real y returns nothing
+function SpawnNeutrals_Harpies takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'n0HW', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'n0HX', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'n0HW', x, y, 0), x, y)
 endfunction
 
-function Func0932 takes real x, real y returns nothing
+function SpawnNeutrals_Junglers takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'njg1', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'njg1', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'njga', x, y, 0), x, y)
 endfunction
 
-function Func0933 takes real x, real y returns nothing
+function SpawnNeutrals_DragonOverseers takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nbdo', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nbdo', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nbds', x, y, 0), x, y)
 endfunction
 
-function Func0934 takes real x, real y returns nothing
+function SpawnNeutrals_BlackDragons takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nbdk', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nbdk', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nbwm', x, y, 0), x, y)
 endfunction
 
-function Func0935 takes real x, real y returns nothing
+function SpawnNeutrals_RockGolems takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'ngst', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'ngst', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nggr', x, y, 0), x, y)
 endfunction
 
-function Func0937 takes real x, real y returns nothing
+function SpawnNeutrals_Lizards takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'n0LC', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'n0LD', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'n0LD', x, y, 0), x, y)
 endfunction
 
-function Func0938 takes real x, real y returns nothing
+function SpawnNeutrals_Ogres takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nogm', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nogm', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nomg', x, y, 0), x, y)
 endfunction
 
-function Func0939 takes real x, real y returns nothing
+function SpawnNeutrals_Furbolgs takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nfpc', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nfpu', x, y, 0), x, y)
 endfunction
 
-function Func0940 takes real x, real y returns nothing
+function SpawnNeutrals_SatyrsBig takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nsth', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', x, y, 0), x, y)
 endfunction
 
-function Func0941 takes real x, real y returns nothing
+function SpawnNeutrals_SatyrsSmall takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nstl', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nsat', x, y, 0), x, y)
 endfunction
 
-function Func0942 takes real x, real y returns nothing
+function SpawnNeutrals_Wolves takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nwlg', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nwlg', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'n00S', x, y, 0), x, y)
 endfunction
 
-function Func0943 takes real x, real y returns nothing
+function SpawnNeutrals_MudGolems takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'n026', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'n026', x, y, 0), x, y)
 endfunction
 
-function Func0944 takes real x, real y returns nothing
+function SpawnNeutrals_Kobolds takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nkol', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nkob', x, y, 0), x, y)
@@ -22056,253 +22061,133 @@ function Func0944 takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nkot', x, y, 0), x, y)
 endfunction
 
-function Func0945 takes real x, real y returns nothing
+function SpawnNeutrals_Trolls takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nfsh', x, y, 0), x, y)
 endfunction
 
-function Func0946 takes real x, real y returns nothing
+function SpawnNeutrals_Centaurs takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'ncen', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'ncnk', x, y, 0), x, y)
 endfunction
 
-function Func0947 takes real x, real y returns nothing
+function SpawnNeutrals_Gnolls takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'ngns', x, y, 0), x, y)
 endfunction
 
-function Func0948 takes real x, real y returns nothing
+function SpawnNeutrals_TrollsKobold takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nftb', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nkol', x, y, 0), x, y)
 endfunction
 
-function Func0949 takes real x, real y returns nothing
+function SpawnNeutrals_Banshee takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'ngh1', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'npfl', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'npfl', x, y, 0), x, y)
 endfunction
 
-function Func0950 takes real x, real y returns nothing
+function SpawnNeutrals_Wildkins takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'nowe', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nowb', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'nowb', x, y, 0), x, y)
 endfunction
 
-function Func0951 takes real x, real y returns nothing
+function SpawnNeutrals_DarkTrolls takes real x, real y returns nothing
 	call SetUnitPosition(CreateUnit(Neutrals, 'ndtr', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'ndtr', x, y, 0), x, y)
 	call SetUnitPosition(CreateUnit(Neutrals, 'ndtw', x, y, 0), x, y)
 endfunction
 
-function Func0952 takes real x, real y returns nothing
+function SpawnNeutrals_BigCamp takes real x, real y returns nothing
 	local integer i = GetRandomInt(1, 5)
 	if i == 1 then
-		call Func0939(x, y)
+		call SpawnNeutrals_Furbolgs(x, y)
 	elseif i == 2 then
-		call Func0940(x, y)
+		call SpawnNeutrals_SatyrsBig(x, y)
 	elseif i == 3 then
-		call Func0950(x, y)
+		call SpawnNeutrals_Wildkins(x, y)
 	elseif i == 4 then
-		call Func0951(x, y)
+		call SpawnNeutrals_DarkTrolls(x, y)
 	elseif i == 5 then
-		call Func0946(x, y)
+		call SpawnNeutrals_Centaurs(x, y)
 	endif
 endfunction
 
-function Func0953 takes real x, real y returns nothing
+function SpawnNeutrals_MediumCamp takes real x, real y returns nothing
 	local integer i = GetRandomInt(1, 5)
 	if i == 1 then
-		call Func0939(x, y)
+		call SpawnNeutrals_MudGolems(x, y)
 	elseif i == 2 then
-		call Func0940(x, y)
+		call SpawnNeutrals_Ogres(x, y)
 	elseif i == 3 then
-		call Func0950(x, y)
+		call SpawnNeutrals_SatyrsSmall(x, y)
 	elseif i == 4 then
-		call Func0951(x, y)
+		call SpawnNeutrals_Wolves(x, y)
 	elseif i == 5 then
-		call Func0946(x, y)
+		call SpawnNeutrals_Centaurs(x, y)
 	endif
 endfunction
 
-function Func0954 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 5)
-	if i == 1 then
-		call Func0939(x, y)
-	elseif i == 2 then
-		call Func0940(x, y)
-	elseif i == 3 then
-		call Func0950(x, y)
-	elseif i == 4 then
-		call Func0951(x, y)
-	elseif i == 5 then
-		call Func0946(x, y)
-	endif
-endfunction
-
-function Func0955 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 5)
-	if i == 1 then
-		call Func0939(x, y)
-	elseif i == 2 then
-		call Func0940(x, y)
-	elseif i == 3 then
-		call Func0950(x, y)
-	elseif i == 4 then
-		call Func0951(x, y)
-	elseif i == 5 then
-		call Func0946(x, y)
-	endif
-endfunction
-
-function Func0956 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 5)
-	if i == 1 then
-		call Func0943(x, y)
-	elseif i == 2 then
-		call Func0938(x, y)
-	elseif i == 3 then
-		call Func0941(x, y)
-	elseif i == 4 then
-		call Func0942(x, y)
-	elseif i == 5 then
-		call Func0946(x, y)
-	endif
-endfunction
-
-function Func0957 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 5)
-	if i == 1 then
-		call Func0943(x, y)
-	elseif i == 2 then
-		call Func0938(x, y)
-	elseif i == 3 then
-		call Func0941(x, y)
-	elseif i == 4 then
-		call Func0942(x, y)
-	elseif i == 5 then
-		call Func0946(x, y)
-	endif
-endfunction
-
-function Func0958 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 5)
-	if i == 1 then
-		call Func0943(x, y)
-	elseif i == 2 then
-		call Func0938(x, y)
-	elseif i == 3 then
-		call Func0941(x, y)
-	elseif i == 4 then
-		call Func0942(x, y)
-	elseif i == 5 then
-		call Func0946(x, y)
-	endif
-endfunction
-
-function Func0959 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 5)
-	if i == 1 then
-		call Func0943(x, y)
-	elseif i == 2 then
-		call Func0938(x, y)
-	elseif i == 3 then
-		call Func0941(x, y)
-	elseif i == 4 then
-		call Func0942(x, y)
-	elseif i == 5 then
-		call Func0946(x, y)
-	endif
-endfunction
-
-function Func0960 takes real x, real y returns nothing
+function SpawnNeutrals_SmallCamp takes real x, real y returns nothing
 	local integer i = GetRandomInt(1, 6)
 	if i == 1 then
-		call Func0949(x, y)
+		call SpawnNeutrals_Banshee(x, y)
 	elseif i == 2 then
-		call Func0948(x, y)
+		call SpawnNeutrals_TrollsKobold(x, y)
 	elseif i == 3 then
-		call Func0947(x, y)
+		call SpawnNeutrals_Gnolls(x, y)
 	elseif i == 4 then
-		call Func0944(x, y)
+		call SpawnNeutrals_Kobolds(x, y)
 	elseif i == 5 then
-		call Func0945(x, y)
+		call SpawnNeutrals_Trolls(x, y)
 	elseif i == 6 then
-		call Func0931(x, y)
+		call SpawnNeutrals_Harpies(x, y)
 	endif
 endfunction
 
-function Func0961 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 6)
-	if i == 1 then
-		call Func0949(x, y)
-	elseif i == 2 then
-		call Func0948(x, y)
-	elseif i == 3 then
-		call Func0947(x, y)
-	elseif i == 4 then
-		call Func0944(x, y)
-	elseif i == 5 then
-		call Func0945(x, y)
-	elseif i == 6 then
-		call Func0931(x, y)
-	endif
-endfunction
-
-function Func0962 takes real x, real y returns nothing
+function SpawnNeutrals_Ancient takes real x, real y returns nothing
 	local integer i = GetRandomInt(1, 5)
 	if i == 1 then
-		call Func0932(x, y)
+		call SpawnNeutrals_Junglers(x, y)
 	elseif i == 2 then
-		call Func0933(x, y)
+		call SpawnNeutrals_DragonOverseers(x, y)
 	elseif i == 3 then
-		call Func0934(x, y)
+		call SpawnNeutrals_BlackDragons(x, y)
 	elseif i == 4 then
-		call Func0935(x, y)
+		call SpawnNeutrals_RockGolems(x, y)
 	elseif i == 5 then
-		call Func0937(x, y)
+		call SpawnNeutrals_Lizards(x, y)
 	endif
 endfunction
 
-function Func0963 takes real x, real y returns nothing
-	local integer i = GetRandomInt(1, 5)
-	if i == 1 then
-		call Func0932(x, y)
-	elseif i == 2 then
-		call Func0933(x, y)
-	elseif i == 3 then
-		call Func0934(x, y)
-	elseif i == 4 then
-		call Func0935(x, y)
-	elseif i == 5 then
-		call Func0937(x, y)
+function SpawnNeutralsCheck_ForGroup takes nothing returns nothing
+	local unit u = GetEnumUnit()
+	if GetUnitAbilityLevel(u, 'A0P4') != 0 then
+		call GroupRemoveUnit(tt_group1, u)
 	endif
+	if GetUnitTypeId(u) == 'o003' then
+		call GroupRemoveUnit(tt_group1, u)
+	endif
+	if GetUnitTypeId(u) == 'o01X' then
+		call GroupRemoveUnit(tt_group1, u)
+	endif
+	if IsDead(u) then
+		call GroupRemoveUnit(tt_group1, u)
+	endif
+	if IsCourierId(u) then
+		call GroupRemoveUnit(tt_group1, u)
+	endif
+	set u = null
 endfunction
 
-function Func0964 takes nothing returns nothing
-	if GetUnitAbilityLevel(GetEnumUnit(), 'A0P4') != 0 then
-		call GroupRemoveUnit(group001, GetEnumUnit())
-	endif
-	if GetUnitTypeId(GetEnumUnit()) == 'o003' then
-		call GroupRemoveUnit(group001, GetEnumUnit())
-	endif
-	if GetUnitTypeId(GetEnumUnit()) == 'o01X' then
-		call GroupRemoveUnit(group001, GetEnumUnit())
-	endif
-	if IsDead(GetEnumUnit()) == true then
-		call GroupRemoveUnit(group001, GetEnumUnit())
-	endif
-	if Func0093(GetEnumUnit()) == true then
-		call GroupRemoveUnit(group001, GetEnumUnit())
-	endif
-endfunction
-
-function Func0965 takes group loc_group01 returns boolean
-	set group001 = loc_group01
-	call ForGroup(loc_group01, function Func0964)
-	return FirstOfGroup(loc_group01) == null
+function SpawnNeutralsCheck takes group g returns boolean
+	set tt_group1 = g
+	call ForGroup(g, function SpawnNeutralsCheck_ForGroup)
+	return FirstOfGroup(g) == null
 endfunction
 
 function SpawnNeutrals takes nothing returns boolean
@@ -22312,100 +22197,100 @@ function SpawnNeutrals takes nothing returns boolean
 	if Mode_NN then
 		return false
 	endif
-	set checkRect = rect034
-	set spawnRect = rect019
+	set checkRect = ScourgeAncientCamp_CheckRect
+	set spawnRect = ScourgeAncientCamp_SpawnRect
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0962(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g) then
+		call SpawnNeutrals_Ancient(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect035
 	set spawnRect = rect020
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0963(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_Ancient(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect036
 	set spawnRect = rect021
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0952(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_BigCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect037
 	set spawnRect = rect022
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0954(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_BigCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect038
 	set spawnRect = rect023
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0957(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_MediumCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect039
 	set spawnRect = rect024
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0956(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_MediumCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect040
 	set spawnRect = rect025
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0958(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_MediumCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect042
 	set spawnRect = rect026
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0959(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_MediumCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect041
 	set spawnRect = rect027
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0955(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_BigCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect043
 	set spawnRect = rect028
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0960(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_SmallCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect046
 	set spawnRect = rect047
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0961(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_SmallCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = rect048
 	set spawnRect = rect049
 	set g = GetAvailableGroup()
-	call GroupEnumUnitsInRect(g, checkRect, Condition(function Func0011))
-	if Func0965(g)then
-		call Func0953(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
+	call GroupEnumUnitsInRect(g, checkRect, Condition(function ReturnTrue))
+	if SpawnNeutralsCheck(g)then
+		call SpawnNeutrals_BigCamp(GetRectCenterX(spawnRect), GetRectCenterY(spawnRect))
 	endif
 	call KillGroup(g)
 	set checkRect = null
@@ -25298,7 +25183,7 @@ function Func1018 takes nothing returns nothing
 endfunction
 
 function Func1019 takes nothing returns boolean
-	if GetSpellAbilityId() == 'A053' and Func0093(GetSpellTargetUnit()) == false then
+	if GetSpellAbilityId() == 'A053' and IsCourierId(GetSpellTargetUnit()) == false then
 		call Func1018()
 	endif
 	return false
@@ -25332,7 +25217,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real207)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -25343,7 +25228,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real208)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -25354,7 +25239,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real209)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -25365,7 +25250,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real210)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Sent_Mid_3
@@ -25374,7 +25259,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real211)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Sent_Bot_3
@@ -25383,7 +25268,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real212)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Ancient_Sent_1
@@ -25392,7 +25277,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real213)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Ancient_Sent_2
@@ -25401,7 +25286,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real214)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Melee_Sent_Top
@@ -25410,7 +25295,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real215)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Melee_Sent_Mid
@@ -25419,7 +25304,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real216)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Melee_Sent_Bot
@@ -25428,7 +25313,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real217)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Ranged_Sent_Top
@@ -25437,7 +25322,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real218)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Ranged_Sent_Mid
@@ -25446,7 +25331,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real219)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Ranged_Sent_Bot
@@ -25455,7 +25340,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real220)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Ancient_Sent
@@ -25464,7 +25349,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real221)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -25475,7 +25360,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real222)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -25486,7 +25371,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real223)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -25497,7 +25382,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real224)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -25508,7 +25393,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real225)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Scrg_Mid_3
@@ -25517,7 +25402,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real226)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Scrg_Bot_3
@@ -25526,7 +25411,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real227)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Ancient_Scrg_1
@@ -25535,7 +25420,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real228)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Tower_Ancient_Scrg_2
@@ -25544,7 +25429,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real229)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Melee_Scrg_Top
@@ -25553,7 +25438,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real230)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Melee_Scrg_Mid
@@ -25562,7 +25447,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real231)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Melee_Scrg_Bot
@@ -25571,7 +25456,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real232)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Ranged_Scrg_Top
@@ -25580,7 +25465,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real233)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Ranged_Scrg_Mid
@@ -25589,7 +25474,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real234)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Rax_Ranged_Scrg_Bot
@@ -25598,7 +25483,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real235)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 		set loc_unit01 = Ancient_Scrg
@@ -25607,7 +25492,7 @@ function Func1023 takes nothing returns boolean
 			set loc_real02 = loc_real01 + real237
 			if loc_real02 < (GetUnitState(loc_unit01, UNIT_STATE_MAX_LIFE) - real236)then
 				call SetUnitState(loc_unit01, UNIT_STATE_LIFE, loc_real02)
-//  				call Func1022(loc_unit01)
+				//  				call Func1022(loc_unit01)
 			endif
 		endif
 	endif
@@ -26572,14 +26457,14 @@ function Func1079 takes nothing returns nothing
 endfunction
 
 function Func1080 takes nothing returns nothing
-	if Func0093(GetEnumUnit())and IsUnitAlly(GetEnumUnit(), Sentinels[0]) == false and GetUnitState(GetEnumUnit(), UNIT_STATE_LIFE) > 0.5 then
+	if IsCourierId(GetEnumUnit())and IsUnitAlly(GetEnumUnit(), Sentinels[0]) == false and GetUnitState(GetEnumUnit(), UNIT_STATE_LIFE) > 0.5 then
 		call UnitRemoveAbility(GetEnumUnit(), 'B08H')
 		call Func0109(Fountain_Sent, GetEnumUnit(), 2, 500)
 	endif
 endfunction
 
 function Func1081 takes nothing returns nothing
-	if Func0093(GetEnumUnit())and IsUnitAlly(GetEnumUnit(), Scourges[0]) == false and GetUnitState(GetEnumUnit(), UNIT_STATE_LIFE) > 0.5 then
+	if IsCourierId(GetEnumUnit())and IsUnitAlly(GetEnumUnit(), Scourges[0]) == false and GetUnitState(GetEnumUnit(), UNIT_STATE_LIFE) > 0.5 then
 		call UnitRemoveAbility(GetEnumUnit(), 'B08H')
 		call Func0109(Fountain_Scrg, GetEnumUnit(), 2, 500)
 	endif
@@ -26587,11 +26472,11 @@ endfunction
 
 function Func1082 takes nothing returns boolean
 	local group loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsInRect(loc_group01, rect044, Condition(function Func0011))
+	call GroupEnumUnitsInRect(loc_group01, rect044, Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func1080)
 	call KillGroup(loc_group01)
 	set loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsInRect(loc_group01, rect045, Condition(function Func0011))
+	call GroupEnumUnitsInRect(loc_group01, rect045, Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func1081)
 	call KillGroup(loc_group01)
 	set loc_group01 = null
@@ -28065,7 +27950,7 @@ function Func1170 takes nothing returns nothing
 	set loc_trigger01 = CreateTrigger()
 	call TriggerAddAction(loc_trigger01, function Func1169)
 	set loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function Func0011))
+	call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function ReturnTrue))
 	loop
 		set loc_unit01 = FirstOfGroup(loc_group01)
 		exitwhen loc_unit01 == null
@@ -28083,7 +27968,7 @@ function Func1170 takes nothing returns nothing
 	endloop
 	call KillGroup(loc_group01)
 	set loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function Func0011))
+	call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function ReturnTrue))
 	loop
 		set loc_unit01 = FirstOfGroup(loc_group01)
 		exitwhen loc_unit01 == null
@@ -28165,29 +28050,29 @@ function Func1176 takes nothing returns boolean
 	local unit loc_unit01
 	if boolean025 then
 		set loc_trigger01 = CreateTrigger()
-		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[0], EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, Condition(function Func0011))
-		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[0], EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, Condition(function Func0011))
+		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[0], EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, Condition(function ReturnTrue))
+		call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[0], EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, Condition(function ReturnTrue))
 		call TriggerAddCondition(loc_trigger01, Condition(function Func1174))
 		set loc_trigger01 = CreateTrigger()
 		set loc_group01 = GetAvailableGroup()
-		call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function Func0011))
+		call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function ReturnTrue))
 		loop
 			set loc_unit01 = FirstOfGroup(loc_group01)
 			exitwhen loc_unit01 == null
 			call GroupRemoveUnit(loc_group01, loc_unit01)
 			if GetUnitAcquireRange(loc_unit01) != 0 then
-				call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 600, Condition(function Func0011))
+				call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 600, Condition(function ReturnTrue))
 			endif
 		endloop
 		call KillGroup(loc_group01)
 		set loc_group01 = GetAvailableGroup()
-		call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function Func0011))
+		call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function ReturnTrue))
 		loop
 			set loc_unit01 = FirstOfGroup(loc_group01)
 			exitwhen loc_unit01 == null
 			call GroupRemoveUnit(loc_group01, loc_unit01)
 			if GetUnitAcquireRange(loc_unit01) != 0 and IsUnitType(loc_unit01, UNIT_TYPE_STRUCTURE)then
-				call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 600, Condition(function Func0011))
+				call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 600, Condition(function ReturnTrue))
 			endif
 		endloop
 		call KillGroup(loc_group01)
@@ -28226,11 +28111,11 @@ function Func1179 takes nothing returns nothing
 		set loc_integer01 = loc_integer01 + 1
 	endloop
 	set loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function Func0011))
+	call GroupEnumUnitsOfPlayer(loc_group01, Sentinels[0], Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func1178)
 	call KillGroup(loc_group01)
 	set loc_group01 = GetAvailableGroup()
-	call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function Func0011))
+	call GroupEnumUnitsOfPlayer(loc_group01, Scourges[0], Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func1178)
 	call KillGroup(loc_group01)
 	set loc_group01 = null
@@ -30104,7 +29989,7 @@ function Func1259 takes nothing returns boolean
 endfunction
 
 function Func1260 takes nothing returns boolean
-	return Func0093(GetFilterUnit())and GetOwningPlayer(GetFilterUnit()) == GetTriggerPlayer()
+	return IsCourierId(GetFilterUnit())and GetOwningPlayer(GetFilterUnit()) == GetTriggerPlayer()
 endfunction
 
 function Func1261 takes nothing returns nothing
@@ -30565,7 +30450,7 @@ function Func1289 takes unit loc_unit01, player loc_player01 returns nothing
 	endif
 	call SetUnitX(loc_unit01, loc_real01)
 	call SetUnitY(loc_unit01, loc_real02)
-	if Func0093(loc_unit01)then
+	if IsCourierId(loc_unit01)then
 		call IssueImmediateOrder(loc_unit01,"creepanimatedead")
 	endif
 	if IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
@@ -30578,7 +30463,7 @@ function Func1289 takes unit loc_unit01, player loc_player01 returns nothing
 		loop
 			exitwhen loc_integer01 > 5
 			set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer01)
-			if GetUnitTypeId(loc_unit01) != 'H00J' and loc_item01 != null and(GetItemPlayer(loc_item01) != GetOwningPlayer(loc_unit01)and Func0353(loc_item01) != integer207 and Func0353(loc_item01) != integer208)and GetItemTypeId(loc_item01) != Item_Real[integer193]then
+			if GetUnitTypeId(loc_unit01) != 'H00J' and loc_item01 != null and(GetItemPlayer(loc_item01) != GetOwningPlayer(loc_unit01)and Func0353(loc_item01) != integer207 and Func0353(loc_item01) != integer208)and GetItemTypeId(loc_item01) != Item_Real[Aegis]then
 				call UnitRemoveItem(loc_unit01, loc_item01)
 			endif
 			set loc_integer01 = loc_integer01 + 1
@@ -30591,7 +30476,7 @@ function Func1289 takes unit loc_unit01, player loc_player01 returns nothing
 endfunction
 
 function Func1290 takes nothing returns boolean
-	if IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true or Func0093(GetFilterUnit())then
+	if IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true or IsCourierId(GetFilterUnit())then
 		call Func1289(GetFilterUnit(), player008)
 	elseif GetUnitTypeId(GetFilterUnit()) == 'ncop' then
 		call IssueImmediateOrder(GetFilterUnit(),"creepanimatedead")
@@ -30630,9 +30515,9 @@ function Func1293 takes player loc_player01, player loc_player02 returns nothing
 	call ForGroup(loc_group01, function Func1288)
 	call ForGroup(loc_group02, function Func1288)
 	set player008 = loc_player01
-	call EnumItemsInRect(GetWorldBounds(), Condition(function Func0167), function Func1292)
+	call EnumItemsInRect(GetWorldBounds(), Condition(function ReturnTrue), function Func1292)
 	set player008 = loc_player02
-	call EnumItemsInRect(GetWorldBounds(), Condition(function Func0167), function Func1292)
+	call EnumItemsInRect(GetWorldBounds(), Condition(function ReturnTrue), function Func1292)
 	call KillGroup(loc_group01)
 	call KillGroup(loc_group02)
 	set loc_group01 = null
@@ -36914,7 +36799,7 @@ function Func1432 takes nothing returns boolean
 	local real loc_real03
 	local integer loc_integer05
 	local group loc_group02 = GetAvailableGroup()
-	call GroupEnumUnitsInRect(loc_group02, GetWorldBounds(), Condition(function Func0011))
+	call GroupEnumUnitsInRect(loc_group02, GetWorldBounds(), Condition(function ReturnTrue))
 	call ForGroup(loc_group02, function Func1431)
 	call KillGroup(loc_group02)
 	set loc_integer01 = 1
@@ -37783,7 +37668,7 @@ function Func1450 takes nothing returns nothing
 		set loc_integer01 = loc_integer01 + 1
 	endloop
 	call RegionAddRect(loc_region01, bj_mapInitialPlayableArea)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0011))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddAction(loc_trigger01, function Func1449)
 endfunction
 
@@ -38298,7 +38183,7 @@ endfunction
 
 function Func1489 takes nothing returns nothing
 	local integer loc_integer01 = Func0353(GetEnumItem())
-	if GetWidgetLife(GetEnumItem()) > 0 and GetItemPlayer(GetEnumItem()) == player021 and loc_integer01 != integer193 and loc_integer01 != integer207 and loc_integer01 != integer208 and loc_integer01 != integer081 and loc_integer01 != integer082 then
+	if GetWidgetLife(GetEnumItem()) > 0 and GetItemPlayer(GetEnumItem()) == player021 and loc_integer01 != Aegis and loc_integer01 != integer207 and loc_integer01 != integer208 and loc_integer01 != integer081 and loc_integer01 != integer082 then
 		if IsItemVisible(GetEnumItem())then
 			call SetItemVisible(GetEnumItem(), false)
 		else
@@ -38330,7 +38215,7 @@ function Func1490 takes nothing returns nothing
 		exitwhen loc_integer02 > 5
 		set loc_item01 = UnitItemInSlot(loc_unit01, loc_integer02)
 		set loc_integer01 = Func0353(loc_item01)
-		if GetItemPlayer(loc_item01) == player021 and loc_integer01 != integer193 and loc_integer01 != integer207 and loc_integer01 != integer208 and loc_integer01 != integer081 and loc_integer01 != integer082 then
+		if GetItemPlayer(loc_item01) == player021 and loc_integer01 != Aegis and loc_integer01 != integer207 and loc_integer01 != integer208 and loc_integer01 != integer081 and loc_integer01 != integer082 then
 			call UnitRemoveItemFromSlot(loc_unit01, loc_integer02)
 			set loc_integer03 = GetPlayerId(GetItemPlayer(loc_item01))
 			call SetItemPosition(loc_item01, loc_real01, loc_real02)
@@ -38343,7 +38228,7 @@ function Func1490 takes nothing returns nothing
 endfunction
 
 function Func1491 takes nothing returns boolean
-	return(GetUnitTypeId(GetFilterUnit()) == 'ncop' or Func0093(GetFilterUnit())or(IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and GetOwningPlayer(GetFilterUnit()) != player021 and GetOwningPlayer(GetFilterUnit()) != Sentinels[0]and GetOwningPlayer(GetFilterUnit()) != Scourges[0]))and IsUnitAlly(GetFilterUnit(), player021) == true
+	return(GetUnitTypeId(GetFilterUnit()) == 'ncop' or IsCourierId(GetFilterUnit())or(IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == true and GetOwningPlayer(GetFilterUnit()) != player021 and GetOwningPlayer(GetFilterUnit()) != Sentinels[0]and GetOwningPlayer(GetFilterUnit()) != Scourges[0]))and IsUnitAlly(GetFilterUnit(), player021) == true
 endfunction
 
 function Func1492 takes player loc_player01 returns nothing
@@ -40140,7 +40025,7 @@ function Func1596 takes unit loc_unit01, real loc_real01, real loc_real02, group
 	local group loc_group02 = GetAvailableGroup()
 	local unit loc_unit02
 	call Func0172(loc_real01, loc_real02, 150)
-	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 150, Condition(function Func0011))
+	call GroupEnumUnitsInRange(loc_group02, loc_real01, loc_real02, 150, Condition(function ReturnTrue))
 	loop
 		set loc_unit02 = FirstOfGroup(loc_group02)
 		exitwhen loc_unit02 == null
@@ -40477,7 +40362,7 @@ function Func1613 takes nothing returns nothing
 	local unit loc_unit02
 	local trigger loc_trigger01
 	local integer loc_integer02
-	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function Func0011))
+	call GroupEnumUnitsOfPlayer(loc_group01, loc_player01, Condition(function ReturnTrue))
 	call ForGroup(loc_group01, function Func1612)
 	call KillGroup(loc_group01)
 	call DestroyEffect(AddSpecialEffect("Abilities\\Spells\\Orc\\FeralSpirit\\feralspiritdone.mdl", loc_real01, loc_real02))
@@ -41704,7 +41589,7 @@ endfunction
 function Func1693 takes nothing returns boolean
 	if(IsUnitType(GetFilterUnit(), UNIT_TYPE_HERO) == false)then
 		if(IsUnitAliveBJ(GetFilterUnit()))then
-			if Func0093(GetFilterUnit()) == false then
+			if IsCourierId(GetFilterUnit()) == false then
 				if(GetUnitTypeId(GetFilterUnit()) != 'ncop')then
 					if(GetUnitAbilityLevel(GetFilterUnit(), 'Aeth') == 1)then
 						if((GetUnitAbilityLevel(GetFilterUnit(), 'A0KO') == 1)or(GetUnitAbilityLevel(GetFilterUnit(), 'A0KQ') == 1)or(GetUnitAbilityLevel(GetFilterUnit(), 'A0KR') == 1)or(GetUnitAbilityLevel(GetFilterUnit(), 'A0KP') == 1))then
@@ -41887,7 +41772,7 @@ function Func1703 takes nothing returns nothing
 endfunction
 
 function Func1704 takes nothing returns nothing
-	if Func0093(GetEnumUnit()) == false then
+	if IsCourierId(GetEnumUnit()) == false then
 		call Func0109(unit268, GetEnumUnit(), 1, real266)
 	endif
 endfunction
@@ -42950,7 +42835,7 @@ function Func1763 takes nothing returns boolean
 		call SaveUnitHandle(HY, (loc_integer02), (8), (loc_unit01))
 		call SaveTriggerHandle(HY, (loc_integer02), (9), (loc_trigger01))
 		call SaveInteger(HY, (loc_integer02), (5), (loc_integer03))
-		call TriggerRegisterUnitInRange(loc_trigger02, loc_unit01, 235, Condition(function Func0167))
+		call TriggerRegisterUnitInRange(loc_trigger02, loc_unit01, 235, Condition(function ReturnTrue))
 		call TriggerRegisterUnitEvent(loc_trigger02, loc_unit01, EVENT_UNIT_DEATH)
 		call TriggerAddCondition(loc_trigger02, Condition(function Func1762))
 		call DestroyEffect(AddSpecialEffectTarget("effects\\ManaFlareBoltImpact_NoSound.mdx", loc_unit01,"origin"))
@@ -44944,7 +44829,7 @@ function Func1910 takes nothing returns nothing
 	local rect loc_rect01 = Rect(loc_real01 - loc_real03, loc_real02 - loc_real03, loc_real01 + loc_real03, loc_real02 + loc_real03)
 	set integer446 = 0
 	set integer447 = loc_integer01
-	call EnumDestructablesInRect(loc_rect01, Condition(function Func0011), function Func1909)
+	call EnumDestructablesInRect(loc_rect01, Condition(function ReturnTrue), function Func1909)
 	call RemoveRect(loc_rect01)
 	call RemoveLocation(loc_location01)
 	set loc_location01 = null
@@ -47569,7 +47454,7 @@ endfunction
 
 function Func2071 takes nothing returns boolean
 	local unit loc_unit01 = GetFilterUnit()
-	if IsUnitInGroup(loc_unit01, group001)then
+	if IsUnitInGroup(loc_unit01, tt_group1)then
 		return false
 	endif
 	if IsUnitEnemy(loc_unit01, GetOwningPlayer(unit002))and GetUnitAbilityLevel(loc_unit01, 'A04R') != 1 and GetUnitState(loc_unit01, UNIT_STATE_LIFE) > 0 and IsUnitType(loc_unit01, UNIT_TYPE_STRUCTURE) == false then
@@ -47601,7 +47486,7 @@ function Func2073 takes nothing returns boolean
 	call SaveReal(HY, (loc_integer01), (24), ((loc_real07) * 1.0))
 	set unit002 = loc_unit01
 	set real002 = GetUnitAbilityLevel(loc_unit01, 'A0FN') * 75 + 25
-	set group001 = loc_group01
+	set tt_group1 = loc_group01
 	call GroupEnumUnitsInRange(loc_group02, loc_real02, loc_real03, 200 + 25, Condition(function Func2071))
 	call ForGroup(loc_group02, function Func2072)
 	call GroupAddGroup(loc_group02, loc_group01)
@@ -48985,7 +48870,7 @@ function Func2160 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
 	local region loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, bj_mapInitialPlayableArea)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0011))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2159))
 	set loc_trigger01 = null
 	set loc_region01 = null
@@ -51120,7 +51005,7 @@ endfunction
 
 function Func2302 takes nothing returns nothing
 	local integer loc_integer01 = Func0353(GetEnumItem())
-	if GetWidgetLife(GetEnumItem()) > 0 and loc_integer01 != integer193 then
+	if GetWidgetLife(GetEnumItem()) > 0 and loc_integer01 != Aegis then
 		if boolean003 == true then
 			call Func2300()
 		else
@@ -52058,8 +51943,8 @@ endfunction
 
 function Func2340 takes nothing returns nothing
 	local trigger loc_trigger01 = CreateTrigger()
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, GetOwningPlayer(GetTriggerUnit()), EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, Condition(function Func0167))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, GetOwningPlayer(GetTriggerUnit()), EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, Condition(function Func0167))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, GetOwningPlayer(GetTriggerUnit()), EVENT_PLAYER_UNIT_ISSUED_TARGET_ORDER, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, GetOwningPlayer(GetTriggerUnit()), EVENT_PLAYER_UNIT_ISSUED_POINT_ORDER, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2339))
 	set loc_trigger01 = null
 endfunction
@@ -52566,7 +52451,7 @@ function Func2377 takes unit loc_unit01, real loc_real01, real loc_real02, real 
 endfunction
 
 function Func2378 takes nothing returns boolean
-	if((GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(GetTriggerUnit())))and Func0093(GetFilterUnit()) == false and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))then
+	if((GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and IsDead(GetFilterUnit()) == false)and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(GetTriggerUnit())))and IsCourierId(GetFilterUnit()) == false and(IsUnitType(GetFilterUnit(), UNIT_TYPE_ANCIENT) == false or Func0267(GetFilterUnit()))then
 		return true
 	endif
 	return false
@@ -52946,7 +52831,7 @@ function Func2396 takes nothing returns nothing
 		set loc_trigger01 = CreateTrigger()
 		set loc_region01 = CreateRegion()
 		call RegionAddRect(loc_region01, GetWorldBounds())
-		call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+		call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 		call TriggerAddCondition(loc_trigger01, Condition(function Func2395))
 		call SaveUnitHandle(HY, (GetHandleId(loc_trigger01)), (298), (loc_unit01))
 		set loc_trigger01 = null
@@ -54555,7 +54440,7 @@ function Func2504 takes unit loc_unit01, unit loc_unit02, real loc_real01 return
 	set real301 = 9999
 	set tt_unit1 = loc_unit01
 	set destructable001 = null
-	call EnumDestructablesInRect(loc_rect01, Condition(function Func0011), function Func2503)
+	call EnumDestructablesInRect(loc_rect01, Condition(function ReturnTrue), function Func2503)
 	call RemoveRect(loc_rect01)
 	set loc_rect01 = null
 	return destructable001
@@ -55937,7 +55822,7 @@ function Func2588 takes nothing returns nothing
 endfunction
 
 function Func2589 takes nothing returns boolean
-	if GetSpellAbilityId() == 'A04Y' and Func0093(GetSpellTargetUnit()) == false then
+	if GetSpellAbilityId() == 'A04Y' and IsCourierId(GetSpellTargetUnit()) == false then
 		call Func2588()
 	endif
 	return false
@@ -56895,7 +56780,7 @@ function Func2635 takes nothing returns boolean
 	if((LoadInteger(HY, (GetHandleId((loc_unit02))), ((2485)))) == 1)and loc_real06 >= GetUnitState(loc_unit02, UNIT_STATE_LIFE) - 2 then
 		set loc_real06 = GetUnitState(loc_unit02, UNIT_STATE_LIFE) - 2
 	endif
-	if Func0093(loc_unit02)then
+	if IsCourierId(loc_unit02)then
 		set loc_real06 = 0
 	endif
 	if loc_real06 > 0 and IsDead(loc_unit02) == false then
@@ -56941,7 +56826,7 @@ function Func2636 takes nothing returns nothing
 	if((LoadInteger(HY, (GetHandleId((loc_unit02))), ((2485)))) == 1)and loc_real01 >= GetUnitState(loc_unit02, UNIT_STATE_LIFE) - 2 then
 		set loc_real01 = GetUnitState(loc_unit02, UNIT_STATE_LIFE) - 2
 	endif
-	if Func0093(loc_unit02)then
+	if IsCourierId(loc_unit02)then
 		set loc_real01 = 0
 	endif
 	call Func0109(loc_unit01, loc_unit02, 6, loc_real01)
@@ -57615,7 +57500,7 @@ function Func2684 takes nothing returns nothing
 endfunction
 
 function Func2685 takes nothing returns boolean
-	if GetSpellAbilityId() == 'A04Q' and GetUnitState(GetTriggerUnit(), UNIT_STATE_LIFE) > 0.5 and Func0093(GetSpellTargetUnit()) == false then
+	if GetSpellAbilityId() == 'A04Q' and GetUnitState(GetTriggerUnit(), UNIT_STATE_LIFE) > 0.5 and IsCourierId(GetSpellTargetUnit()) == false then
 		call Func2684()
 	endif
 	return false
@@ -58368,7 +58253,7 @@ function Func2736 takes nothing returns nothing
 		call SetUnitX(loc_unit03, loc_real04)
 		call SetUnitY(loc_unit03, loc_real05)
 		call GroupAddUnit(loc_group02, loc_unit03)
-		call TriggerRegisterUnitInRange(loc_trigger01, loc_unit03, 17, Condition(function Func0011))
+		call TriggerRegisterUnitInRange(loc_trigger01, loc_unit03, 17, Condition(function ReturnTrue))
 		set loc_integer01 = loc_integer01 + 1
 	endloop
 	if loc_boolean01 then
@@ -58975,7 +58860,7 @@ function Func2765 takes nothing returns nothing
 	local integer loc_integer03 = GetHandleId(loc_trigger03)
 	local integer loc_integer04 = GetUnitAbilityLevel(loc_unit01, 'A15J')
 	set integer482 = loc_integer04
-	call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 750, Condition(function Func0011))
+	call TriggerRegisterUnitInRange(loc_trigger01, loc_unit01, 750, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2764))
 	call SaveTriggerHandle(HY, (loc_integer01), (275), (loc_trigger02))
 	call SaveUnitHandle(HY, (loc_integer01), (2), (loc_unit01))
@@ -60471,7 +60356,7 @@ function Func2862 takes nothing returns nothing
 endfunction
 
 function Func2863 takes nothing returns nothing
-	if Func0093(GetEnumUnit()) == false then
+	if IsCourierId(GetEnumUnit()) == false then
 		call Func0109(tt_unit1, GetEnumUnit(), 3, real009)
 	endif
 endfunction
@@ -64234,7 +64119,7 @@ function Func3048 takes nothing returns nothing
 	call SaveEffectHandle(HY, (loc_integer01), (177), (AddSpecialEffectTarget(loc_string03, loc_unit02,"overhead")))
 	call SaveInteger(HY, (loc_integer01), (5), (GetUnitAbilityLevel(loc_unit01, 'A0SW')))
 	call TriggerRegisterDeathEvent(loc_trigger01, loc_unit02)
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, GetOwningPlayer(loc_unit01), EVENT_PLAYER_UNIT_SELECTED, Condition(function Func0011))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, GetOwningPlayer(loc_unit01), EVENT_PLAYER_UNIT_SELECTED, Condition(function ReturnTrue))
 	call TriggerRegisterUnitEvent(loc_trigger01, loc_unit03, EVENT_UNIT_SPELL_EFFECT)
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.2, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func3047))
@@ -68363,7 +68248,7 @@ function Func3304 takes nothing returns nothing
 	local timer loc_timer01
 	local integer loc_integer01
 	call UnitDamageTarget(unit002, loc_unit01, real002, true, true, ATTACK_TYPE_NORMAL, DAMAGE_TYPE_MAGIC, WEAPON_TYPE_WHOKNOWS)
-	call GroupAddUnit(group001, loc_unit01)
+	call GroupAddUnit(tt_group1, loc_unit01)
 	if IsUnitType(loc_unit01, UNIT_TYPE_HERO) == true then
 		set loc_timer01 = CreateTimer()
 		set loc_integer01 = GetHandleId(loc_timer01)
@@ -68381,7 +68266,7 @@ function Func3304 takes nothing returns nothing
 endfunction
 
 function Func3305 takes nothing returns boolean
-	return IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit002))and IsUnitInGroup(GetFilterUnit(), group001) == false and GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) > 1 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false
+	return IsUnitEnemy(GetFilterUnit(), GetOwningPlayer(unit002))and IsUnitInGroup(GetFilterUnit(), tt_group1) == false and GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and GetUnitState(GetFilterUnit(), UNIT_STATE_LIFE) > 1 and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false
 endfunction
 
 function Func3306 takes nothing returns nothing
@@ -68415,7 +68300,7 @@ function Func3306 takes nothing returns nothing
 	call SetUnitX(loc_unit02, loc_real06)
 	call SetUnitY(loc_unit02, loc_real07)
 	call SetUnitFacing(loc_unit02, loc_real05 * bj_RADTODEG)
-	set group001 = loc_group01
+	set tt_group1 = loc_group01
 	set unit002 = loc_unit01
 	set real002 = 50 * GetUnitAbilityLevel(loc_unit01, ('A0HW'))
 	call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 150, loc_boolexpr01)
@@ -68458,7 +68343,7 @@ function Func3307 takes nothing returns nothing
 	endif
 	call SetUnitX(loc_unit02, loc_real06)
 	call SetUnitY(loc_unit02, loc_real07)
-	set group001 = loc_group01
+	set tt_group1 = loc_group01
 	set unit002 = loc_unit01
 	set real002 = 50 * GetUnitAbilityLevel(loc_unit01, ('A0HW'))
 	call GroupEnumUnitsInRange(loc_group02, loc_real06, loc_real07, 150, loc_boolexpr01)
@@ -70105,7 +69990,7 @@ function Func3415 takes unit loc_unit01, unit loc_unit02, real loc_real01 return
 endfunction
 
 function Func3416 takes nothing returns boolean
-	return IsUnitInGroup(GetFilterUnit(), group001) == false and IsUnitAlly(GetFilterUnit(), GetOwningPlayer(GetTriggerUnit()))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(GetTriggerUnit()))and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false and GetFilterUnit() != unit351
+	return IsUnitInGroup(GetFilterUnit(), tt_group1) == false and IsUnitAlly(GetFilterUnit(), GetOwningPlayer(GetTriggerUnit()))and IsUnitVisible(GetFilterUnit(), GetOwningPlayer(GetTriggerUnit()))and IsUnitType(GetFilterUnit(), UNIT_TYPE_STRUCTURE) == false and GetUnitAbilityLevel(GetFilterUnit(), 'A04R') == 0 and IsDead(GetFilterUnit()) == false and GetFilterUnit() != unit351
 endfunction
 
 function Func3417 takes group loc_group01, unit loc_unit01, unit loc_unit02, unit loc_unit03 returns unit
@@ -70113,7 +69998,7 @@ function Func3417 takes group loc_group01, unit loc_unit01, unit loc_unit02, uni
 	local boolexpr loc_boolexpr01 = Condition(function Func3416)
 	local unit loc_unit04 = null
 	local unit loc_unit05
-	set group001 = loc_group01
+	set tt_group1 = loc_group01
 	set unit002 = loc_unit02
 	call GroupEnumUnitsInRange(loc_group02, GetUnitX(loc_unit01), GetUnitY(loc_unit01), 500, loc_boolexpr01)
 	set loc_unit05 = FirstOfGroup(loc_group02)
@@ -82576,7 +82461,7 @@ function Func4028 takes nothing returns boolean
 	local real loc_real05 = 90
 	set loc_rect01 = Rect(loc_real02 - loc_real05, loc_real03 - loc_real05, loc_real02 + loc_real05, loc_real03 + loc_real05)
 	set integer518 = 0
-	call EnumDestructablesInRect(loc_rect01, Condition(function Func0011), function Func4027)
+	call EnumDestructablesInRect(loc_rect01, Condition(function ReturnTrue), function Func4027)
 	if integer518 > 0 or loc_integer03 == loc_integer02 or loc_integer03 == (loc_integer02 - 1)or loc_integer03 == (loc_integer02 - 2)then
 		set loc_integer05 = 'u01P'
 	endif
@@ -84883,7 +84768,7 @@ function Func4155 takes nothing returns nothing
 	call DisableTrigger(Trig_ManipulateItem)
 	loop
 		exitwhen loc_integer03 > 5
-		if UnitItemInSlot(loc_unit01, loc_integer03) != null and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer193]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer220]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer142]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer143]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer150]then
+		if UnitItemInSlot(loc_unit01, loc_integer03) != null and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[Aegis]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer220]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer142]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer143]and GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)) != Item_Real[integer150]then
 			set loc_item01 = CreateItem(GetItemTypeId(UnitItemInSlot(loc_unit01, loc_integer03)), 0, 0)
 			if GetItemCharges(UnitItemInSlot(loc_unit01, loc_integer03)) > 0 then
 				call SetItemCharges(loc_item01, GetItemCharges(UnitItemInSlot(loc_unit01, loc_integer03)))
@@ -86967,7 +86852,7 @@ function main takes nothing returns nothing
 	set rect016 = Rect(5696.0, 5504.0, 7296.0, 7392.0)
 	set rect017 = Rect(-7680.0, -8032.0, -6176.0, -6240.0)
 	set rect018 = Rect(-2464.0, 1536.0, -2240.0, 1760.0)
-	set rect019 = Rect(4288.0, -2688.0, 4544.0, -2400.0)
+	set ScourgeAncientCamp_SpawnRect = Rect(4288.0, -2688.0, 4544.0, -2400.0)
 	set rect020 = Rect(-3328.0, -416.0, -3104.0, -96.0)
 	set rect021 = Rect(1440.0, -4096.0, 1728.0, -3872.0)
 	set rect022 = Rect(-4576.0, 3328.0, -4448.0, 3488.0)
@@ -86982,7 +86867,7 @@ function main takes nothing returns nothing
 	set rect031 = Rect(-5952.0, -6432.0, -5248.0, -5728.0)
 	set rect032 = Rect(5088.0, 7488.0, 5792.0, 8192.0)
 	set rect033 = Rect(2304.0, -672.0, 2592.0, -384.0)
-	set rect034 = Rect(3872.0, -3008.0, 4928.0, -1952.0)
+	set ScourgeAncientCamp_CheckRect = Rect(3872.0, -3008.0, 4928.0, -1952.0)
 	set rect035 = Rect(-3552.0, -768.0, -2528.0, 320.0)
 	set rect036 = Rect(1056.0, -5216.0, 2368.0, -3744.0)
 	set rect037 = Rect(-5120.0, 3008.0, -3648.0, 4320.0)
@@ -86998,7 +86883,7 @@ function main takes nothing returns nothing
 	set rect047 = Rect(-384.0, 3392.0, -192.0, 3520.0)
 	set rect048 = Rect(-1728.0, -5056.0, -768.0, -3840.0)
 	set rect049 = Rect(-1152.0, -4704.0, -960.0, -4480.0)
-	set rect050 = FindRect(Rect(-480.0, -800.0, -256.0, -512.0))
+	set rect050 = Rect(-480.0, -800.0, -256.0, -512.0)
 	set rect051 = Rect(2112.0, -1280.0, 3072.0, -288.0)
 	set rect052 = Rect(7264.0, -5504.0, 7488.0, -5280.0)
 	set rect053 = Rect(-8160.0, 6848.0, -7968.0, 7040.0)
@@ -87170,7 +87055,7 @@ function main takes nothing returns nothing
 	set rect212 = Rect(-4608.0, -448.0, -3872.0, 192.0)
 	set rect213 = Rect(2528.0, -1376.0, 2944.0, -960.0)
 	call ConfigureNeutralVictim()
-	set boolexpr001 = Filter(function Func0008)
+	set boolexpr001 = Filter(function ReturnTrue)
 	set filterIssueHauntOrderAtLocBJ = Filter(function IssueHauntOrderAtLocBJFilter)
 	set filterEnumDestructablesInCircleBJ = Filter(function Func0003)
 	set filterGetUnitsInRectOfPlayer = Filter(function GetUnitsInRectOfPlayerFilter)
@@ -87343,7 +87228,7 @@ function main takes nothing returns nothing
 	endloop
 	set force001 = CreateForce()
 	set force002 = CreateForce()
-	set group001 = CreateGroup()
+	set tt_group1 = CreateGroup()
 	set timer002 = CreateTimer()
 	set force003 = CreateForce()
 	set real003 = 0.00
@@ -87911,9 +87796,9 @@ function main takes nothing returns nothing
 	call Func0124('A27K')
 	call Func0124('A27J')
 	set trigger002 = CreateTrigger()
-	call TriggerRegisterPlayerUnitEvent(trigger002, Sentinels[0], EVENT_PLAYER_UNIT_DEATH, Condition(function Func0167))
-	call TriggerRegisterPlayerUnitEvent(trigger002, Scourges[0], EVENT_PLAYER_UNIT_DEATH, Condition(function Func0167))
-	call TriggerRegisterPlayerUnitEvent(trigger002, Neutrals, EVENT_PLAYER_UNIT_DEATH, Condition(function Func0167))
+	call TriggerRegisterPlayerUnitEvent(trigger002, Sentinels[0], EVENT_PLAYER_UNIT_DEATH, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(trigger002, Scourges[0], EVENT_PLAYER_UNIT_DEATH, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(trigger002, Neutrals, EVENT_PLAYER_UNIT_DEATH, Condition(function ReturnTrue))
 	call TriggerAddAction(trigger002, function Func0487)
 	set loc_trigger01 = CreateTrigger()
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.5, true)
@@ -87935,12 +87820,12 @@ function main takes nothing returns nothing
 	set trigger055 = CreateTrigger()
 	call TriggerAddCondition(trigger055, Condition(function Func0532))
 	set trigger004 = CreateTrigger()
-	call TriggerRegisterPlayerUnitEvent(trigger004, Neutrals, EVENT_PLAYER_UNIT_DEATH, Condition(function Func0011))
+	call TriggerRegisterPlayerUnitEvent(trigger004, Neutrals, EVENT_PLAYER_UNIT_DEATH, Condition(function ReturnTrue))
 	call TriggerAddCondition(trigger004, Condition(function Func0535))
 	call TriggerAddAction(trigger004, function Func0538)
 	set loc_trigger01 = CreateTrigger()
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[0], EVENT_PLAYER_UNIT_DEATH, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[0], EVENT_PLAYER_UNIT_DEATH, Condition(function Func0011))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[0], EVENT_PLAYER_UNIT_DEATH, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[0], EVENT_PLAYER_UNIT_DEATH, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0543))
 	set loc_trigger01 = null
 	set loc_trigger01 = CreateTrigger()
@@ -88934,7 +88819,7 @@ function main takes nothing returns nothing
 	set Item_Mute[ItemCount] = 0
 	set Item_Icon[ItemCount] = "ReplaceableTextures\\CommandButtons\\BTNArcaniteArmor.blp"
 	set Item_Cooldown[ItemCount] = 0
-	set integer193 = ItemCount
+	set Aegis = ItemCount
 	set ItemCount = ItemCount + 1
 	set Item_Dummy[ItemCount] = 'I09G'
 	set Item_Real[ItemCount] = 'I09F'
@@ -91113,7 +90998,7 @@ function main takes nothing returns nothing
 	set loc_trigger01 = CreateTrigger()
 	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_SUMMON)
 	call TriggerAddAction(loc_trigger01, function Func0644)
-	call TriggerAddCondition(loc_trigger01, Condition(function Func0642))
+	call TriggerAddCondition(loc_trigger01, Condition(function ReturnTrue))
 	set loc_trigger01 = CreateTrigger()
 	call TriggerRegisterTimerEvent(loc_trigger01, 0.33, true)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0661))
@@ -91187,11 +91072,11 @@ function main takes nothing returns nothing
 	call Func0168(loc_trigger01, EVENT_PLAYER_UNIT_DEATH)
 	call TriggerAddAction(loc_trigger01, function Func0893)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0892))
-	call InitNeutralsDots()
+	call InitNeutralDots()
 	set loc_trigger01 = CreateTrigger()
-	call TriggerRegisterUnitInRange(loc_trigger01, unit010, 300, Condition(function Func0167))
-	call TriggerRegisterUnitInRange(loc_trigger01, unit015, 300, Condition(function Func0167))
-	call TriggerRegisterUnitInRange(loc_trigger01, unit008, 300, Condition(function Func0167))
+	call TriggerRegisterUnitInRange(loc_trigger01, unit010, 300, Condition(function ReturnTrue))
+	call TriggerRegisterUnitInRange(loc_trigger01, unit015, 300, Condition(function ReturnTrue))
+	call TriggerRegisterUnitInRange(loc_trigger01, unit008, 300, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0896))
 	set loc_trigger01 = null
 	set trigger005 = CreateTrigger()
@@ -91201,78 +91086,78 @@ function main takes nothing returns nothing
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect014)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect007)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect185)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0899))
 	set loc_trigger01 = null
 	set loc_region01 = null
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect009)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect002)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect181)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0900))
 	set loc_trigger01 = null
 	set loc_region01 = null
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect013)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect006)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect186)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0901))
 	set loc_trigger01 = null
 	set loc_region01 = null
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect010)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect003)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect182)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0902))
 	set loc_trigger01 = null
 	set loc_region01 = null
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect005)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect012)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect184)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0903))
 	set loc_trigger01 = null
 	set loc_region01 = null
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect008)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect001)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, rect183)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func0904))
 	set loc_trigger01 = null
 	set loc_region01 = null
@@ -91504,7 +91389,7 @@ function main takes nothing returns nothing
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, bj_mapInitialPlayableArea)
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0011))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1072))
 	set loc_trigger01 = null
 	set loc_region01 = null
@@ -91546,7 +91431,7 @@ function main takes nothing returns nothing
 	set trigger062 = CreateTrigger()
 	call TriggerAddAction(trigger062, function Func1106)
 	set loc_trigger01 = CreateTrigger()
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Neutrals, EVENT_PLAYER_UNIT_ATTACKED, Condition(function Func0011))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Neutrals, EVENT_PLAYER_UNIT_ATTACKED, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1107))
 	set loc_trigger01 = null
 	set region008 = CreateRegion()
@@ -91579,16 +91464,16 @@ function main takes nothing returns nothing
 	call TriggerAddAction(loc_trigger01, function WTFMode_Init)
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1145))
 	set loc_trigger01 = CreateTrigger()
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[1], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[2], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[3], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[4], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[5], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[1], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[2], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[3], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[4], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
-	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[5], EVENT_PLAYER_HERO_LEVEL, Condition(function Func0011))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[1], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[2], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[3], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[4], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Sentinels[5], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[1], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[2], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[3], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[4], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
+	call TriggerRegisterPlayerUnitEvent(loc_trigger01, Scourges[5], EVENT_PLAYER_HERO_LEVEL, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1149))
 	set loc_trigger01 = null
 	set loc_trigger01 = CreateTrigger()
@@ -91598,14 +91483,14 @@ function main takes nothing returns nothing
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, GetWorldBounds())
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0167))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1167))
 	set loc_trigger01 = null
 	set loc_region01 = null
 	set loc_trigger01 = CreateTrigger()
-	call TriggerRegisterUnitInRange(loc_trigger01, unit010, 300, Condition(function Func0167))
-	call TriggerRegisterUnitInRange(loc_trigger01, unit015, 300, Condition(function Func0167))
-	call TriggerRegisterUnitInRange(loc_trigger01, unit008, 300, Condition(function Func0167))
+	call TriggerRegisterUnitInRange(loc_trigger01, unit010, 300, Condition(function ReturnTrue))
+	call TriggerRegisterUnitInRange(loc_trigger01, unit015, 300, Condition(function ReturnTrue))
+	call TriggerRegisterUnitInRange(loc_trigger01, unit008, 300, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func1168))
 	set loc_trigger01 = null
 	set loc_trigger01 = CreateTrigger()
@@ -92101,7 +91986,7 @@ function main takes nothing returns nothing
 	set loc_trigger01 = CreateTrigger()
 	set loc_region01 = CreateRegion()
 	call RegionAddRect(loc_region01, GetWorldBounds())
-	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function Func0011))
+	call TriggerRegisterEnterRegion(loc_trigger01, loc_region01, Condition(function ReturnTrue))
 	call TriggerAddCondition(loc_trigger01, Condition(function Func2884))
 	set integers151[1] = 'A0VS'
 	set integers151[2] = 'A0VK'
